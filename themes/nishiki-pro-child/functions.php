@@ -90,4 +90,15 @@ add_action('wp_enqueue_scripts', function () {
         $child->get('Version'),
         true
     );
+
+    // Single Article JS (記事ページ用)
+    if (is_single()) {
+        wp_enqueue_script(
+            'nishiki-pro-child-single',
+            get_stylesheet_directory_uri() . '/assets/js/single.js',
+            [],
+            $child->get('Version'),
+            true
+        );
+    }
 });

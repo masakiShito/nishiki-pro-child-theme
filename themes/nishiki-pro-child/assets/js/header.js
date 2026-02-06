@@ -1,189 +1,234 @@
 /**
- * Header Enhancement - ヘッダーの動的エフェクト
+ * Header - Navigation & Mobile Menu
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+(function() {
+    'use strict';
+
     const header = document.getElementById('masthead');
-    let lastScrollTop = 0;
-    let scrollTimeout;
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menuClose = document.querySelector('.mobile-menu-close');
+    const menuOverlay = document.querySelector('.mobile-menu-overlay');
+    const progressBar = document.querySelector('.header-progress');
 
     if (!header) return;
 
-    // スクロール時のヘッダー変化
-    window.addEventListener('scroll', function() {
-        clearTimeout(scrollTimeout);
-        
-        scrollTimeout = setTimeout(() => {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            // スクロールダウン（50px以上）
-            if (scrollTop > 50) {
-                document.body.classList.add('scrolled');
-            } else {
-                document.body.classList.remove('scrolled');
-            }
-            
-            lastScrollTop = scrollTop;
-        }, 10);
-    });
+    // ===========================================
+    // Scroll Effects
+    // ===========================================
 
-    // 検索オーバーレイ
-    const searchToggle = document.querySelector('.search-toggle');
-    const searchOverlay = document.getElementById('search-overlay');
-    
-    if (searchToggle && searchOverlay) {
-        searchToggle.addEventListener('click', () => {
-            searchOverlay.classList.add('is-open');
-            document.body.style.overflow = 'hidden';
-            
-            // 検索フォームにフォーカス
-            const searchInput = searchOverlay.querySelector('input[type="search"]');
-            if (searchInput) {
-                setTimeout(() => searchInput.focus(), 100);
-            }
-        });
-        
-        const searchClose = searchOverlay.querySelector('.close');
-        if (searchClose) {
-            searchClose.addEventListener('click', () => {
-                searchOverlay.classList.remove('is-open');
-                document.body.style.overflow = '';
-            });
+    let ticking = false;
+
+    function onScroll() {
+        const scrollY = window.pageYOffset;
+
+        // Scrolled state
+        if (scrollY > 20) {
+            document.body.classList.add('scrolled');
+        } else {
+            document.body.classList.remove('scrolled');
         }
-        
-        // オーバーレイ外をクリックで閉じる
-        searchOverlay.addEventListener('click', (e) => {
-            if (e.target === searchOverlay) {
-                searchOverlay.classList.remove('is-open');
-                document.body.style.overflow = '';
-            }
-        });
+
+        // Progress bar
+        if (progressBar) {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+            progressBar.style.width = `${Math.min(progress, 100)}%`;
+        }
+
+        ticking = false;
     }
 
-    // メニューオーバーレイ
-    const menuToggle = document.querySelector('.menu-toggle');
-    const menuOverlay = document.getElementById('menu-overlay');
-    
-    if (menuToggle && menuOverlay) {
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(onScroll);
+            ticking = true;
+        }
+    }
+
+    window.addEventListener('scroll', requestTick, { passive: true });
+
+    // ===========================================
+    // Mobile Menu
+    // ===========================================
+
+    function openMobileMenu() {
+        if (!mobileMenu || !menuToggle) return;
+
+        mobileMenu.classList.add('is-open');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+
+        // Focus first element
+        setTimeout(() => {
+            const firstFocusable = mobileMenu.querySelector('button, a');
+            if (firstFocusable) firstFocusable.focus();
+        }, 100);
+    }
+
+    function closeMobileMenu() {
+        if (!mobileMenu || !menuToggle) return;
+
+        mobileMenu.classList.remove('is-open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+
+        // Close all accordions
+        document.querySelectorAll('.mobile-nav-item.is-open').forEach(item => {
+            item.classList.remove('is-open');
+            const toggle = item.querySelector('.mobile-nav-toggle');
+            if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        });
+
+        menuToggle.focus();
+    }
+
+    // Toggle button
+    if (menuToggle) {
         menuToggle.addEventListener('click', () => {
-            menuOverlay.classList.add('is-open');
-            document.body.style.overflow = 'hidden';
-        });
-        
-        const menuClose = menuOverlay.querySelector('.close');
-        if (menuClose) {
-            menuClose.addEventListener('click', () => {
-                menuOverlay.classList.remove('is-open');
-                document.body.style.overflow = '';
-            });
-        }
-        
-        // オーバーレイ外をクリックで閉じる
-        menuOverlay.addEventListener('click', (e) => {
-            if (e.target === menuOverlay) {
-                menuOverlay.classList.remove('is-open');
-                document.body.style.overflow = '';
+            const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
             }
         });
     }
 
-    // ESCキーで閉じる
+    // Close button
+    if (menuClose) {
+        menuClose.addEventListener('click', closeMobileMenu);
+    }
+
+    // Overlay click
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', closeMobileMenu);
+    }
+
+    // Escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            if (searchOverlay && searchOverlay.classList.contains('is-open')) {
-                searchOverlay.classList.remove('is-open');
-                document.body.style.overflow = '';
-            }
-            if (menuOverlay && menuOverlay.classList.contains('is-open')) {
-                menuOverlay.classList.remove('is-open');
-                document.body.style.overflow = '';
-            }
+        if (e.key === 'Escape' && mobileMenu?.classList.contains('is-open')) {
+            closeMobileMenu();
         }
     });
 
-    // メニューアイテムにリップルエフェクト
-    const menuLinks = header.querySelectorAll('.menu-items a, ul.menu a, .category-link');
-    
-    menuLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            ripple.classList.add('ripple');
-            
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            
-            this.appendChild(ripple);
-            
+    // ===========================================
+    // Mobile Nav Accordion (Child Categories)
+    // ===========================================
+
+    const navToggles = document.querySelectorAll('.mobile-nav-toggle');
+
+    navToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const item = this.closest('.mobile-nav-item');
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+            // Close other open items
+            document.querySelectorAll('.mobile-nav-item.is-open').forEach(openItem => {
+                if (openItem !== item) {
+                    openItem.classList.remove('is-open');
+                    const otherToggle = openItem.querySelector('.mobile-nav-toggle');
+                    if (otherToggle) otherToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Toggle current item
+            if (isExpanded) {
+                item.classList.remove('is-open');
+                this.setAttribute('aria-expanded', 'false');
+            } else {
+                item.classList.add('is-open');
+                this.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
+    // ===========================================
+    // Desktop Dropdown (keyboard accessibility)
+    // ===========================================
+
+    const navItems = document.querySelectorAll('.nav-item.has-dropdown');
+
+    navItems.forEach(item => {
+        const link = item.querySelector('.nav-link');
+        const dropdown = item.querySelector('.dropdown');
+
+        if (!link || !dropdown) return;
+
+        // Focus management
+        link.addEventListener('focus', () => {
+            item.classList.add('is-focused');
+        });
+
+        link.addEventListener('blur', (e) => {
+            // Check if focus moved to dropdown
             setTimeout(() => {
-                ripple.remove();
-            }, 600);
+                if (!item.contains(document.activeElement)) {
+                    item.classList.remove('is-focused');
+                }
+            }, 10);
+        });
+
+        // Keyboard navigation
+        link.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                // Let the link navigate normally
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const firstDropdownLink = dropdown.querySelector('.dropdown-link');
+                if (firstDropdownLink) firstDropdownLink.focus();
+            }
+        });
+
+        // Arrow key navigation in dropdown
+        const dropdownLinks = dropdown.querySelectorAll('.dropdown-link, .dropdown-view-all');
+        dropdownLinks.forEach((dropdownLink, index) => {
+            dropdownLink.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const next = dropdownLinks[index + 1];
+                    if (next) next.focus();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (index === 0) {
+                        link.focus();
+                    } else {
+                        dropdownLinks[index - 1].focus();
+                    }
+                } else if (e.key === 'Escape') {
+                    link.focus();
+                    item.classList.remove('is-focused');
+                }
+            });
+
+            dropdownLink.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (!item.contains(document.activeElement)) {
+                        item.classList.remove('is-focused');
+                    }
+                }, 10);
+            });
         });
     });
 
-    // ロゴ/タイトルにパララックス効果
-    const siteInfo = header.querySelector('.site-info');
-    
-    if (siteInfo) {
-        header.addEventListener('mousemove', (e) => {
-            const rect = header.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            
-            siteInfo.style.transform = `translate(${x * 10}px, ${y * 5}px)`;
-        });
-        
-        header.addEventListener('mouseleave', () => {
-            siteInfo.style.transform = '';
-        });
-    }
+    // ===========================================
+    // Close mobile menu on resize
+    // ===========================================
 
-    // スクロール位置のインジケーター
-    const progressBar = document.createElement('div');
-    progressBar.classList.add('scroll-progress');
-    header.appendChild(progressBar);
-    
-    window.addEventListener('scroll', () => {
-        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (window.pageYOffset / windowHeight) * 100;
-        progressBar.style.width = scrolled + '%';
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (window.innerWidth > 1024 && mobileMenu?.classList.contains('is-open')) {
+                closeMobileMenu();
+            }
+        }, 150);
     });
 
-    // カテゴリーナビのスムーズスクロール
-    const categoryList = document.querySelector('.category-list');
-    if (categoryList) {
-        let isDown = false;
-        let startX;
-        let scrollLeft;
+    // Initial scroll check
+    onScroll();
 
-        categoryList.addEventListener('mousedown', (e) => {
-            isDown = true;
-            categoryList.style.cursor = 'grabbing';
-            startX = e.pageX - categoryList.offsetLeft;
-            scrollLeft = categoryList.scrollLeft;
-        });
-
-        categoryList.addEventListener('mouseleave', () => {
-            isDown = false;
-            categoryList.style.cursor = 'grab';
-        });
-
-        categoryList.addEventListener('mouseup', () => {
-            isDown = false;
-            categoryList.style.cursor = 'grab';
-        });
-
-        categoryList.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - categoryList.offsetLeft;
-            const walk = (x - startX) * 2;
-            categoryList.scrollLeft = scrollLeft - walk;
-        });
-    }
-});
+})();
