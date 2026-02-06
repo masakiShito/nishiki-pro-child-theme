@@ -1,0 +1,8 @@
+*
+!.gitignore
+!themes/
+!themes/nishiki-pro-child/
+!themes/nishiki-pro-child/**
+themes/twentytwentyfive/
+themes/twentytwentyfour/
+themes/twentytwentythree/
