@@ -28,6 +28,16 @@ add_action('wp_enqueue_scripts', function () {
         $child->get('Version')
     );
 
+    // Single post improvements CSS
+    if (is_single()) {
+        wp_enqueue_style(
+            'nishiki-pro-child-single',
+            get_stylesheet_directory_uri() . '/assets/css/single-improvements.css',
+            ['nishiki-pro-child'],
+            $child->get('Version')
+        );
+    }
+
     // Header Enhancement JS
     wp_enqueue_script(
         'nishiki-pro-child-header',
