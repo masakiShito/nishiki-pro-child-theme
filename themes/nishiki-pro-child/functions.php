@@ -38,6 +38,24 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 
+    // Archive page improvements CSS & JS
+    if (is_home() || is_archive() || is_search()) {
+        wp_enqueue_style(
+            'nishiki-pro-child-archive',
+            get_stylesheet_directory_uri() . '/assets/css/archive-improvements.css',
+            ['nishiki-pro-child'],
+            $child->get('Version')
+        );
+
+        wp_enqueue_script(
+            'nishiki-pro-child-archive',
+            get_stylesheet_directory_uri() . '/assets/js/archive.js',
+            [],
+            $child->get('Version'),
+            true
+        );
+    }
+
     // Header Enhancement JS
     wp_enqueue_script(
         'nishiki-pro-child-header',

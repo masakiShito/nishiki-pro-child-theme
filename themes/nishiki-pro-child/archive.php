@@ -1,6 +1,6 @@
 <?php
 /**
- * 記事一覧ページ（カテゴリー・タグ・日付アーカイブ）
+ * 記事一覧ページ（カテゴリー・タグ・日付アーカイブ） - モダンマガジンスタイル
  */
 
 if (!defined('ABSPATH')) {
@@ -8,66 +8,116 @@ if (!defined('ABSPATH')) {
 }
 
 get_header();
+
+global $wp_query;
+$total_posts = $wp_query->found_posts;
+
+// Get archive title and description
+$archive_title = '';
+$archive_label = 'Archive';
+$archive_description = '';
+
+if (is_category()) {
+    $archive_label = 'Category';
+    $archive_title = single_cat_title('', false);
+    $archive_description = category_description();
+} elseif (is_tag()) {
+    $archive_label = 'Tag';
+    $archive_title = single_tag_title('', false);
+    $archive_description = tag_description();
+} elseif (is_date()) {
+    $archive_label = 'Archive';
+    if (is_year()) {
+        $archive_title = get_the_date('Y年');
+    } elseif (is_month()) {
+        $archive_title = get_the_date('Y年n月');
+    } elseif (is_day()) {
+        $archive_title = get_the_date('Y年n月j日');
+    }
+} elseif (is_author()) {
+    $archive_label = 'Author';
+    $archive_title = get_the_author();
+} else {
+    $archive_title = '記事一覧';
+}
 ?>
 
 <div class="archive-page">
+    <!-- スクロールプログレス -->
+    <div class="scroll-indicator">
+        <div class="scroll-indicator__bar"></div>
+    </div>
+
     <!-- ヒーローセクション -->
     <section class="archive-hero">
+        <div class="archive-hero__shapes">
+            <div class="archive-hero__shape archive-hero__shape--1"></div>
+            <div class="archive-hero__shape archive-hero__shape--2"></div>
+            <div class="archive-hero__shape archive-hero__shape--3"></div>
+        </div>
         <div class="archive-hero__container">
             <div class="archive-hero__content">
-                <?php if (is_category()) : ?>
-                    <span class="archive-hero__label">Category</span>
-                    <h1 class="archive-hero__title"><?php single_cat_title(); ?></h1>
-                    <?php if (category_description()) : ?>
-                        <p class="archive-hero__description"><?php echo category_description(); ?></p>
-                    <?php endif; ?>
-                <?php elseif (is_tag()) : ?>
-                    <span class="archive-hero__label">Tag</span>
-                    <h1 class="archive-hero__title"><?php single_tag_title(); ?></h1>
-                <?php elseif (is_date()) : ?>
-                    <span class="archive-hero__label">Archive</span>
-                    <h1 class="archive-hero__title">
-                        <?php
-                        if (is_year()) {
-                            echo get_the_date('Y年');
-                        } elseif (is_month()) {
-                            echo get_the_date('Y年n月');
-                        } elseif (is_day()) {
-                            echo get_the_date('Y年n月j日');
-                        }
-                        ?>
-                    </h1>
-                <?php elseif (is_author()) : ?>
-                    <span class="archive-hero__label">Author</span>
-                    <h1 class="archive-hero__title"><?php the_author(); ?></h1>
-                <?php else : ?>
-                    <span class="archive-hero__label">Archive</span>
-                    <h1 class="archive-hero__title">記事一覧</h1>
+                <span class="archive-hero__label"><?php echo esc_html($archive_label); ?></span>
+                <h1 class="archive-hero__title"><?php echo esc_html($archive_title); ?></h1>
+                <?php if ($archive_description) : ?>
+                    <p class="archive-hero__description"><?php echo wp_kses_post($archive_description); ?></p>
                 <?php endif; ?>
-
-                <div class="archive-hero__meta">
-                    <span class="archive-hero__count">
-                        <?php
-                        global $wp_query;
-                        printf('%s件の記事', $wp_query->found_posts);
-                        ?>
-                    </span>
+                <div class="archive-hero__stats">
+                    <div class="archive-hero__stat">
+                        <span class="archive-hero__stat-value" data-count="<?php echo esc_attr($total_posts); ?>"><?php echo esc_html($total_posts); ?></span>
+                        <span class="archive-hero__stat-label">記事</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- フィルターバー -->
+    <div class="archive-filter">
+        <div class="archive-filter__container">
+            <div class="archive-filter__inner">
+                <div class="archive-filter__info">
+                    <span class="archive-filter__result">
+                        <strong><?php echo esc_html($total_posts); ?></strong>件の記事が見つかりました
+                    </span>
+                </div>
+                <div class="archive-filter__view">
+                    <button class="archive-filter__view-btn is-active" data-view="grid" aria-label="グリッド表示">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                    </button>
+                    <button class="archive-filter__view-btn" data-view="list" aria-label="リスト表示">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"/>
+                            <line x1="8" y1="12" x2="21" y2="12"/>
+                            <line x1="8" y1="18" x2="21" y2="18"/>
+                            <line x1="3" y1="6" x2="3.01" y2="6"/>
+                            <line x1="3" y1="12" x2="3.01" y2="12"/>
+                            <line x1="3" y1="18" x2="3.01" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 記事一覧 -->
     <section class="archive-content">
         <div class="archive-content__container">
             <?php if (have_posts()) : ?>
                 <div class="article-grid">
-                    <?php while (have_posts()) : the_post(); ?>
-                        <article <?php post_class('article-card'); ?>>
+                    <?php while (have_posts()) : the_post();
+                        $article_categories = get_the_category();
+                    ?>
+                        <article <?php post_class('article-card'); ?> data-category="<?php echo !empty($article_categories) ? esc_attr($article_categories[0]->slug) : ''; ?>">
                             <a href="<?php the_permalink(); ?>" class="article-card__link">
                                 <div class="article-card__image">
                                     <?php if (has_post_thumbnail()) : ?>
-                                        <?php the_post_thumbnail('medium_large', ['class' => 'article-card__img']); ?>
+                                        <?php the_post_thumbnail('medium_large', ['class' => 'article-card__img', 'loading' => 'lazy']); ?>
                                     <?php else : ?>
                                         <div class="article-card__placeholder">
                                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
@@ -77,17 +127,21 @@ get_header();
                                             </svg>
                                         </div>
                                     <?php endif; ?>
+                                    <div class="article-card__overlay"></div>
                                 </div>
 
                                 <div class="article-card__content">
                                     <div class="article-card__meta">
-                                        <?php
-                                        $categories = get_the_category();
-                                        if (!empty($categories)) :
-                                        ?>
-                                            <span class="article-card__category"><?php echo esc_html($categories[0]->name); ?></span>
+                                        <?php if (!empty($article_categories)) : ?>
+                                            <span class="article-card__category"><?php echo esc_html($article_categories[0]->name); ?></span>
                                         <?php endif; ?>
                                         <time class="article-card__date" datetime="<?php echo get_the_date('c'); ?>">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                                <line x1="3" y1="10" x2="21" y2="10"/>
+                                            </svg>
                                             <?php echo get_the_date('Y.m.d'); ?>
                                         </time>
                                     </div>
@@ -97,6 +151,16 @@ get_header();
                                     <p class="article-card__excerpt">
                                         <?php echo wp_trim_words(get_the_excerpt(), 60, '...'); ?>
                                     </p>
+
+                                    <div class="article-card__footer">
+                                        <span class="article-card__read-more">
+                                            続きを読む
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                                <polyline points="12 5 19 12 12 19"/>
+                                            </svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </a>
                         </article>
@@ -105,11 +169,12 @@ get_header();
 
                 <!-- ページネーション -->
                 <?php
-                $pagination = paginate_links(array(
-                    'prev_text' => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>',
-                    'next_text' => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>',
+                $pagination = paginate_links([
+                    'prev_text' => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><span>前へ</span>',
+                    'next_text' => '<span>次へ</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>',
                     'type' => 'array',
-                ));
+                    'mid_size' => 2,
+                ]);
 
                 if ($pagination) :
                 ?>
@@ -125,7 +190,7 @@ get_header();
             <?php else : ?>
                 <div class="archive-empty">
                     <div class="archive-empty__icon">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                             <polyline points="14 2 14 8 20 8"/>
                             <line x1="12" y1="18" x2="12" y2="12"/>
@@ -133,9 +198,17 @@ get_header();
                         </svg>
                     </div>
                     <h2 class="archive-empty__title">記事が見つかりませんでした</h2>
-                    <p class="archive-empty__text">このカテゴリーにはまだ記事がありません。</p>
+                    <p class="archive-empty__text">
+                        <?php if (is_category()) : ?>
+                            このカテゴリーにはまだ記事がありません。
+                        <?php elseif (is_tag()) : ?>
+                            このタグの記事はまだありません。
+                        <?php else : ?>
+                            条件に一致する記事が見つかりませんでした。
+                        <?php endif; ?>
+                    </p>
                     <a href="<?php echo esc_url(home_url('/')); ?>" class="archive-empty__button">
-                        トップページへ戻る
+                        ホームへ戻る
                     </a>
                 </div>
             <?php endif; ?>
