@@ -19,13 +19,14 @@ get_header();
         $reading_time = ceil(mb_strlen(strip_tags(get_the_content())) / 600);
         ?>
 
-        <!-- タイトル + アイキャッチ -->
-        <section class="article-hero<?php echo has_post_thumbnail() ? ' has-thumbnail' : ' no-thumbnail'; ?>">
-            <?php if (has_post_thumbnail()) : ?>
-                <?php the_post_thumbnail('full', ['class' => 'article-hero__image']); ?>
-            <?php endif; ?>
+        <!-- タイトルヒーロー（画像なし） -->
+        <section class="article-hero article-hero--synthetic">
             <div class="article-hero__overlay">
+                <div class="article-hero__art" aria-hidden="true"></div>
                 <div class="article-hero__content">
+                    <p class="article-hero__subcopy" aria-label="System Engineer Blog">
+                        <span class="article-hero__subcopy-text">SYSTEM ENGINEER BLOG</span>
+                    </p>
                     <h1 class="article-hero__title"><?php the_title(); ?></h1>
                     <div class="article-hero__meta">
                         <time datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date('Y年n月j日'); ?></time>
@@ -51,7 +52,7 @@ get_header();
         <!-- フロート目次（PCのみ） -->
         <aside class="article-floating-toc article-toc" id="articleToc">
             <div class="article-toc__inner">
-                <button class="article-toc__toggle" aria-expanded="true" aria-controls="tocContent">
+                <button class="article-toc__toggle" aria-expanded="false" aria-controls="tocContent">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="8" y1="6" x2="21" y2="6"/>
                         <line x1="8" y1="12" x2="21" y2="12"/>
@@ -65,7 +66,7 @@ get_header();
                         <polyline points="6 9 12 15 18 9"/>
                     </svg>
                 </button>
-                <nav class="article-toc__content" id="tocContent">
+                <nav class="article-toc__content is-collapsed" id="tocContent">
                     <ol class="article-toc__list" id="toc"></ol>
                 </nav>
             </div>
@@ -96,18 +97,20 @@ get_header();
                     </section>
                 <?php endif; ?>
 
-                <?php if ($post_tags) : ?>
-                    <section class="article-sidebar__section">
-                        <h2 class="article-sidebar__title">タグ</h2>
-                        <div class="article-sidebar__chips">
+                <section class="article-sidebar__section">
+                    <h2 class="article-sidebar__title">タグ</h2>
+                    <div class="article-sidebar__chips">
+                        <?php if ($post_tags) : ?>
                             <?php foreach ($post_tags as $tag) : ?>
                                 <a href="<?php echo esc_url(get_tag_link($tag->term_id)); ?>" class="article-sidebar__chip">
                                     #<?php echo esc_html($tag->name); ?>
                                 </a>
                             <?php endforeach; ?>
-                        </div>
-                    </section>
-                <?php endif; ?>
+                        <?php else : ?>
+                            <span class="article-sidebar__empty">タグなし</span>
+                        <?php endif; ?>
+                    </div>
+                </section>
 
                 <section class="article-sidebar__section article-author">
                     <div class="article-author__avatar">

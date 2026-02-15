@@ -11,6 +11,7 @@
     function init() {
         hideInlineTocBlocks();
         initTableOfContents();
+        initFloatingTocVisibility();
         initTocToggle();
         initScrollSpy();
         initCopyButton();
@@ -20,6 +21,29 @@
         initScrollAnimations();
         initProgressBar();
         initSmoothScroll();
+    }
+
+    // ===========================================
+    // Floating TOC visibility (hero下から表示)
+    // ===========================================
+
+    function initFloatingTocVisibility() {
+        const floatingToc = document.querySelector('.article-floating-toc');
+        const hero = document.querySelector('.article-hero');
+
+        if (!floatingToc || !hero) return;
+
+        const updateVisibility = () => {
+            const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
+            const heroBottom = hero.offsetTop + hero.offsetHeight;
+            const current = window.scrollY + headerHeight + 12;
+            const shouldShow = current >= heroBottom;
+            floatingToc.classList.toggle('is-visible', shouldShow);
+        };
+
+        updateVisibility();
+        window.addEventListener('scroll', updateVisibility, { passive: true });
+        window.addEventListener('resize', updateVisibility);
     }
 
     // ===========================================

@@ -100,9 +100,6 @@
 
 				<!-- アクション -->
 				<div class="header-actions">
-					<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="header-cta">
-						<span>About</span>
-					</a>
 					<button type="button" class="menu-toggle" aria-label="メニューを開く" aria-expanded="false">
 						<span class="menu-toggle-bar"></span>
 						<span class="menu-toggle-bar"></span>
@@ -169,15 +166,6 @@
 						</ul>
 					<?php endif; ?>
 				</nav>
-
-				<div class="mobile-menu-footer">
-					<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>" class="mobile-about-link">
-						About
-						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="M7 17L17 7M17 7H7M17 7v10"/>
-						</svg>
-					</a>
-				</div>
 			</div>
 		</div>
 

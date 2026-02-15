@@ -15,7 +15,7 @@
         <div class="hero__main">
             <h1 class="hero__title">
                 わかったことだけ、<br>
-                書いていく。
+                書いていく
             </h1>
             
             <p class="hero__subtitle">
