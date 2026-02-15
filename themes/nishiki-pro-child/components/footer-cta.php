@@ -1,3 +1,22 @@
+<?php
+// Aboutページを取得（スラッグまたはテンプレートで検索）
+$about_page = get_page_by_path('about');
+
+// スラッグで見つからない場合、page-about.phpテンプレートを使用しているページを検索
+if (!$about_page) {
+    $pages_with_template = get_pages(array(
+        'meta_key' => '_wp_page_template',
+        'meta_value' => 'page-about.php'
+    ));
+    if (!empty($pages_with_template)) {
+        $about_page = $pages_with_template[0];
+    }
+}
+
+// Aboutページが存在する場合のみセクションを表示
+if ($about_page) :
+    $about_url = get_permalink($about_page->ID);
+?>
 <section class="onesta-section onesta-section--about-cta">
     <div class="onesta-wrap">
         <div class="onesta-footer-cta">
@@ -12,7 +31,7 @@
                 試して、失敗して、それでも前に進む。<br>
                 そんな日々の記録を残しています。
             </p>
-            <a href="<?php echo esc_url(home_url('/about/')); ?>" class="onesta-footer-cta__button">
+            <a href="<?php echo esc_url($about_url); ?>" class="onesta-footer-cta__button">
                 <span>もっと詳しく見る</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -23,3 +42,4 @@
         </div>
     </div>
 </section>
+<?php endif; ?>

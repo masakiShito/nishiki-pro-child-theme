@@ -38,6 +38,24 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 
+    // About page CSS & JS
+    if (is_page_template('page-about.php')) {
+        wp_enqueue_style(
+            'nishiki-pro-child-about',
+            get_stylesheet_directory_uri() . '/assets/css/page-about.css',
+            ['nishiki-pro-child'],
+            $child->get('Version')
+        );
+
+        wp_enqueue_script(
+            'nishiki-pro-child-about',
+            get_stylesheet_directory_uri() . '/assets/js/about.js',
+            [],
+            $child->get('Version'),
+            true
+        );
+    }
+
     // Archive page improvements CSS & JS
     if (is_home() || is_archive() || is_search()) {
         wp_enqueue_style(
@@ -130,3 +148,44 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 });
+
+/**
+ * About固定ページを自動生成
+ */
+function create_about_page_automatically() {
+    // 既にAboutページが存在するかチェック
+    $about_page = get_page_by_path('about');
+    
+    if (!$about_page) {
+        // Aboutページを作成
+        $page_data = array(
+            'post_title'    => 'About',
+            'post_content'  => '',
+            'post_status'   => 'publish',
+            'post_type'     => 'page',
+            'post_name'     => 'about'
+        );
+        
+        $page_id = wp_insert_post($page_data);
+        
+        // テンプレートを設定
+        if ($page_id) {
+            update_post_meta($page_id, '_wp_page_template', 'page-about.php');
+            
+            // パーマリンクを更新
+            flush_rewrite_rules();
+        }
+    }
+}
+
+// テーマ有効化時に実行
+add_action('after_switch_theme', 'create_about_page_automatically');
+
+// 初回読み込み時にも実行
+add_action('init', function() {
+    static $run_once = false;
+    if (!$run_once) {
+        create_about_page_automatically();
+        $run_once = true;
+    }
+}, 999);

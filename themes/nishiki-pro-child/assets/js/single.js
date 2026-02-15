@@ -1,6 +1,6 @@
 /**
  * Single Article - 記事ページ用JavaScript
- * Enhanced with animations and smooth interactions
+ * Clean & Readable Design
  */
 
 (function() {
@@ -9,7 +9,9 @@
     document.addEventListener('DOMContentLoaded', init);
 
     function init() {
+        hideInlineTocBlocks();
         initTableOfContents();
+        initTocToggle();
         initScrollSpy();
         initCopyButton();
         initHeadingAnchors();
@@ -21,13 +23,67 @@
     }
 
     // ===========================================
+    // 本文内の目次ブロックを非表示（サイドバー目次に統一）
+    // ===========================================
+
+    function hideInlineTocBlocks() {
+        const articleContent = document.querySelector('.article-content');
+        if (!articleContent) return;
+
+        const staticSelectors = [
+            '.ez-toc-container',
+            '.lwptoc',
+            '.wp-block-luckywp-table-of-contents',
+            '.rank-math-toc-block',
+            '.wp-block-table-of-contents',
+            '.simpletoc',
+            '.toc_container',
+            '.toc',
+            '.table-of-contents',
+            '[id*="toc"]',
+            '[class*="toc"]'
+        ];
+
+        const candidates = articleContent.querySelectorAll(staticSelectors.join(', '));
+        candidates.forEach((el) => {
+            if (el.closest('.article-toc')) return;
+            if (isLikelyInlineToc(el)) {
+                el.style.display = 'none';
+            }
+        });
+
+        // クラス名が未知でも、見出し+アンカー一覧の構造を持つブロックを検出
+        const fallbackBlocks = articleContent.querySelectorAll('section, nav, div, aside');
+        fallbackBlocks.forEach((el) => {
+            if (el.closest('.article-toc')) return;
+            if (isLikelyInlineToc(el)) {
+                el.style.display = 'none';
+            }
+        });
+    }
+
+    function isLikelyInlineToc(el) {
+        if (!el || el.children.length === 0) return false;
+
+        const text = (el.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        const hasTocWord = /目次|table of contents|contents/.test(text);
+        const hashLinks = el.querySelectorAll('a[href^="#"]').length;
+        const listItems = el.querySelectorAll('ol li, ul li').length;
+        const nearTop = el.getBoundingClientRect().top < window.innerHeight * 1.5;
+
+        if (hasTocWord && (hashLinks >= 2 || listItems >= 2)) return true;
+        if (hashLinks >= 5 && listItems >= 4 && nearTop) return true;
+        return false;
+    }
+
+    // ===========================================
     // Table of Contents (目次) 自動生成
     // ===========================================
 
     function initTableOfContents() {
         const articleContent = document.querySelector('.article-content');
         const tocList = document.querySelector('.article-toc__list');
-        const tocWidget = tocList?.closest('.sidebar-widget');
+        const tocWidget = document.querySelector('.article-toc');
 
         if (!articleContent || !tocList) return;
 
@@ -58,6 +114,23 @@
     }
 
     // ===========================================
+    // TOC Toggle
+    // ===========================================
+
+    function initTocToggle() {
+        const toggle = document.querySelector('.article-toc__toggle');
+        const content = document.querySelector('.article-toc__content');
+
+        if (!toggle || !content) return;
+
+        toggle.addEventListener('click', () => {
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', !isExpanded);
+            content.classList.toggle('is-collapsed');
+        });
+    }
+
+    // ===========================================
     // Scroll Spy - 現在位置の目次をハイライト
     // ===========================================
 
@@ -81,9 +154,7 @@
                 const tocLink = document.querySelector(`.article-toc__list a[href="#${id}"]`);
 
                 if (entry.isIntersecting) {
-                    // すべてのアクティブクラスを削除
                     tocLinks.forEach(link => link.classList.remove('is-active'));
-                    // 現在の項目をアクティブに
                     if (tocLink) tocLink.classList.add('is-active');
                 }
             });
@@ -114,7 +185,6 @@
                         behavior: 'smooth'
                     });
 
-                    // URLを更新（履歴に残す）
                     history.pushState(null, '', `#${targetId}`);
                 }
             });
@@ -136,7 +206,6 @@
             try {
                 await navigator.clipboard.writeText(url);
 
-                // ボタンのフィードバック
                 copyButton.classList.add('copied');
                 const originalHTML = copyButton.innerHTML;
                 copyButton.innerHTML = `
@@ -145,7 +214,6 @@
                     </svg>
                 `;
 
-                // トースト通知を表示
                 showToast('URLをコピーしました');
 
                 setTimeout(() => {
@@ -161,7 +229,6 @@
     }
 
     function showToast(message, type = 'success') {
-        // 既存のトーストを削除
         const existingToast = document.querySelector('.copy-toast');
         if (existingToast) existingToast.remove();
 
@@ -175,7 +242,6 @@
 
         document.body.appendChild(toast);
 
-        // アニメーション
         requestAnimationFrame(() => {
             toast.classList.add('show');
         });
@@ -212,7 +278,6 @@
 
             heading.appendChild(anchor);
 
-            // ホバー時にアンカーを表示
             heading.addEventListener('mouseenter', () => {
                 anchor.style.opacity = '1';
             });
@@ -221,7 +286,6 @@
             });
         });
 
-        // スタイルを追加
         const style = document.createElement('style');
         style.textContent = `
             .heading-anchor {
@@ -230,12 +294,12 @@
                 top: 50%;
                 transform: translateY(-50%);
                 opacity: 0;
-                color: var(--accent);
+                color: var(--article-accent, #10b981);
                 transition: opacity 0.2s ease;
                 padding: 4px;
             }
             .heading-anchor:hover {
-                color: var(--accent-dark);
+                color: var(--article-accent-dark, #059669);
             }
             .article-content h2,
             .article-content h3,
@@ -260,12 +324,10 @@
             const href = link.getAttribute('href');
             if (!href) return;
 
-            // 外部リンクの判定
             if (href.startsWith('http') && !href.includes(window.location.hostname)) {
                 link.setAttribute('target', '_blank');
                 link.setAttribute('rel', 'noopener noreferrer');
 
-                // 外部リンクアイコンを追加
                 if (!link.querySelector('.external-icon')) {
                     const icon = document.createElement('span');
                     icon.className = 'external-icon';
@@ -293,6 +355,7 @@
         const images = articleContent.querySelectorAll('img');
 
         images.forEach(img => {
+            img.style.cursor = 'zoom-in';
             img.addEventListener('click', () => {
                 openImageModal(img.src, img.alt);
             });
@@ -317,7 +380,6 @@
             </div>
         `;
 
-        // スタイル
         const style = document.createElement('style');
         style.id = 'image-modal-style';
         style.textContent = `
@@ -335,7 +397,7 @@
                 inset: 0;
                 background: rgba(0, 0, 0, 0.9);
                 opacity: 0;
-                transition: opacity 0.4s ease;
+                transition: opacity 0.3s ease;
             }
             #image-modal.is-open .image-modal__overlay {
                 opacity: 1;
@@ -345,8 +407,8 @@
                 max-width: 95vw;
                 max-height: 95vh;
                 opacity: 0;
-                transform: scale(0.9);
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                transform: scale(0.95);
+                transition: all 0.3s ease;
             }
             #image-modal.is-open .image-modal__content {
                 opacity: 1;
@@ -357,7 +419,6 @@
                 max-height: 90vh;
                 object-fit: contain;
                 border-radius: 8px;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             }
             .image-modal__close {
                 position: absolute;
@@ -373,11 +434,10 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.3s ease;
+                transition: all 0.2s ease;
             }
             .image-modal__close:hover {
                 background: rgba(255, 255, 255, 0.2);
-                transform: rotate(90deg);
             }
         `;
 
@@ -397,7 +457,7 @@
             setTimeout(() => {
                 modal.remove();
                 document.body.style.overflow = '';
-            }, 400);
+            }, 300);
         };
 
         modal.querySelector('.image-modal__overlay').addEventListener('click', closeModal);
@@ -417,7 +477,7 @@
     function initScrollAnimations() {
         const observerOptions = {
             root: null,
-            rootMargin: '0px 0px -100px 0px',
+            rootMargin: '0px 0px -80px 0px',
             threshold: 0.1
         };
 
@@ -430,18 +490,17 @@
             });
         }, observerOptions);
 
-        // アニメーション対象の要素を監視
         const animatedElements = document.querySelectorAll(
             '.related-card, .post-navigation__item'
         );
-        animatedElements.forEach(el => {
+
+        animatedElements.forEach((el, index) => {
             el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            el.style.transform = 'translateY(24px)';
+            el.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
             observer.observe(el);
         });
 
-        // is-visibleクラスが追加されたときのスタイル
         const style = document.createElement('style');
         style.textContent = `
             .related-card.is-visible,
@@ -461,7 +520,6 @@
         const articleBody = document.querySelector('.article-body');
         if (!articleBody) return;
 
-        // フローティングバッジを作成
         const progressBadge = document.createElement('div');
         progressBadge.className = 'reading-progress-badge';
         progressBadge.innerHTML = `
@@ -489,108 +547,6 @@
         const percentEl = progressBadge.querySelector('.reading-progress-badge__percent');
         const labelEl = progressBadge.querySelector('.reading-progress-badge__label');
 
-        // スタイル追加
-        const style = document.createElement('style');
-        style.textContent = `
-            .reading-progress-badge {
-                position: fixed;
-                bottom: 30px;
-                left: 30px;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                background: #ffffff;
-                padding: 10px 18px 10px 10px;
-                border-radius: 40px;
-                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
-                z-index: 999;
-                opacity: 0;
-                transform: translateY(20px);
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                cursor: default;
-            }
-            .reading-progress-badge.is-visible {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            .reading-progress-badge:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
-            }
-            .reading-progress-badge__inner {
-                position: relative;
-                width: 44px;
-                height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .reading-progress-badge__circle {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                transform: rotate(-90deg);
-            }
-            .reading-progress-badge__bg {
-                stroke: rgba(16, 185, 129, 0.15);
-            }
-            .reading-progress-badge__fill {
-                stroke: var(--accent, #10b981);
-                stroke-linecap: round;
-                transition: stroke-dasharray 0.3s ease;
-            }
-            .reading-progress-badge__percent {
-                font-size: 11px;
-                font-weight: 800;
-                color: var(--accent, #10b981);
-                z-index: 1;
-            }
-            .reading-progress-badge__label {
-                font-size: 13px;
-                font-weight: 600;
-                color: var(--text-secondary, #666);
-                white-space: nowrap;
-                min-width: 58px;
-            }
-            .reading-progress-badge.is-complete {
-                background: linear-gradient(135deg, var(--accent, #10b981), #059669);
-                padding-right: 20px;
-            }
-            .reading-progress-badge.is-complete .reading-progress-badge__percent {
-                color: #ffffff;
-            }
-            .reading-progress-badge.is-complete .reading-progress-badge__label {
-                color: #ffffff;
-                min-width: auto;
-            }
-            .reading-progress-badge.is-complete .reading-progress-badge__bg {
-                stroke: rgba(255, 255, 255, 0.3);
-            }
-            .reading-progress-badge.is-complete .reading-progress-badge__fill {
-                stroke: #ffffff;
-            }
-            @media (max-width: 768px) {
-                .reading-progress-badge {
-                    bottom: 20px;
-                    left: 20px;
-                    padding: 8px 14px 8px 8px;
-                    gap: 10px;
-                }
-                .reading-progress-badge__inner {
-                    width: 38px;
-                    height: 38px;
-                }
-                .reading-progress-badge__percent {
-                    font-size: 10px;
-                }
-                .reading-progress-badge__label {
-                    font-size: 12px;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // スクロール監視
         let ticking = false;
         let isVisible = false;
 
@@ -602,7 +558,6 @@
                     const scrollTop = window.scrollY;
                     const windowHeight = window.innerHeight;
 
-                    // 記事エリアに入ったら表示
                     const shouldShow = scrollTop > articleTop - windowHeight * 0.5;
 
                     if (shouldShow && !isVisible) {
@@ -613,18 +568,15 @@
                         isVisible = false;
                     }
 
-                    // 進捗計算
                     const progress = Math.max(0, Math.min(100,
                         ((scrollTop - articleTop + windowHeight * 0.5) / articleHeight) * 100
                     ));
 
                     const roundedProgress = Math.round(progress);
 
-                    // 円グラフ更新
                     circleFill.setAttribute('stroke-dasharray', `${progress}, 100`);
                     percentEl.textContent = `${roundedProgress}%`;
 
-                    // 100%達成時の特別表示
                     if (roundedProgress >= 100) {
                         progressBadge.classList.add('is-complete');
                         labelEl.textContent = '読破！';
