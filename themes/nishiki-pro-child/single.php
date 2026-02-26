@@ -49,29 +49,6 @@ get_header();
         }
         ?>
 
-        <!-- フロート目次（PCのみ） -->
-        <aside class="article-floating-toc article-toc" id="articleToc">
-            <div class="article-toc__inner">
-                <button class="article-toc__toggle" aria-expanded="false" aria-controls="tocContent">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="8" y1="6" x2="21" y2="6"/>
-                        <line x1="8" y1="12" x2="21" y2="12"/>
-                        <line x1="8" y1="18" x2="21" y2="18"/>
-                        <line x1="3" y1="6" x2="3.01" y2="6"/>
-                        <line x1="3" y1="12" x2="3.01" y2="12"/>
-                        <line x1="3" y1="18" x2="3.01" y2="18"/>
-                    </svg>
-                    <span>目次</span>
-                    <svg class="article-toc__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"/>
-                    </svg>
-                </button>
-                <nav class="article-toc__content is-collapsed" id="tocContent">
-                    <ol class="article-toc__list" id="toc"></ol>
-                </nav>
-            </div>
-        </aside>
-
         <!-- 記事本文エリア -->
         <div class="article-main">
             <!-- メインコンテンツ -->

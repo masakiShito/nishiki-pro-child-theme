@@ -4,6 +4,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+function nishiki_is_blog_request_path() {
+    $request_path = trim((string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    return (bool) preg_match('#^blog(?:/page/([0-9]+))?$#', $request_path);
+}
+
 /**
  * /blog 専用ルーティング（固定ページ設定に依存しないフォールバック）
  */
@@ -36,9 +41,10 @@ add_filter('template_include', function($template) {
 }, 99);
 
 add_filter('body_class', function($classes) {
-    if (get_query_var('nishiki_blog')) {
+    if (get_query_var('nishiki_blog') || nishiki_is_blog_request_path()) {
         $classes[] = 'page-template-page-blog';
         $classes[] = 'page-template';
+        $classes[] = 'blog-list-route';
     }
     return array_unique($classes);
 });
@@ -96,7 +102,7 @@ add_action('wp_enqueue_scripts', function () {
     }
 
     // Archive page improvements CSS & JS
-    if (is_home() || is_archive() || is_search() || is_page('blog') || is_page_template('page-blog.php') || get_query_var('nishiki_blog')) {
+    if (is_home() || is_archive() || is_search() || is_page('blog') || is_page_template('page-blog.php') || get_query_var('nishiki_blog') || nishiki_is_blog_request_path()) {
         $archive_css = get_stylesheet_directory() . '/assets/css/archive-improvements.css';
         $archive_js = get_stylesheet_directory() . '/assets/js/archive.js';
         wp_enqueue_style(
