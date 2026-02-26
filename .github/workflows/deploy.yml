@@ -1,0 +1,87 @@
+name: Deploy Nishiki Pro Child to Lolipop
+
+on:
+  push:
+    branches: ["main"]
+
+concurrency:
+  group: deploy-nishiki-pro-child
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      LOCAL_THEME_DIR: "."
+      DIST_DIR: "dist"
+      ARCHIVE_NAME: "theme-dist.tgz"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 1) distを作る（不要物除外）
+      - name: Build dist (theme files only)
+        run: |
+          set -euo pipefail
+          rm -rf "${DIST_DIR}"
+          mkdir -p "${DIST_DIR}"
+
+          rsync -a --delete \
+            --exclude ".git" \
+            --exclude ".github" \
+            --exclude ".DS_Store" \
+            --exclude "node_modules" \
+            --exclude "${DIST_DIR}" \
+            "${LOCAL_THEME_DIR}/" "${DIST_DIR}/"
+
+          echo "---- dist tree (top) ----"
+          ls -la "${DIST_DIR}" | head -n 50
+
+      # 2) tarで固める（SCPの挙動差を消す）
+      - name: Pack dist
+        run: |
+          set -euo pipefail
+          tar -czf "${ARCHIVE_NAME}" -C "${DIST_DIR}" .
+          ls -la "${ARCHIVE_NAME}"
+
+      # 3) リモートにアップ（置き場所は一旦 tmp 推奨）
+      - name: Upload archive via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.LOLIPOP_HOST }}
+          port: ${{ secrets.LOLIPOP_PORT }}
+          username: ${{ secrets.LOLIPOP_USER }}
+          password: ${{ secrets.LOLIPOP_PASS }}
+          source: ${{ env.ARCHIVE_NAME }}
+          target: /tmp
+
+      # 4) 展開（ターゲット直下に上書き）
+      - name: Extract archive on remote
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.LOLIPOP_HOST }}
+          port: ${{ secrets.LOLIPOP_PORT }}
+          username: ${{ secrets.LOLIPOP_USER }}
+          password: ${{ secrets.LOLIPOP_PASS }}
+          script: |
+            set -euo pipefail
+
+            TARGET="${{ secrets.LOLIPOP_REMOTE_PATH }}"
+            ARCHIVE="/tmp/${{ env.ARCHIVE_NAME }}"
+
+            echo "== TARGET =="
+            echo "$TARGET"
+
+            if [ ! -d "$TARGET" ]; then
+              echo "[ERROR] target dir not found: $TARGET"
+              exit 1
+            fi
+
+            echo "== Extracting... =="
+            tar -xzf "$ARCHIVE" -C "$TARGET"
+
+            echo "== Verify style.css =="
+            ls -la "$TARGET" | head -n 50
+            head -n 20 "$TARGET/style.css" || true

@@ -1,5 +1,7 @@
 *
 !.gitignore
+!.github/
+!.github/workflows/
 !.github/workflows/deploy.yml
 !themes/
 !themes/nishiki-pro-child/
