@@ -3198,6 +3198,178 @@ body.scrolled #masthead {
 }
 
 /* ===========================================
+   Mobile Layout Fixes - モバイルレイアウト修正
+   =========================================== */
+
+/* Hero Section - 単列レイアウト */
+@media (max-width: 768px) {
+    .hero {
+        min-height: auto;
+    }
+
+    .hero__container {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .hero__main {
+        padding: 60px 24px 48px;
+        order: 1;
+    }
+
+    .hero__side {
+        padding: 48px 24px;
+        order: 2;
+        gap: 20px;
+    }
+
+    .hero__title {
+        font-size: clamp(28px, 8vw, 40px);
+    }
+
+    .hero__subtitle {
+        font-size: 15px;
+    }
+}
+
+/* Categories Section - パディング最適化 */
+@media (max-width: 768px) {
+    .categories {
+        padding: 64px 0;
+    }
+
+    .categories__container {
+        padding: 0 20px;
+    }
+
+    .categories__header {
+        margin-bottom: 36px;
+    }
+}
+
+/* Features Section - 単列・パディング最適化 */
+@media (max-width: 768px) {
+    .features {
+        padding: 64px 0;
+    }
+
+    .features__container {
+        padding: 0 20px;
+    }
+
+    .features__header {
+        margin-bottom: 36px;
+    }
+
+    .features__grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .feature-card {
+        padding: 28px 24px;
+    }
+}
+
+/* Latest Posts Slider - モバイル最適化（1枚表示） */
+@media (max-width: 768px) {
+    .latest-posts {
+        padding: 64px 0;
+    }
+
+    .latest-posts__container {
+        padding: 0 0 0 20px;
+    }
+
+    .latest-posts__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 36px;
+        padding-right: 20px;
+    }
+
+    .latest-posts__navigation {
+        order: 3;
+        align-self: flex-end;
+    }
+
+    .latest-posts__indicators {
+        padding-right: 20px;
+    }
+
+    .post-slide {
+        flex: 0 0 calc(82% - 12px);
+    }
+}
+
+/* Archive CTA - 単列・パディング最適化 */
+@media (max-width: 768px) {
+    .archive-cta {
+        padding: 64px 0;
+    }
+
+    .archive-cta__container {
+        padding: 0 20px;
+    }
+
+    .archive-cta__header {
+        margin-bottom: 36px;
+    }
+
+    .archive-cta__content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .archive-cta__card {
+        padding: 32px 24px;
+    }
+}
+
+/* Footer CTA - モバイル最適化 */
+@media (max-width: 768px) {
+    .onesta-section--about-cta {
+        padding: 64px 0;
+    }
+
+    .onesta-footer-cta {
+        padding: 48px 24px;
+        border-radius: 20px;
+    }
+
+    .onesta-footer-cta__badge {
+        position: static;
+        margin-bottom: 4px;
+    }
+
+    .onesta-footer-cta__icon {
+        width: 72px;
+        height: 72px;
+    }
+
+    .onesta-footer-cta__button {
+        padding: 16px 32px;
+        font-size: 15px;
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+}
+
+/* Simple Footer */
+@media (max-width: 768px) {
+    .simple-footer {
+        margin-top: 40px;
+        padding: 24px 0;
+    }
+
+    .simple-footer__container {
+        padding: 0 20px;
+    }
+}
+
+/* ===========================================
    Index Page - 記事一覧（ホーム）
    =========================================== */
 

@@ -1727,3 +1727,55 @@
         font-size: 11px;
     }
 }
+
+/* ===========================================
+   Mobile Additional Fixes - モバイル追加修正
+   =========================================== */
+
+@media (max-width: 768px) {
+    /* テーブルの横スクロール対応 */
+    .article-content table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ブロッククォートのモバイル最適化 */
+    .article-content blockquote {
+        padding: 20px;
+        margin: 24px 0;
+    }
+
+    .article-content blockquote::before {
+        font-size: 48px;
+        top: -8px;
+        left: 8px;
+    }
+
+    /* ドロップキャップをモバイルで無効化（レイアウト崩れ防止） */
+    .article-content > p:first-of-type::first-letter {
+        float: none;
+        font-size: inherit;
+        line-height: inherit;
+        margin: 0;
+        color: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+    }
+
+    /* アーティクルメインのパディング最適化 */
+    .article-hero {
+        padding: 0 16px;
+    }
+
+    /* タクソノミーのラベルを縦並びに */
+    .article-taxonomy__group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .article-taxonomy__label {
+        min-width: auto;
+    }
+}
