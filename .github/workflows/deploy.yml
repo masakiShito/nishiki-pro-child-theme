@@ -3,6 +3,7 @@ name: Deploy Nishiki Pro Child to Lolipop
 on:
   push:
     branches: ["main"]
+  workflow_dispatch: {}
 
 concurrency:
   group: deploy-nishiki-pro-child
@@ -13,35 +14,36 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      # リポジトリ側の「子テーマのルート」（通常はリポジトリ直下）
-      LOCAL_THEME_DIR: "."
+      # 子テーマの実体フォルダ（リポジトリ内）
+      LOCAL_THEME_DIR: "themes/nishiki-pro-child"
+      DIST_DIR: "dist"
 
-      # サーバ側の候補パス（LOLIPOP_REMOTE_PATHがズレてる時の切り分け用）
-      # ※実際のデプロイ先はSecretsの LOLIPOP_REMOTE_PATH を使う
-      CANDIDATE_PATHS: |
-        morofujisan.com/wp-content/themes/nishiki-pro-child
-        web/morofujisan.com/wp-content/themes/nishiki-pro-child
-        public_html/morofujisan.com/wp-content/themes/nishiki-pro-child
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 1) 送るものを dist に組み立て（.githubなど不要物は除外）
+      # 1) dist を作る（子テーマの中身だけ）
       - name: Build dist (theme files only)
         run: |
-          set -e
-          mkdir -p dist
-          rsync -av --delete \
+          set -euo pipefail
+          rm -rf "${DIST_DIR}"
+          mkdir -p "${DIST_DIR}"
+
+          rsync -a --delete \
             --exclude ".git" \
             --exclude ".github" \
             --exclude ".DS_Store" \
             --exclude "node_modules" \
-            "${LOCAL_THEME_DIR}/" "dist/"
+            "${LOCAL_THEME_DIR}/" "${DIST_DIR}/"
+
           echo "---- dist tree (top) ----"
-          ls -la dist | head -n 50
-      # 2) SSHで「起点ディレクトリ」「候補パスの存在」を出力（デバッグ）
-      #    これで LOLIPOP_REMOTE_PATH を確定できる
-      - name: Debug remote (pwd & candidate paths)
+          ls -la "${DIST_DIR}" | head -n 100
+
+          # 念のため、テーマとして必須の style.css があるか確認
+          test -f "${DIST_DIR}/style.css"
+
+      # 2) SSH で「接続できるか」「デプロイ先が存在するか」を確認（ここで落ちたらSecretsが違う）
+      - name: Debug remote (connect & check target dir)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.LOLIPOP_HOST }}
@@ -52,42 +54,35 @@ jobs:
             set -e
             echo "== REMOTE PWD =="
             pwd
-            echo "== REMOTE LS (top) =="
+            echo "== REMOTE TOP LS =="
             ls -la | head -n 50
-            echo "== CHECK CANDIDATE PATHS =="
-            for p in $(echo "${{ env.CANDIDATE_PATHS }}" | tr '\n' ' '); do
-              echo "--- $p ---"
-              if [ -d "$p" ]; then
-                echo "[OK] exists"
-                ls -la "$p" | head -n 30
-              else
-                echo "[NG] not found"
-              fi
-            done
-            echo "== TARGET FROM SECRET =="
-            echo "${{ secrets.LOLIPOP_REMOTE_PATH }}"
-            if [ -d "${{ secrets.LOLIPOP_REMOTE_PATH }}" ]; then
-              echo "[OK] secret target exists"
-              ls -la "${{ secrets.LOLIPOP_REMOTE_PATH }}" | head -n 30
-            else
-              echo "[WARN] secret target NOT found (LOLIPOP_REMOTE_PATH may be wrong)"
-            fi
-      # 3) アップロード（SCPで同期）
-      #    strip_components: 1 なので dist/* をターゲット直下に展開
-      - name: Upload via SCP
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.LOLIPOP_HOST }}
-          port: ${{ secrets.LOLIPOP_PORT }}
-          username: ${{ secrets.LOLIPOP_USER }}
-          password: ${{ secrets.LOLIPOP_PASS }}
-          source: "dist"
-          target: ${{ secrets.LOLIPOP_REMOTE_PATH }}
-          strip_components: 1
-          overwrite: true
 
-      # 4) アップ後に「style.css だけ」確認（反映チェック）
-      - name: Verify deployment (check style.css)
+            echo "== TARGET DIR (from secret) =="
+            echo "${{ secrets.LOLIPOP_REMOTE_PATH }}"
+
+            if [ -d "${{ secrets.LOLIPOP_REMOTE_PATH }}" ]; then
+              echo "[OK] target exists"
+              ls -la "${{ secrets.LOLIPOP_REMOTE_PATH }}" | head -n 50
+            else
+              echo "[ERROR] target NOT found"
+              exit 1
+            fi
+
+      # 3) デプロイ（SFTP）
+      - name: Upload via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.LOLIPOP_USER }}
+          server: ${{ secrets.LOLIPOP_HOST }}
+          port: ${{ secrets.LOLIPOP_PORT }}
+          password: ${{ secrets.LOLIPOP_PASS }}
+          local_path: ./dist/*
+          remote_path: ${{ secrets.LOLIPOP_REMOTE_PATH }}
+          sftp_only: true
+          delete_remote_files: false
+
+      # 4) 反映チェック（style.cssを表示）
+      - name: Verify deployment (style.css)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.LOLIPOP_HOST }}
@@ -96,9 +91,17 @@ jobs:
           password: ${{ secrets.LOLIPOP_PASS }}
           script: |
             set -e
-            echo "== VERIFY FILES =="
-            ls -la "${{ secrets.LOLIPOP_REMOTE_PATH }}" | head -n 50
+            echo "== VERIFY TARGET DIR =="
+            ls -la "${{ secrets.LOLIPOP_REMOTE_PATH }}" | head -n 80
+
             echo "== style.css head =="
             head -n 25 "${{ secrets.LOLIPOP_REMOTE_PATH }}/style.css" || true
+
             echo "== style.css tail =="
             tail -n 10 "${{ secrets.LOLIPOP_REMOTE_PATH }}/style.css" || true
+
+            # 二重配置事故が起きてないか念のためチェック
+            if [ -d "${{ secrets.LOLIPOP_REMOTE_PATH }}/themes/nishiki-pro-child" ]; then
+              echo "[WARN] nested themes/nishiki-pro-child exists (previous bad deploy). Consider deleting it."
+              ls -la "${{ secrets.LOLIPOP_REMOTE_PATH }}/themes" | head -n 50
+            fi
