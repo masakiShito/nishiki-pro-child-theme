@@ -15,6 +15,7 @@
         initImageLightbox();
         initScrollAnimations();
         initProgressBar();
+        initSnsFloat();
     }
 
     // ===========================================
@@ -416,6 +417,39 @@
                 ticking = true;
             }
         });
+    }
+
+    // ===========================================
+    // フローティングSNSボタン表示制御
+    // ===========================================
+
+    function initSnsFloat() {
+        const snsFloat = document.getElementById('snsFloat');
+        if (!snsFloat) return;
+
+        const articleHero = document.querySelector('.article-hero');
+        if (!articleHero) {
+            snsFloat.classList.add('is-visible');
+            return;
+        }
+
+        let isVisible = false;
+
+        const checkVisibility = () => {
+            const heroBottom = articleHero.offsetTop + articleHero.offsetHeight;
+            const shouldShow = window.scrollY > heroBottom - 100;
+
+            if (shouldShow && !isVisible) {
+                snsFloat.classList.add('is-visible');
+                isVisible = true;
+            } else if (!shouldShow && isVisible) {
+                snsFloat.classList.remove('is-visible');
+                isVisible = false;
+            }
+        };
+
+        window.addEventListener('scroll', checkVisibility, { passive: true });
+        checkVisibility();
     }
 
 })();

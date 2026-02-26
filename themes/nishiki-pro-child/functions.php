@@ -267,6 +267,14 @@ function create_blog_page_automatically() {
     }
 }
 
+// 記事ページ末尾の黒帯フィードセクションを削除
+add_action('template_redirect', function() {
+    if (is_single()) {
+        remove_all_actions('nishiki_pro_after_inner_content');
+        remove_all_actions('nishiki_pro_after_content');
+    }
+}, 5);
+
 // テーマ有効化時に実行
 add_action('after_switch_theme', function() {
     create_about_page_automatically();
