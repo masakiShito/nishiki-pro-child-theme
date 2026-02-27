@@ -1269,3 +1269,60 @@ body.page-template-page-blog .pagination__item .page-numbers ,
         background-position: -120% 0;
     }
 }
+
+/* ===========================================
+   Small Screen Additional Fixes (480px以下)
+   =========================================== */
+
+@media (max-width: 480px) {
+    /* フィルタータブを小さく */
+    .archive-filter__tabs {
+        gap: 4px;
+    }
+
+    .archive-filter__tab {
+        font-size: 12px;
+        padding: 7px 10px;
+        gap: 4px;
+    }
+
+    /* カウントバッジを非表示（スペース節約） */
+    .archive-filter__tab-count {
+        display: none;
+    }
+
+    /* ブログ一覧ページのヒーロー統計 - 折り返し対応 */
+    body.page-template-page-blog .archive-hero__stats,
+    .blog-list-page .archive-hero__stats {
+        flex-wrap: wrap;
+    }
+
+    body.page-template-page-blog .archive-hero__stat,
+    .blog-list-page .archive-hero__stat {
+        flex: 1;
+        min-width: calc(50% - 7px);
+        text-align: center;
+    }
+
+    /* 記事グリッドのギャップ縮小 */
+    .article-grid {
+        gap: 16px;
+    }
+
+    .article-card__content {
+        padding: 16px;
+    }
+
+    .article-card__title {
+        font-size: 16px;
+    }
+
+    /* フィーチャード記事のコンテンツパディング */
+    .featured-article__content {
+        padding: 20px;
+    }
+
+    .featured-article__title {
+        font-size: 20px;
+    }
+}
