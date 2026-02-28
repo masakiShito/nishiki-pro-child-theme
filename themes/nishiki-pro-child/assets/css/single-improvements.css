@@ -1729,53 +1729,255 @@
 }
 
 /* ===========================================
-   Mobile Additional Fixes - モバイル追加修正
+   Table of Contents Widget（目次）
    =========================================== */
 
+.toc-widget {
+    background: #ffffff;
+    border: 1px solid var(--article-border, #dde3ee);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07);
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
+}
+
+.toc-widget:empty {
+    display: none;
+}
+
+/* ヘッダー */
+.toc-widget__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, var(--article-accent, #0f766e) 0%, var(--article-accent-dark, #0b4f4a) 100%);
+    flex-shrink: 0;
+}
+
+.toc-widget__title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toc-widget__icon {
+    width: 16px;
+    height: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    flex-shrink: 0;
+}
+
+.toc-widget__title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* 開閉ボタン */
+.toc-widget__toggle {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #ffffff;
+    transition: background 0.2s ease, transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.toc-widget__toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.toc-widget__toggle svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+}
+
+.toc-widget--collapsed .toc-widget__toggle svg {
+    transform: rotate(180deg);
+}
+
+/* ボディ（リスト領域） */
+.toc-widget__body {
+    overflow-y: auto;
+    padding: 12px 0;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: var(--article-border, #dde3ee) transparent;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease,
+                padding 0.3s ease;
+    max-height: 600px;
+    opacity: 1;
+}
+
+.toc-widget__body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.toc-widget__body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.toc-widget__body::-webkit-scrollbar-thumb {
+    background: var(--article-border, #dde3ee);
+    border-radius: 2px;
+}
+
+.toc-widget--collapsed .toc-widget__body {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* リスト */
+.toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* H2アイテム */
+.toc-list__item {
+    position: relative;
+}
+
+.toc-list__item--h2 > .toc-list__link {
+    padding: 7px 16px 7px 40px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--article-text, #1f2430);
+}
+
+/* H3アイテム */
+.toc-list__item--h3 > .toc-list__link {
+    padding: 5px 16px 5px 52px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--article-text-secondary, #475569);
+}
+
+/* H4アイテム */
+.toc-list__item--h4 > .toc-list__link {
+    padding: 4px 16px 4px 64px;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--article-text-muted, #7f8797);
+}
+
+/* リンク共通 */
+.toc-list__link {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    text-decoration: none;
+    line-height: 1.5;
+    border-left: 3px solid transparent;
+    transition: background 0.18s ease,
+                color 0.18s ease,
+                border-color 0.18s ease;
+    border-radius: 0 6px 6px 0;
+    margin-right: 8px;
+}
+
+.toc-list__link:hover {
+    background: var(--article-bg, #f4f7fb);
+    color: var(--article-accent, #0f766e);
+}
+
+/* 番号バッジ（H2のみ） */
+.toc-list__num {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--article-bg-alt, #eef2f7);
+    color: var(--article-accent, #0f766e);
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    line-height: 1;
+    transition: background 0.18s ease, color 0.18s ease;
+    font-variant-numeric: tabular-nums;
+}
+
+/* アクティブ状態 */
+.toc-list__item.is-active > .toc-list__link {
+    border-left-color: var(--article-accent, #0f766e);
+    background: linear-gradient(90deg, rgba(15, 118, 110, 0.06) 0%, transparent 100%);
+    color: var(--article-accent, #0f766e);
+    font-weight: 700;
+}
+
+.toc-list__item--h2.is-active > .toc-list__link .toc-list__num {
+    background: var(--article-accent, #0f766e);
+    color: #ffffff;
+}
+
+.toc-list__item--h3.is-active > .toc-list__link,
+.toc-list__item--h4.is-active > .toc-list__link {
+    color: var(--article-accent, #0f766e);
+    font-weight: 600;
+}
+
+/* テキスト */
+.toc-list__text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* 目次が空の場合は非表示 */
+.toc-widget--empty {
+    display: none;
+}
+
+/* モバイル対応 */
+@media (max-width: 1024px) {
+    .toc-widget {
+        position: static;
+        max-height: none;
+    }
+}
+
 @media (max-width: 768px) {
-    /* テーブルの横スクロール対応 */
-    .article-content table {
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+    .toc-widget {
+        margin-bottom: 20px;
     }
 
-    /* ブロッククォートのモバイル最適化 */
-    .article-content blockquote {
-        padding: 20px;
-        margin: 24px 0;
+    .toc-list__item--h2 > .toc-list__link {
+        font-size: 12px;
+        padding: 6px 12px 6px 36px;
     }
 
-    .article-content blockquote::before {
-        font-size: 48px;
-        top: -8px;
-        left: 8px;
+    .toc-list__item--h3 > .toc-list__link {
+        font-size: 11px;
+        padding: 5px 12px 5px 48px;
     }
 
-    /* ドロップキャップをモバイルで無効化（レイアウト崩れ防止） */
-    .article-content > p:first-of-type::first-letter {
-        float: none;
-        font-size: inherit;
-        line-height: inherit;
-        margin: 0;
-        color: inherit;
-        font-family: inherit;
-        font-weight: inherit;
-    }
-
-    /* アーティクルメインのパディング最適化 */
-    .article-hero {
-        padding: 0 16px;
-    }
-
-    /* タクソノミーのラベルを縦並びに */
-    .article-taxonomy__group {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-    }
-
-    .article-taxonomy__label {
-        min-width: auto;
+    .toc-list__item--h4 > .toc-list__link {
+        font-size: 10.5px;
+        padding: 4px 12px 4px 58px;
     }
 }

@@ -61,6 +61,31 @@ get_header();
 
             <!-- 右カラム -->
             <aside class="article-sidebar">
+                <!-- 目次 -->
+                <div class="toc-widget" id="tocWidget">
+                    <div class="toc-widget__header">
+                        <div class="toc-widget__title-wrap">
+                            <svg class="toc-widget__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="8" y1="6" x2="21" y2="6"/>
+                                <line x1="8" y1="12" x2="21" y2="12"/>
+                                <line x1="8" y1="18" x2="21" y2="18"/>
+                                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                                <line x1="3" y1="18" x2="3.01" y2="18"/>
+                            </svg>
+                            <span class="toc-widget__title">目次</span>
+                        </div>
+                        <button class="toc-widget__toggle" id="tocToggle" aria-expanded="true" aria-label="目次を折りたたむ">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <nav class="toc-widget__body" id="tocBody" aria-label="目次">
+                        <ol class="toc-list" id="tocList"></ol>
+                    </nav>
+                </div>
+
                 <?php if (!empty($post_categories)) : ?>
                     <section class="article-sidebar__section">
                         <h2 class="article-sidebar__title">カテゴリー</h2>
