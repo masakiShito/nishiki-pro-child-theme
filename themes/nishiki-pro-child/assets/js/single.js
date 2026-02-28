@@ -10,6 +10,7 @@
 
     function init() {
         initCopyButton();
+        initTableOfContents();
         initHeadingAnchors();
         initExternalLinks();
         initImageLightbox();
@@ -77,6 +78,161 @@
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 400);
         }, 2500);
+    }
+
+    // ===========================================
+    // 目次（Table of Contents）
+    // ===========================================
+
+    function initTableOfContents() {
+        const tocWidget = document.getElementById('tocWidget');
+        const tocList   = document.getElementById('tocList');
+        const tocToggle = document.getElementById('tocToggle');
+        const tocBody   = document.getElementById('tocBody');
+
+        if (!tocWidget || !tocList) return;
+
+        const articleContent = document.querySelector('.article-content');
+        if (!articleContent) {
+            tocWidget.classList.add('toc-widget--empty');
+            return;
+        }
+
+        // --------------------------------------------------
+        // 1. 見出しにIDを自動付与
+        // --------------------------------------------------
+        const headings = articleContent.querySelectorAll('h2, h3, h4');
+
+        if (headings.length === 0) {
+            tocWidget.classList.add('toc-widget--empty');
+            return;
+        }
+
+        const usedIds = {};
+
+        headings.forEach(heading => {
+            if (!heading.id) {
+                const base = heading.textContent.trim()
+                    .replace(/\s+/g, '-')
+                    .replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF-]/g, '')
+                    .substring(0, 60) || 'heading';
+                let id = base;
+                let count = 1;
+                while (usedIds[id]) {
+                    id = `${base}-${count++}`;
+                }
+                heading.id = id;
+            }
+            usedIds[heading.id] = true;
+        });
+
+        // --------------------------------------------------
+        // 2. 目次リストを生成
+        // --------------------------------------------------
+        let h2Counter = 0;
+        const tocItems = []; // { el, linkEl } の配列
+
+        headings.forEach(heading => {
+            const level = parseInt(heading.tagName.replace('H', ''), 10);
+            const li = document.createElement('li');
+            li.className = `toc-list__item toc-list__item--h${level}`;
+
+            const a = document.createElement('a');
+            a.href = `#${heading.id}`;
+            a.className = 'toc-list__link';
+
+            if (level === 2) {
+                h2Counter++;
+                const numSpan = document.createElement('span');
+                numSpan.className = 'toc-list__num';
+                numSpan.textContent = String(h2Counter).padStart(2, '0');
+                a.appendChild(numSpan);
+            }
+
+            const textSpan = document.createElement('span');
+            textSpan.className = 'toc-list__text';
+            textSpan.textContent = heading.textContent.replace(/\s*#\s*$/, '').trim();
+            a.appendChild(textSpan);
+
+            // スムーススクロール
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.getElementById(heading.id);
+                if (!target) return;
+                const offset = 80;
+                const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                window.scrollTo({ top, behavior: 'smooth' });
+                history.replaceState(null, '', `#${heading.id}`);
+            });
+
+            li.appendChild(a);
+            tocList.appendChild(li);
+            tocItems.push({ heading, li });
+        });
+
+        // --------------------------------------------------
+        // 3. 折りたたみ（開閉）
+        // --------------------------------------------------
+        if (tocToggle && tocBody) {
+            tocToggle.addEventListener('click', () => {
+                const isCollapsed = tocWidget.classList.toggle('toc-widget--collapsed');
+                tocToggle.setAttribute('aria-expanded', String(!isCollapsed));
+                tocToggle.setAttribute('aria-label', isCollapsed ? '目次を開く' : '目次を折りたたむ');
+            });
+        }
+
+        // --------------------------------------------------
+        // 4. スクロール追従ハイライト
+        // --------------------------------------------------
+        const OFFSET = 100;
+        let activeItem = null;
+
+        function updateActiveHeading() {
+            const scrollY = window.scrollY + OFFSET;
+            let current = null;
+
+            for (let i = 0; i < tocItems.length; i++) {
+                const { heading } = tocItems[i];
+                if (heading.getBoundingClientRect().top + window.scrollY <= scrollY) {
+                    current = tocItems[i];
+                } else {
+                    break;
+                }
+            }
+
+            if (current === activeItem) return;
+
+            if (activeItem) {
+                activeItem.li.classList.remove('is-active');
+            }
+            activeItem = current;
+            if (activeItem) {
+                activeItem.li.classList.add('is-active');
+
+                // TOCボディ内でアクティブ項目を可視スクロール
+                const linkEl = activeItem.li.querySelector('.toc-list__link');
+                if (linkEl && tocBody) {
+                    const bodyRect  = tocBody.getBoundingClientRect();
+                    const linkRect  = linkEl.getBoundingClientRect();
+                    const isAbove   = linkRect.top < bodyRect.top;
+                    const isBelow   = linkRect.bottom > bodyRect.bottom;
+                    if (isAbove || isBelow) {
+                        linkEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    }
+                }
+            }
+        }
+
+        let rafId = null;
+        window.addEventListener('scroll', () => {
+            if (rafId) return;
+            rafId = requestAnimationFrame(() => {
+                updateActiveHeading();
+                rafId = null;
+            });
+        }, { passive: true });
+
+        updateActiveHeading();
     }
 
     // ===========================================
