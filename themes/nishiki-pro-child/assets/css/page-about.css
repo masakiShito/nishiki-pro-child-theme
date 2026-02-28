@@ -1185,3 +1185,70 @@
     opacity: 1;
     transform: translateY(0);
 }
+
+/* ===========================================
+   Small Screen Additional Fixes (480px以下)
+   =========================================== */
+
+@media (max-width: 480px) {
+    /* マネジメント統計の折り返し対応 */
+    .management-stats {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .management-stat {
+        min-width: calc(50% - 8px);
+    }
+
+    /* プロフィール引用ブロックの最適化 */
+    .about-profile__quote blockquote {
+        padding: 24px 20px;
+    }
+
+    .about-profile__quote blockquote::before {
+        font-size: 40px;
+        top: 12px;
+        left: 12px;
+    }
+
+    /* ベントカードの数字を小さく */
+    .bento-card__number {
+        font-size: 56px;
+    }
+
+    /* ストレングスカードのパディング縮小 */
+    .strength-card {
+        padding: 28px 20px;
+    }
+
+    .strength-card__number {
+        font-size: 36px;
+    }
+
+    .strength-card__title {
+        font-size: 18px;
+    }
+
+    /* スキルタグのサイズ調整 */
+    .skill-tag {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    /* タグのサイズ調整 */
+    .tag {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+
+    /* ミニタイムラインを縦並びに */
+    .mini-timeline {
+        flex-direction: column;
+    }
+
+    /* ハイライトアイテムのホバー効果を無効化（タッチ端末対応） */
+    .highlight-item:hover {
+        transform: none;
+    }
+}
