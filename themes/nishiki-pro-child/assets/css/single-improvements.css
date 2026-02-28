@@ -1732,13 +1732,19 @@
    Table of Contents Widget（目次）
    =========================================== */
 
+/* ===========================================
+   目次ウィジェット - テック・コードエディタ風
+   =========================================== */
+
 .toc-widget {
-    background: #ffffff;
-    border: 1px solid var(--article-border, #dde3ee);
-    border-radius: 12px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 10px;
     overflow: hidden;
     margin-bottom: 24px;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+        0 12px 36px rgba(0, 0, 0, 0.45);
     position: sticky;
     top: 24px;
     max-height: calc(100vh - 48px);
@@ -1750,60 +1756,90 @@
     display: none;
 }
 
-/* ヘッダー */
+/* ヘッダー（エディタタブ / ターミナルウィンドウ風） */
 .toc-widget__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
-    background: linear-gradient(135deg, var(--article-accent, #0f766e) 0%, var(--article-accent-dark, #0b4f4a) 100%);
+    padding: 10px 12px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
     flex-shrink: 0;
+    gap: 8px;
 }
 
 .toc-widget__title-wrap {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    min-width: 0;
+    flex: 1;
 }
 
+/* ウィンドウコントロールボタン（macOS風3つのドット） */
+.toc-widget__dots {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    margin-right: 4px;
+}
+
+.toc-widget__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+    flex-shrink: 0;
+}
+
+.toc-widget__dot--red    { background: #ff5f57; box-shadow: 0 0 0 1px rgba(255, 95,  87,  0.3); }
+.toc-widget__dot--yellow { background: #febc2e; box-shadow: 0 0 0 1px rgba(254, 188, 46,  0.3); }
+.toc-widget__dot--green  { background: #28c840; box-shadow: 0 0 0 1px rgba(40,  200, 64,  0.3); }
+
 .toc-widget__icon {
-    width: 16px;
-    height: 16px;
-    color: rgba(255, 255, 255, 0.85);
+    width: 13px;
+    height: 13px;
+    color: #8b949e;
     flex-shrink: 0;
 }
 
 .toc-widget__title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: #8b949e;
+    letter-spacing: 0;
+    text-transform: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 開閉ボタン */
 .toc-widget__toggle {
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    border-radius: 6px;
-    width: 28px;
-    height: 28px;
+    background: rgba(177, 186, 196, 0.08);
+    border: 1px solid rgba(177, 186, 196, 0.12);
+    border-radius: 4px;
+    width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #ffffff;
-    transition: background 0.2s ease, transform 0.3s ease;
+    color: #8b949e;
+    transition: background 0.2s ease, color 0.2s ease;
     flex-shrink: 0;
 }
 
 .toc-widget__toggle:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(177, 186, 196, 0.16);
+    color: #c9d1d9;
 }
 
 .toc-widget__toggle svg {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     transition: transform 0.3s ease;
 }
 
@@ -1814,19 +1850,17 @@
 /* ボディ（リスト領域） */
 .toc-widget__body {
     overflow-y: auto;
-    padding: 12px 0;
     flex: 1;
     scrollbar-width: thin;
-    scrollbar-color: var(--article-border, #dde3ee) transparent;
+    scrollbar-color: #30363d transparent;
     transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease,
-                padding 0.3s ease;
+                opacity 0.3s ease;
     max-height: 600px;
     opacity: 1;
 }
 
 .toc-widget__body::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
 }
 
 .toc-widget__body::-webkit-scrollbar-track {
@@ -1834,108 +1868,147 @@
 }
 
 .toc-widget__body::-webkit-scrollbar-thumb {
-    background: var(--article-border, #dde3ee);
+    background: #30363d;
     border-radius: 2px;
 }
 
 .toc-widget--collapsed .toc-widget__body {
     max-height: 0;
     opacity: 0;
-    padding: 0;
     overflow: hidden;
+}
+
+/* コメント行（コードコメント風） */
+.toc-widget__comment {
+    display: block;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+    font-size: 10.5px;
+    color: #57a349;
+    padding: 8px 12px 4px;
+    opacity: 0.85;
+    user-select: none;
 }
 
 /* リスト */
 .toc-list {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 4px 0 8px;
 }
 
-/* H2アイテム */
 .toc-list__item {
     position: relative;
 }
 
+/* H2 アイテム */
 .toc-list__item--h2 > .toc-list__link {
-    padding: 7px 16px 7px 40px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--article-text, #1f2430);
+    padding: 5px 12px 5px 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #c9d1d9;
 }
 
-/* H3アイテム */
+/* H3 アイテム */
 .toc-list__item--h3 > .toc-list__link {
-    padding: 5px 16px 5px 52px;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--article-text-secondary, #475569);
-}
-
-/* H4アイテム */
-.toc-list__item--h4 > .toc-list__link {
-    padding: 4px 16px 4px 64px;
+    padding: 4px 12px 4px 44px;
     font-size: 11.5px;
     font-weight: 400;
-    color: var(--article-text-muted, #7f8797);
+    color: #8b949e;
+}
+
+/* H4 アイテム */
+.toc-list__item--h4 > .toc-list__link {
+    padding: 3px 12px 3px 56px;
+    font-size: 11px;
+    font-weight: 400;
+    color: #6e7681;
 }
 
 /* リンク共通 */
 .toc-list__link {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
+    gap: 0;
     text-decoration: none;
-    line-height: 1.5;
-    border-left: 3px solid transparent;
-    transition: background 0.18s ease,
-                color 0.18s ease,
-                border-color 0.18s ease;
-    border-radius: 0 6px 6px 0;
-    margin-right: 8px;
+    line-height: 1.55;
+    border-left: 2px solid transparent;
+    transition: background 0.15s ease,
+                color 0.15s ease,
+                border-color 0.15s ease;
 }
 
 .toc-list__link:hover {
-    background: var(--article-bg, #f4f7fb);
-    color: var(--article-accent, #0f766e);
+    background: rgba(177, 186, 196, 0.06);
+    color: #e6edf3;
+    border-left-color: rgba(63, 185, 80, 0.35);
 }
 
-/* 番号バッジ（H2のみ） */
+/* 番号バッジ（H2のみ - 行番号スタイル） */
 .toc-list__num {
     flex-shrink: 0;
-    width: 20px;
-    height: 20px;
-    background: var(--article-bg-alt, #eef2f7);
-    color: var(--article-accent, #0f766e);
+    width: 32px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
     font-size: 10px;
-    font-weight: 700;
-    border-radius: 4px;
+    font-weight: 400;
+    color: #484f58;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-    line-height: 1;
-    transition: background 0.18s ease, color 0.18s ease;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 2px 8px 0 0;
+    border-right: 1px solid #21262d;
+    margin-right: 10px;
+    line-height: 1.55;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
     font-variant-numeric: tabular-nums;
+    background: rgba(22, 27, 34, 0.6);
 }
 
-/* アクティブ状態 */
+/* H3/H4 ツリーライン（CSS生成） */
+.toc-list__item--h3 > .toc-list__link::before {
+    content: '├─';
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+    font-size: 10px;
+    color: #3d444d;
+    padding-left: 12px;
+    padding-right: 6px;
+    flex-shrink: 0;
+    line-height: 1.55;
+    transition: color 0.15s ease;
+}
+
+.toc-list__item--h4 > .toc-list__link::before {
+    content: '│  └─';
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+    font-size: 10px;
+    color: #3d444d;
+    padding-left: 12px;
+    padding-right: 6px;
+    flex-shrink: 0;
+    line-height: 1.55;
+    transition: color 0.15s ease;
+}
+
+/* アクティブ状態（コードエディタの現在行選択スタイル） */
 .toc-list__item.is-active > .toc-list__link {
-    border-left-color: var(--article-accent, #0f766e);
-    background: linear-gradient(90deg, rgba(15, 118, 110, 0.06) 0%, transparent 100%);
-    color: var(--article-accent, #0f766e);
-    font-weight: 700;
+    border-left-color: #3fb950;
+    background: rgba(63, 185, 80, 0.08);
+    color: #e6edf3;
 }
 
 .toc-list__item--h2.is-active > .toc-list__link .toc-list__num {
-    background: var(--article-accent, #0f766e);
-    color: #ffffff;
+    color: #3fb950;
+    border-right-color: rgba(63, 185, 80, 0.25);
+    background: rgba(63, 185, 80, 0.06);
 }
 
 .toc-list__item--h3.is-active > .toc-list__link,
 .toc-list__item--h4.is-active > .toc-list__link {
-    color: var(--article-accent, #0f766e);
-    font-weight: 600;
+    color: #aff0bb;
+}
+
+.toc-list__item--h3.is-active > .toc-list__link::before,
+.toc-list__item--h4.is-active > .toc-list__link::before {
+    color: #3fb950;
 }
 
 /* テキスト */
@@ -1946,6 +2019,42 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+
+/* フッター（エディタステータスバー風） */
+.toc-widget__footer {
+    padding: 5px 12px;
+    background: #161b22;
+    border-top: 1px solid #30363d;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+    font-size: 10px;
+    color: #6e7681;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.toc-widget__footer-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.toc-widget__footer-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3fb950;
+    display: inline-block;
+    box-shadow: 0 0 4px rgba(63, 185, 80, 0.5);
+    animation: tocFooterPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes tocFooterPulse {
+    0%, 100% { opacity: 1;   box-shadow: 0 0 4px rgba(63, 185, 80, 0.5); }
+    50%       { opacity: 0.5; box-shadow: 0 0 8px rgba(63, 185, 80, 0.8); }
 }
 
 /* 目次が空の場合は非表示 */
@@ -1968,16 +2077,13 @@
 
     .toc-list__item--h2 > .toc-list__link {
         font-size: 12px;
-        padding: 6px 12px 6px 36px;
     }
 
     .toc-list__item--h3 > .toc-list__link {
         font-size: 11px;
-        padding: 5px 12px 5px 48px;
     }
 
     .toc-list__item--h4 > .toc-list__link {
         font-size: 10.5px;
-        padding: 4px 12px 4px 58px;
     }
 }

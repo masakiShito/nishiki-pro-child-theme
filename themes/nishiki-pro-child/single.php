@@ -65,15 +65,19 @@ get_header();
                 <div class="toc-widget" id="tocWidget">
                     <div class="toc-widget__header">
                         <div class="toc-widget__title-wrap">
-                            <svg class="toc-widget__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                <line x1="8" y1="6" x2="21" y2="6"/>
-                                <line x1="8" y1="12" x2="21" y2="12"/>
-                                <line x1="8" y1="18" x2="21" y2="18"/>
-                                <line x1="3" y1="6" x2="3.01" y2="6"/>
-                                <line x1="3" y1="12" x2="3.01" y2="12"/>
-                                <line x1="3" y1="18" x2="3.01" y2="18"/>
+                            <div class="toc-widget__dots" aria-hidden="true">
+                                <span class="toc-widget__dot toc-widget__dot--red"></span>
+                                <span class="toc-widget__dot toc-widget__dot--yellow"></span>
+                                <span class="toc-widget__dot toc-widget__dot--green"></span>
+                            </div>
+                            <svg class="toc-widget__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10 9 9 9 8 9"/>
                             </svg>
-                            <span class="toc-widget__title">目次</span>
+                            <span class="toc-widget__title">_toc.md</span>
                         </div>
                         <button class="toc-widget__toggle" id="tocToggle" aria-expanded="true" aria-label="目次を折りたたむ">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">

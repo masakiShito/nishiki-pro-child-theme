@@ -127,7 +127,16 @@
         });
 
         // --------------------------------------------------
-        // 2. 目次リストを生成
+        // 2. コメント行を挿入（コードエディタ風）
+        // --------------------------------------------------
+        const comment = document.createElement('span');
+        comment.className = 'toc-widget__comment';
+        comment.setAttribute('aria-hidden', 'true');
+        comment.textContent = '// table_of_contents';
+        tocBody.insertBefore(comment, tocList);
+
+        // --------------------------------------------------
+        // 3. 目次リストを生成
         // --------------------------------------------------
         let h2Counter = 0;
         const tocItems = []; // { el, linkEl } の配列
@@ -171,7 +180,24 @@
         });
 
         // --------------------------------------------------
-        // 3. 折りたたみ（開閉）
+        // 4. フッター（エディタステータスバー風）を追加
+        // --------------------------------------------------
+        const footer = document.createElement('div');
+        footer.className = 'toc-widget__footer';
+        footer.setAttribute('aria-hidden', 'true');
+        footer.innerHTML = `
+            <span class="toc-widget__footer-indicator">
+                <span class="toc-widget__footer-dot"></span>
+                <span id="tocFooterStatus">Ln 1</span>
+            </span>
+            <span>${headings.length} items</span>
+        `;
+        tocWidget.appendChild(footer);
+
+        const tocFooterStatus = document.getElementById('tocFooterStatus');
+
+        // --------------------------------------------------
+        // 5. 折りたたみ（開閉）
         // --------------------------------------------------
         if (tocToggle && tocBody) {
             tocToggle.addEventListener('click', () => {
@@ -182,7 +208,7 @@
         }
 
         // --------------------------------------------------
-        // 4. スクロール追従ハイライト
+        // 6. スクロール追従ハイライト
         // --------------------------------------------------
         const OFFSET = 100;
         let activeItem = null;
@@ -190,11 +216,13 @@
         function updateActiveHeading() {
             const scrollY = window.scrollY + OFFSET;
             let current = null;
+            let currentIndex = 0;
 
             for (let i = 0; i < tocItems.length; i++) {
                 const { heading } = tocItems[i];
                 if (heading.getBoundingClientRect().top + window.scrollY <= scrollY) {
                     current = tocItems[i];
+                    currentIndex = i + 1;
                 } else {
                     break;
                 }
@@ -208,6 +236,11 @@
             activeItem = current;
             if (activeItem) {
                 activeItem.li.classList.add('is-active');
+
+                // フッターのステータスを更新
+                if (tocFooterStatus) {
+                    tocFooterStatus.textContent = `Ln ${currentIndex}`;
+                }
 
                 // TOCボディ内でアクティブ項目を可視スクロール
                 const linkEl = activeItem.li.querySelector('.toc-list__link');
