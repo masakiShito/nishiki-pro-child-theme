@@ -4,8 +4,11 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const featureCards = document.querySelectorAll('.feature-card');
-    
+
     if (featureCards.length === 0) return;
+
+    // タッチデバイス（モバイル）かどうかを判定
+    const isTouchDevice = window.matchMedia('(hover: none)').matches;
 
     // 1. スクロールで順番にフェードイン
     const observerOptions = {
@@ -18,12 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (entry.isIntersecting) {
                 const card = entry.target;
                 const index = card.getAttribute('data-index') || 0;
-                
+
                 setTimeout(() => {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0) scale(1)';
                 }, index * 150);
-                
+
                 observer.unobserve(card);
             }
         });
@@ -37,29 +40,40 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(card);
     });
 
-    // 2. アイコンの回転アニメーション（ホバー時）
-    featureCards.forEach(card => {
-        const icon = card.querySelector('.feature-card__icon');
-        
-        card.addEventListener('mouseenter', () => {
-            icon.style.animation = 'iconBounce 0.6s ease';
+    // 2. アイコンの回転アニメーション（ホバー時）- PC のみ
+    if (!isTouchDevice) {
+        featureCards.forEach(card => {
+            const icon = card.querySelector('.feature-card__icon');
+
+            card.addEventListener('mouseenter', () => {
+                icon.style.animation = 'iconBounce 0.6s ease';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                icon.style.animation = 'none';
+            });
         });
-        
-        card.addEventListener('mouseleave', () => {
-            icon.style.animation = 'none';
-        });
-    });
+    }
 
     // 3. リストアイテムの順次表示
     featureCards.forEach(card => {
         const listItems = card.querySelectorAll('.feature-card__list li');
-        
+
+        if (isTouchDevice) {
+            // モバイル: ホバーなしでリストアイテムをそのまま表示
+            listItems.forEach(item => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateX(0)';
+            });
+            return;
+        }
+
         listItems.forEach((item, index) => {
             item.style.opacity = '0';
             item.style.transform = 'translateX(-10px)';
             item.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
         });
-        
+
         card.addEventListener('mouseenter', () => {
             listItems.forEach((item, index) => {
                 setTimeout(() => {

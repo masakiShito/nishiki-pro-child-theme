@@ -3370,6 +3370,74 @@ body.scrolled #masthead {
 }
 
 /* ===========================================
+   Mobile / Touch Device - ホバー依存要素の修正
+   hover: none はマウスなしのタッチデバイスにのみ適用
+   =========================================== */
+
+@media (hover: none) {
+    /* カテゴリカード: 矢印を常時表示 */
+    .category-card__arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* カテゴリカード: ホバー時の浮き上がりを無効化 */
+    .category-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .category-card:hover::before {
+        transform: scaleX(0);
+    }
+
+    .category-card:hover .category-card__title {
+        color: var(--text-primary);
+    }
+
+    /* フィーチャーカード: ホバー時の浮き上がりを無効化 */
+    .feature-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .feature-card:hover::before {
+        opacity: 0;
+    }
+
+    .feature-card:hover .feature-card__icon {
+        transform: none;
+    }
+
+    /* 記事スライド: ホバー時の浮き上がりを無効化 */
+    .post-slide__link:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: var(--border-light);
+    }
+
+    .post-slide__link:hover::before {
+        transform: scaleX(0);
+    }
+
+    .post-slide__link:hover .post-slide__image img {
+        transform: none;
+    }
+
+    .post-slide__link:hover .post-slide__category {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    /* フッターCTA: ホバー時の浮き上がりを無効化 */
+    .onesta-footer-cta:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: var(--border-light);
+    }
+}
+
+/* ===========================================
    Index Page - 記事一覧（ホーム）
    =========================================== */
 
