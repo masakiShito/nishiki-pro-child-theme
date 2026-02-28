@@ -17,6 +17,7 @@
         initScrollAnimations();
         initProgressBar();
         initSnsFloat();
+        initStickyToc();
     }
 
     // ===========================================
@@ -606,6 +607,116 @@
                 ticking = true;
             }
         });
+    }
+
+    // ===========================================
+    // 目次スティッキー固定（常時表示）
+    // ===========================================
+
+    function initStickyToc() {
+        const tocWidget = document.getElementById('tocWidget');
+        const sidebar   = document.querySelector('.article-sidebar');
+        const articleMain = document.querySelector('.article-main');
+
+        if (!tocWidget || !sidebar || !articleMain) return;
+
+        // デスクトップ（1025px以上）のみ適用
+        const BREAKPOINT = 1025;
+        const TOP_OFFSET = 24; // ビューポート上端からの余白(px)
+
+        let isFixed = false;
+        let spacer  = null;
+
+        function attachFixed() {
+            if (isFixed) return;
+
+            const rect        = tocWidget.getBoundingClientRect();
+            const sidebarRect = sidebar.getBoundingClientRect();
+
+            // レイアウト崩れ防止用スペーサー
+            spacer = document.createElement('div');
+            spacer.className = 'toc-widget-spacer';
+            spacer.style.cssText = [
+                'height:' + rect.height + 'px',
+                'flex-shrink:0',
+                'pointer-events:none',
+            ].join(';');
+            sidebar.insertBefore(spacer, tocWidget);
+
+            // fixedで固定
+            tocWidget.style.top   = TOP_OFFSET + 'px';
+            tocWidget.style.left  = sidebarRect.left + 'px';
+            tocWidget.style.width = sidebar.offsetWidth + 'px';
+            tocWidget.classList.add('is-sticky-fixed');
+            isFixed = true;
+        }
+
+        function detachFixed() {
+            if (!isFixed) return;
+
+            if (spacer && spacer.parentNode) {
+                spacer.parentNode.removeChild(spacer);
+                spacer = null;
+            }
+
+            tocWidget.style.top   = '';
+            tocWidget.style.left  = '';
+            tocWidget.style.width = '';
+            tocWidget.classList.remove('is-sticky-fixed');
+            isFixed = false;
+        }
+
+        function update() {
+            if (window.innerWidth < BREAKPOINT) {
+                detachFixed();
+                return;
+            }
+
+            const mainRect  = articleMain.getBoundingClientRect();
+            const tocHeight = tocWidget.offsetHeight;
+
+            // 基準要素（fixedのときはspacer、通常時はtocWidget本体）
+            const ref     = isFixed ? spacer : tocWidget;
+            const refRect = ref.getBoundingClientRect();
+
+            // fixedにすべき条件:
+            //   ① 基準要素の上端がビューポート上端のオフセットより上になった
+            //   ② 記事末端がまだ十分遠い（TOCが隠れないようにする）
+            const shouldFix = refRect.top < TOP_OFFSET &&
+                              mainRect.bottom > (TOP_OFFSET + tocHeight + 20);
+
+            if (shouldFix && !isFixed) {
+                attachFixed();
+            } else if (!shouldFix && isFixed) {
+                detachFixed();
+            }
+
+            // fixed中はリサイズに追従して水平位置を更新
+            if (isFixed) {
+                const sidebarRect = sidebar.getBoundingClientRect();
+                tocWidget.style.left  = sidebarRect.left + 'px';
+                tocWidget.style.width = sidebar.offsetWidth + 'px';
+            }
+        }
+
+        let rafId = null;
+        function onScroll() {
+            if (rafId) return;
+            rafId = requestAnimationFrame(() => {
+                update();
+                rafId = null;
+            });
+        }
+
+        function onResize() {
+            // リサイズ時は一度解除して再計算
+            detachFixed();
+            update();
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onResize, { passive: true });
+        update();
     }
 
     // ===========================================

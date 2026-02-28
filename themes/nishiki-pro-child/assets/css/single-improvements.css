@@ -306,11 +306,10 @@
 }
 
 .article-sidebar {
-    position: sticky;
-    top: 100px;
     display: flex;
     flex-direction: column;
     gap: 18px;
+    position: relative;
 }
 
 .article-sidebar__section {
@@ -1745,11 +1744,16 @@
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.04) inset,
         0 12px 36px rgba(0, 0, 0, 0.45);
-    position: sticky;
-    top: 24px;
     max-height: calc(100vh - 48px);
     display: flex;
     flex-direction: column;
+}
+
+/* JavaScriptでfixedになったときのスタイル */
+.toc-widget.is-sticky-fixed {
+    position: fixed !important;
+    z-index: 200;
+    margin-bottom: 0;
 }
 
 .toc-widget:empty {
@@ -2065,8 +2069,13 @@
 /* モバイル対応 */
 @media (max-width: 1024px) {
     .toc-widget {
-        position: static;
         max-height: none;
+    }
+    .toc-widget.is-sticky-fixed {
+        position: static !important;
+        width: auto !important;
+        left: auto !important;
+        top: auto !important;
     }
 }
 
