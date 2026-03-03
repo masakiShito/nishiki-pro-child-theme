@@ -36,7 +36,7 @@
     background: #ffffff;
     min-height: 100vh;
     position: relative;
-    overflow: hidden;
+    overflow-x: clip; /* overflow:hidden はposition:stickyを無効化するためclipに変更 */
 }
 
 .single-wrapper .single-article {
@@ -1745,9 +1745,7 @@
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.04) inset,
         0 12px 36px rgba(0, 0, 0, 0.45);
-    position: sticky;
-    top: 24px;
-    max-height: calc(100vh - 48px);
+    max-height: calc(100vh - 120px); /* サイドバーtop:100px + 余白20pxを考慮 */
     display: flex;
     flex-direction: column;
 }
@@ -2065,7 +2063,6 @@
 /* モバイル対応 */
 @media (max-width: 1024px) {
     .toc-widget {
-        position: static;
         max-height: none;
     }
 }
