@@ -1275,7 +1275,43 @@ body.page-template-page-blog .pagination__item .page-numbers ,
    =========================================== */
 
 @media (max-width: 480px) {
+    /* アーカイブヒーロー */
+    .archive-hero {
+        padding: 70px 0 50px;
+    }
+
+    .archive-hero__title {
+        font-size: clamp(32px, 9vw, 50px);
+    }
+
+    .archive-hero__description {
+        font-size: 15px;
+    }
+
+    .archive-hero__stats {
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .archive-hero__stat {
+        flex: 1;
+        min-width: calc(50% - 8px);
+    }
+
+    .archive-hero__stat-value {
+        font-size: 22px;
+    }
+
     /* フィルタータブを小さく */
+    .archive-filter {
+        margin-top: -20px;
+    }
+
+    .archive-filter__inner {
+        padding: 12px;
+        border-radius: 12px;
+    }
+
     .archive-filter__tabs {
         gap: 4px;
     }
@@ -1324,5 +1360,19 @@ body.page-template-page-blog .pagination__item .page-numbers ,
 
     .featured-article__title {
         font-size: 20px;
+    }
+
+    /* ページネーション */
+    .pagination__item a,
+    .pagination__item span {
+        min-width: 36px;
+        height: 36px;
+        font-size: 13px;
+        border-radius: 8px;
+    }
+
+    /* アーカイブコンテンツ */
+    .archive-content {
+        padding: 30px 0 60px;
     }
 }
