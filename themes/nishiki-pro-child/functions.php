@@ -73,8 +73,14 @@ add_action('wp_enqueue_scripts', function () {
         $child->get('Version')
     );
 
-    // Single post improvements CSS
+    // Single post improvements CSS + JetBrains Mono font (コードエディタ風目次用)
     if (is_single()) {
+        wp_enqueue_style(
+            'nishiki-pro-child-jetbrains-mono',
+            'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
+            [],
+            null
+        );
         wp_enqueue_style(
             'nishiki-pro-child-single',
             get_stylesheet_directory_uri() . '/assets/css/single-improvements.css',

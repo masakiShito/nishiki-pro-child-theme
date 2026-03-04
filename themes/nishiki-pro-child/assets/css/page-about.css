@@ -1185,3 +1185,122 @@
     opacity: 1;
     transform: translateY(0);
 }
+
+/* ===========================================
+   Small Screen Additional Fixes (480px以下)
+   =========================================== */
+
+@media (max-width: 480px) {
+    /* ヒーロー */
+    .about-hero {
+        padding-top: 80px;
+    }
+
+    .about-hero__card {
+        padding: 28px 24px;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .about-hero__avatar {
+        width: 88px;
+        height: 88px;
+    }
+
+    /* セクションの縦パディング縮小 */
+    .about-profile,
+    .about-career,
+    .about-phases,
+    .about-skills,
+    .about-strengths,
+    .about-management,
+    .about-cta {
+        padding: 56px 16px;
+    }
+
+    /* セクションタイトル */
+    .section-title {
+        font-size: clamp(22px, 6vw, 28px);
+    }
+
+    /* マネジメント統計の折り返し対応 */
+    .management-stats {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .management-stat {
+        min-width: calc(50% - 8px);
+    }
+
+    /* プロフィール引用ブロックの最適化 */
+    .about-profile__quote blockquote {
+        padding: 24px 20px;
+    }
+
+    .about-profile__quote blockquote::before {
+        font-size: 40px;
+        top: 12px;
+        left: 12px;
+    }
+
+    /* ベントカードの数字を小さく */
+    .bento-card__number {
+        font-size: 56px;
+    }
+
+    /* ベントカードのパディング */
+    .bento-card {
+        padding: 24px 20px;
+    }
+
+    /* ストレングスカードのパディング縮小 */
+    .strength-card {
+        padding: 28px 20px;
+    }
+
+    .strength-card__number {
+        font-size: 36px;
+    }
+
+    .strength-card__title {
+        font-size: 18px;
+    }
+
+    /* スキルタグのサイズ調整 */
+    .skill-tag {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    /* タグのサイズ調整 */
+    .tag {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+
+    /* ミニタイムラインを縦並びに */
+    .mini-timeline {
+        flex-direction: column;
+    }
+
+    /* フェーズバー */
+    .phase-bar__label {
+        font-size: 14px;
+    }
+
+    /* CTAセクション */
+    .about-cta__title {
+        font-size: clamp(22px, 6vw, 28px);
+    }
+
+    .about-cta__button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* ハイライトアイテムのホバー効果を無効化（タッチ端末対応） */
+    .highlight-item:hover {
+        transform: none;
+    }
+}

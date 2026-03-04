@@ -57,17 +57,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 3. スクロールで左側がスライドアウト（パララックス）
+    // モバイルでは単列レイアウトのため無効化
     window.addEventListener('scroll', () => {
+        if (window.innerWidth <= 768) {
+            // モバイル: インラインスタイルをリセット
+            if (heroSide) {
+                heroSide.style.transform = '';
+                heroSide.style.opacity = '';
+            }
+            if (heroMain) heroMain.style.transform = '';
+            return;
+        }
+
         const scrolled = window.pageYOffset;
         const maxScroll = window.innerHeight;
-        
+
         if (heroSide && scrolled < maxScroll) {
             const translateX = -(scrolled / maxScroll) * 30;
             const opacity = 1 - (scrolled / maxScroll);
             heroSide.style.transform = `translateX(${translateX}%)`;
             heroSide.style.opacity = Math.max(opacity, 0);
         }
-        
+
         if (heroMain && scrolled < maxScroll) {
             const translateX = (scrolled / maxScroll) * 20;
             heroMain.style.transform = `translateX(${translateX}%)`;

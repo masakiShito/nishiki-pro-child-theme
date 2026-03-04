@@ -10,12 +10,14 @@
 
     function init() {
         initCopyButton();
+        initTableOfContents();
         initHeadingAnchors();
         initExternalLinks();
         initImageLightbox();
         initScrollAnimations();
         initProgressBar();
         initSnsFloat();
+        initTocPosition();
     }
 
     // ===========================================
@@ -77,6 +79,194 @@
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 400);
         }, 2500);
+    }
+
+    // ===========================================
+    // 目次（Table of Contents）
+    // ===========================================
+
+    function initTableOfContents() {
+        const tocWidget = document.getElementById('tocWidget');
+        const tocList   = document.getElementById('tocList');
+        const tocToggle = document.getElementById('tocToggle');
+        const tocBody   = document.getElementById('tocBody');
+
+        if (!tocWidget || !tocList) return;
+
+        const articleContent = document.querySelector('.article-content');
+        if (!articleContent) {
+            tocWidget.classList.add('toc-widget--empty');
+            return;
+        }
+
+        // --------------------------------------------------
+        // 1. 見出しにIDを自動付与
+        // --------------------------------------------------
+        const headings = articleContent.querySelectorAll('h2, h3, h4');
+
+        if (headings.length === 0) {
+            tocWidget.classList.add('toc-widget--empty');
+            return;
+        }
+
+        const usedIds = {};
+
+        headings.forEach(heading => {
+            if (!heading.id) {
+                const base = heading.textContent.trim()
+                    .replace(/\s+/g, '-')
+                    .replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF-]/g, '')
+                    .substring(0, 60) || 'heading';
+                let id = base;
+                let count = 1;
+                while (usedIds[id]) {
+                    id = `${base}-${count++}`;
+                }
+                heading.id = id;
+            }
+            usedIds[heading.id] = true;
+        });
+
+        // --------------------------------------------------
+        // 2. コメント行を挿入（コードエディタ風）
+        // --------------------------------------------------
+        const comment = document.createElement('span');
+        comment.className = 'toc-widget__comment';
+        comment.setAttribute('aria-hidden', 'true');
+        comment.textContent = '// table_of_contents';
+        tocBody.insertBefore(comment, tocList);
+
+        // --------------------------------------------------
+        // 3. 目次リストを生成
+        // --------------------------------------------------
+        let h2Counter = 0;
+        const tocItems = []; // { el, linkEl } の配列
+
+        headings.forEach(heading => {
+            const level = parseInt(heading.tagName.replace('H', ''), 10);
+            const li = document.createElement('li');
+            li.className = `toc-list__item toc-list__item--h${level}`;
+
+            const a = document.createElement('a');
+            a.href = `#${heading.id}`;
+            a.className = 'toc-list__link';
+
+            if (level === 2) {
+                h2Counter++;
+                const numSpan = document.createElement('span');
+                numSpan.className = 'toc-list__num';
+                numSpan.textContent = String(h2Counter).padStart(2, '0');
+                a.appendChild(numSpan);
+            }
+
+            const textSpan = document.createElement('span');
+            textSpan.className = 'toc-list__text';
+            textSpan.textContent = heading.textContent.replace(/\s*#\s*$/, '').trim();
+            a.appendChild(textSpan);
+
+            // スムーススクロール
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.getElementById(heading.id);
+                if (!target) return;
+                const offset = 80;
+                const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                window.scrollTo({ top, behavior: 'smooth' });
+                history.replaceState(null, '', `#${heading.id}`);
+            });
+
+            li.appendChild(a);
+            tocList.appendChild(li);
+            tocItems.push({ heading, li });
+        });
+
+        // --------------------------------------------------
+        // 4. フッター（エディタステータスバー風）を追加
+        // --------------------------------------------------
+        const footer = document.createElement('div');
+        footer.className = 'toc-widget__footer';
+        footer.setAttribute('aria-hidden', 'true');
+        footer.innerHTML = `
+            <span class="toc-widget__footer-indicator">
+                <span class="toc-widget__footer-dot"></span>
+                <span id="tocFooterStatus">Ln 1</span>
+            </span>
+            <span>${headings.length} items</span>
+        `;
+        tocWidget.appendChild(footer);
+
+        const tocFooterStatus = document.getElementById('tocFooterStatus');
+
+        // --------------------------------------------------
+        // 5. 折りたたみ（開閉）
+        // --------------------------------------------------
+        if (tocToggle && tocBody) {
+            tocToggle.addEventListener('click', () => {
+                const isCollapsed = tocWidget.classList.toggle('toc-widget--collapsed');
+                tocToggle.setAttribute('aria-expanded', String(!isCollapsed));
+                tocToggle.setAttribute('aria-label', isCollapsed ? '目次を開く' : '目次を折りたたむ');
+            });
+        }
+
+        // --------------------------------------------------
+        // 6. スクロール追従ハイライト
+        // --------------------------------------------------
+        const OFFSET = 100;
+        let activeItem = null;
+
+        function updateActiveHeading() {
+            const scrollY = window.scrollY + OFFSET;
+            let current = null;
+            let currentIndex = 0;
+
+            for (let i = 0; i < tocItems.length; i++) {
+                const { heading } = tocItems[i];
+                if (heading.getBoundingClientRect().top + window.scrollY <= scrollY) {
+                    current = tocItems[i];
+                    currentIndex = i + 1;
+                } else {
+                    break;
+                }
+            }
+
+            if (current === activeItem) return;
+
+            if (activeItem) {
+                activeItem.li.classList.remove('is-active');
+            }
+            activeItem = current;
+            if (activeItem) {
+                activeItem.li.classList.add('is-active');
+
+                // フッターのステータスを更新
+                if (tocFooterStatus) {
+                    tocFooterStatus.textContent = `Ln ${currentIndex}`;
+                }
+
+                // TOCボディ内でアクティブ項目を可視スクロール
+                const linkEl = activeItem.li.querySelector('.toc-list__link');
+                if (linkEl && tocBody) {
+                    const bodyRect  = tocBody.getBoundingClientRect();
+                    const linkRect  = linkEl.getBoundingClientRect();
+                    const isAbove   = linkRect.top < bodyRect.top;
+                    const isBelow   = linkRect.bottom > bodyRect.bottom;
+                    if (isAbove || isBelow) {
+                        linkEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    }
+                }
+            }
+        }
+
+        let rafId = null;
+        window.addEventListener('scroll', () => {
+            if (rafId) return;
+            rafId = requestAnimationFrame(() => {
+                updateActiveHeading();
+                rafId = null;
+            });
+        }, { passive: true });
+
+        updateActiveHeading();
     }
 
     // ===========================================
@@ -450,6 +640,41 @@
 
         window.addEventListener('scroll', checkVisibility, { passive: true });
         checkVisibility();
+    }
+
+    // ===========================================
+    // モバイル時：目次を記事先頭に表示
+    // ===========================================
+
+    function initTocPosition() {
+        const tocWidget     = document.getElementById('tocWidget');
+        const articleMain   = document.querySelector('.article-main');
+        const articleBody   = document.querySelector('.article-body');
+        const articleSidebar = document.querySelector('.article-sidebar');
+
+        if (!tocWidget || !articleMain || !articleBody || !articleSidebar) return;
+
+        function reposition() {
+            if (window.innerWidth <= 1200) {
+                // モバイル：目次を記事本文の前に移動
+                if (tocWidget.parentElement !== articleMain) {
+                    articleMain.insertBefore(tocWidget, articleBody);
+                }
+            } else {
+                // デスクトップ：目次をサイドバー先頭に戻す
+                if (tocWidget.parentElement !== articleSidebar) {
+                    articleSidebar.insertBefore(tocWidget, articleSidebar.firstElementChild);
+                }
+            }
+        }
+
+        reposition();
+
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(reposition, 150);
+        }, { passive: true });
     }
 
 })();
