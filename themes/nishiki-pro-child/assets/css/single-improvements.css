@@ -2067,6 +2067,13 @@
     }
 }
 
+/* モバイル：JSによりarticle-mainの直下に移動した際の目次スタイル調整 */
+@media (max-width: 1200px) {
+    .article-main > .toc-widget {
+        margin-bottom: 0;
+    }
+}
+
 @media (max-width: 768px) {
     .toc-widget {
         margin-bottom: 20px;
