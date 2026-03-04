@@ -17,6 +17,7 @@
         initScrollAnimations();
         initProgressBar();
         initSnsFloat();
+        initTocPosition();
     }
 
     // ===========================================
@@ -639,6 +640,41 @@
 
         window.addEventListener('scroll', checkVisibility, { passive: true });
         checkVisibility();
+    }
+
+    // ===========================================
+    // モバイル時：目次を記事先頭に表示
+    // ===========================================
+
+    function initTocPosition() {
+        const tocWidget     = document.getElementById('tocWidget');
+        const articleMain   = document.querySelector('.article-main');
+        const articleBody   = document.querySelector('.article-body');
+        const articleSidebar = document.querySelector('.article-sidebar');
+
+        if (!tocWidget || !articleMain || !articleBody || !articleSidebar) return;
+
+        function reposition() {
+            if (window.innerWidth <= 1200) {
+                // モバイル：目次を記事本文の前に移動
+                if (tocWidget.parentElement !== articleMain) {
+                    articleMain.insertBefore(tocWidget, articleBody);
+                }
+            } else {
+                // デスクトップ：目次をサイドバー先頭に戻す
+                if (tocWidget.parentElement !== articleSidebar) {
+                    articleSidebar.insertBefore(tocWidget, articleSidebar.firstElementChild);
+                }
+            }
+        }
+
+        reposition();
+
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(reposition, 150);
+        }, { passive: true });
     }
 
 })();
