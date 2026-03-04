@@ -29,8 +29,14 @@ get_header();
                     </p>
                     <h1 class="article-hero__title"><?php the_title(); ?></h1>
                     <div class="article-hero__meta">
-                        <time datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date('Y年n月j日'); ?></time>
-                        <span>約<?php echo $reading_time; ?>分</span>
+                        <time datetime="<?php echo get_the_date('c'); ?>">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <?php echo get_the_date('Y年n月j日'); ?>
+                        </time>
+                        <span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            約<?php echo $reading_time; ?>分で読めます
+                        </span>
                     </div>
                 </div>
             </div>
