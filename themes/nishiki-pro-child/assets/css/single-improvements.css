@@ -1081,7 +1081,7 @@
 .post-navigation__container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 16px;
 }
 
 .post-navigation__item {
@@ -1090,15 +1090,45 @@
     gap: 16px;
     padding: 24px;
     background: #ffffff;
-    border: 1px solid var(--article-border);
-    border-radius: 16px;
+    border: 1.5px solid rgba(0, 0, 0, 0.07);
+    border-radius: 20px;
     text-decoration: none;
     transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Side accent bar */
+.post-navigation__item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: var(--article-accent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.post-navigation__item--prev::after {
+    left: 0;
+    border-radius: 0 2px 2px 0;
+}
+
+.post-navigation__item--next::after {
+    right: 0;
+    border-radius: 2px 0 0 2px;
 }
 
 .post-navigation__item:hover {
-    border-color: var(--article-accent);
-    box-shadow: 0 4px 12px rgba(15, 118, 110, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(16, 185, 129, 0.06);
+    transform: translateY(-2px);
+}
+
+.post-navigation__item:hover::after {
+    opacity: 1;
 }
 
 .post-navigation__item--prev {
@@ -1116,21 +1146,22 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: var(--article-bg);
-    border-radius: 10px;
+    background: rgba(16, 185, 129, 0.08);
+    border-radius: 12px;
     flex-shrink: 0;
     transition: all 0.25s ease;
 }
 
 .post-navigation__arrow svg {
-    width: 18px;
-    height: 18px;
-    color: var(--article-text-muted);
+    width: 17px;
+    height: 17px;
+    color: var(--article-accent);
     transition: all 0.25s ease;
 }
 
 .post-navigation__item:hover .post-navigation__arrow {
     background: var(--article-accent);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .post-navigation__item:hover .post-navigation__arrow svg {
@@ -1148,16 +1179,18 @@
 .post-navigation__info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     min-width: 0;
     flex: 1;
 }
 
 .post-navigation__direction {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--article-text-muted);
-    transition: color 0.25s ease;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--article-accent);
+    letter-spacing: 0.04em;
+    opacity: 0.75;
+    transition: opacity 0.25s ease;
 }
 
 .post-navigation__direction svg {
@@ -1165,7 +1198,7 @@
 }
 
 .post-navigation__item:hover .post-navigation__direction {
-    color: var(--article-accent);
+    opacity: 1;
 }
 
 .post-navigation__item--next .post-navigation__direction {
@@ -1175,8 +1208,8 @@
 .post-navigation__title {
     font-size: 15px;
     font-weight: 600;
-    line-height: 1.5;
-    color: var(--article-text);
+    line-height: 1.55;
+    color: #1f2937;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -1526,16 +1559,16 @@
     .post-navigation__arrow {
         width: 36px;
         height: 36px;
-        border-radius: 8px;
+        border-radius: 10px;
     }
 
     .post-navigation__arrow svg {
-        width: 16px;
-        height: 16px;
+        width: 15px;
+        height: 15px;
     }
 
     .post-navigation__direction {
-        font-size: 11px;
+        font-size: 10px;
     }
 
     .post-navigation__title {

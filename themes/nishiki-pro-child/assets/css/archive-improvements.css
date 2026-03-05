@@ -816,29 +816,62 @@
 .pagination__list {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    align-items: center;
+    gap: 6px;
     flex-wrap: wrap;
 }
 
 .pagination__item a,
 .pagination__item span {
-    min-width: 48px;
-    height: 48px;
-    padding: 0 18px;
-    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 14px;
+    font-size: 14px;
     font-weight: 600;
-    border-radius: 14px;
-    transition: all 0.3s var(--transition-smooth);
+    border-radius: 12px;
+    border: 1.5px solid #e9ecef;
+    background: #ffffff;
+    color: #4b5563;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+}
+
+/* Prev / Next pill buttons */
+.pagination__item a.prev,
+.pagination__item a.next {
+    padding: 0 20px;
+    border-radius: 22px;
+    color: #374151;
 }
 
 .pagination__item a:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(16, 185, 129, 0.04);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+    transform: translateY(-1px);
 }
 
 .pagination__item span.current {
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    background: var(--accent);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transform: scale(1.06);
+}
+
+.pagination__item span.dots {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: #9ca3af;
+    min-width: auto;
+    padding: 0 4px;
+    letter-spacing: 0.05em;
 }
 
 /* ===========================================
@@ -1344,10 +1377,16 @@ body.page-template-page-blog .pagination__item .page-numbers ,
     /* ページネーション */
     .pagination__item a,
     .pagination__item span {
-        min-width: 36px;
-        height: 36px;
+        min-width: 38px;
+        height: 38px;
         font-size: 13px;
-        border-radius: 8px;
+        border-radius: 10px;
+    }
+
+    .pagination__item a.prev,
+    .pagination__item a.next {
+        padding: 0 14px;
+        border-radius: 19px;
     }
 
     /* アーカイブコンテンツ */
