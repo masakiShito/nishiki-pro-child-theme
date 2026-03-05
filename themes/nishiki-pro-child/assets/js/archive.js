@@ -13,7 +13,6 @@
         initScrollAnimations();
         initCategoryFilter();
         initViewToggle();
-        initScrollProgress();
         initParallaxHero();
         initCardHoverEffects();
         initSmoothScroll();
@@ -111,29 +110,6 @@
             viewBtns.forEach(b => b.classList.toggle('is-active', b.dataset.view === view));
             articleGrid.classList.toggle('article-grid--list', view === 'list');
         }
-    }
-
-    /**
-     * Scroll Progress Indicator
-     */
-    function initScrollProgress() {
-        const indicator = document.querySelector('.scroll-indicator__bar');
-        if (!indicator) return;
-
-        let ticking = false;
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const scrollTop = window.scrollY;
-                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                    const scrollPercent = (scrollTop / docHeight) * 100;
-                    indicator.style.width = `${Math.min(scrollPercent, 100)}%`;
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
     }
 
     /**
