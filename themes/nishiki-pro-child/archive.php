@@ -43,11 +43,6 @@ if (is_category()) {
 ?>
 
 <div class="archive-page">
-    <!-- スクロールプログレス -->
-    <div class="scroll-indicator">
-        <div class="scroll-indicator__bar"></div>
-    </div>
-
     <!-- ヒーローセクション -->
     <section class="archive-hero">
         <div class="archive-hero__shapes">
@@ -115,21 +110,6 @@ if (is_category()) {
                     ?>
                         <article <?php post_class('article-card'); ?> data-category="<?php echo !empty($article_categories) ? esc_attr($article_categories[0]->slug) : ''; ?>">
                             <a href="<?php the_permalink(); ?>" class="article-card__link">
-                                <div class="article-card__image">
-                                    <?php if (has_post_thumbnail()) : ?>
-                                        <?php the_post_thumbnail('medium_large', ['class' => 'article-card__img', 'loading' => 'lazy']); ?>
-                                    <?php else : ?>
-                                        <div class="article-card__placeholder">
-                                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                                <circle cx="8.5" cy="8.5" r="1.5"/>
-                                                <polyline points="21 15 16 10 5 21"/>
-                                            </svg>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="article-card__overlay"></div>
-                                </div>
-
                                 <div class="article-card__content">
                                     <div class="article-card__meta">
                                         <?php if (!empty($article_categories)) : ?>
