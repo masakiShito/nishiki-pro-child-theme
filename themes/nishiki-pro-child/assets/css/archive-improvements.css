@@ -19,7 +19,7 @@
     position: relative;
     overflow: hidden;
     padding: 100px 0 80px;
-    background: linear-gradient(135deg, #0d9669 0%, #10b981 40%, #14b8a6 100%);
+    background: linear-gradient(135deg, #059669 0%, #10b981 40%, #34d399 100%);
 }
 
 .archive-hero::before {
@@ -317,7 +317,7 @@
 
 .archive-content {
     padding: 60px 0 120px;
-    background: linear-gradient(180deg, #f8fafb 0%, #f0f4f5 100%);
+    background: linear-gradient(180deg, #f5f5f5 0%, #ebebeb 100%);
 }
 
 .archive-content__container {
@@ -816,29 +816,62 @@
 .pagination__list {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    align-items: center;
+    gap: 6px;
     flex-wrap: wrap;
 }
 
 .pagination__item a,
 .pagination__item span {
-    min-width: 48px;
-    height: 48px;
-    padding: 0 18px;
-    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 14px;
+    font-size: 14px;
     font-weight: 600;
-    border-radius: 14px;
-    transition: all 0.3s var(--transition-smooth);
+    border-radius: 12px;
+    border: 1.5px solid #e9ecef;
+    background: #ffffff;
+    color: #4b5563;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+}
+
+/* Prev / Next pill buttons */
+.pagination__item a.prev,
+.pagination__item a.next {
+    padding: 0 20px;
+    border-radius: 22px;
+    color: #374151;
 }
 
 .pagination__item a:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(16, 185, 129, 0.04);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+    transform: translateY(-1px);
 }
 
 .pagination__item span.current {
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    background: var(--accent);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transform: scale(1.06);
+}
+
+.pagination__item span.dots {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: #9ca3af;
+    min-width: auto;
+    padding: 0 4px;
+    letter-spacing: 0.05em;
 }
 
 /* ===========================================
@@ -859,7 +892,7 @@
     justify-content: center;
     width: 120px;
     height: 120px;
-    background: linear-gradient(135deg, var(--accent-bg) 0%, rgba(20, 184, 166, 0.1) 100%);
+    background: linear-gradient(135deg, var(--accent-bg) 0%, rgba(16, 185, 129, 0.1) 100%);
     border-radius: 50%;
     color: var(--accent);
     margin-bottom: 32px;
@@ -1046,7 +1079,7 @@ body.page-template-page-blog .archive-page ,
 .blog-list-page .archive-page  {
     background:
         radial-gradient(circle at 12% 10%, rgba(16, 185, 129, 0.11), transparent 36%),
-        radial-gradient(circle at 88% 18%, rgba(20, 184, 166, 0.08), transparent 42%),
+        radial-gradient(circle at 88% 18%, rgba(16, 185, 129, 0.08), transparent 42%),
         #f7fafc;
 }
 
@@ -1054,10 +1087,10 @@ body.page-template-page-blog .archive-hero ,
 .blog-list-page .archive-hero  {
     background:
         radial-gradient(circle at 20% 24%, rgba(255, 255, 255, 0.18), transparent 38%),
-        linear-gradient(135deg, #0f766e 0%, #0d9488 44%, #14b8a6 100%);
+        linear-gradient(135deg, #10b981 0%, #059669 44%, #34d399 100%);
     border-bottom-left-radius: 28px;
     border-bottom-right-radius: 28px;
-    box-shadow: 0 30px 60px rgba(15, 118, 110, 0.22);
+    box-shadow: 0 30px 60px rgba(16, 185, 129, 0.22);
 }
 
 body.page-template-page-blog .archive-hero::after ,
@@ -1077,7 +1110,7 @@ body.page-template-page-blog .archive-hero__label ,
     font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
     letter-spacing: 0.14em;
     border: 1px solid rgba(255, 255, 255, 0.32);
-    background: rgba(2, 6, 23, 0.18);
+    background: rgba(26, 26, 26, 0.18);
 }
 
 body.page-template-page-blog .archive-hero__title ,
@@ -1085,7 +1118,7 @@ body.page-template-page-blog .archive-hero__title ,
     letter-spacing: -0.03em;
     text-wrap: balance;
     font-size: clamp(44px, 7vw, 78px);
-    text-shadow: 0 12px 28px rgba(2, 6, 23, 0.35);
+    text-shadow: 0 12px 28px rgba(26, 26, 26, 0.35);
 }
 
 body.page-template-page-blog .archive-hero__description ,
@@ -1134,7 +1167,7 @@ body.page-template-page-blog .article-card ,
 .blog-list-page .article-card  {
     border-radius: 22px;
     border: 1px solid rgba(209, 213, 219, 0.75);
-    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 14px 32px rgba(26, 26, 26, 0.08);
     overflow: hidden;
 }
 
@@ -1155,7 +1188,7 @@ body.page-template-page-blog .article-card::before ,
 body.page-template-page-blog .article-card:hover ,
 .blog-list-page .article-card:hover  {
     transform: translateY(-10px);
-    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14);
+    box-shadow: 0 24px 48px rgba(26, 26, 26, 0.14);
 }
 
 body.page-template-page-blog .article-card:hover::before ,
@@ -1174,7 +1207,7 @@ body.page-template-page-blog .article-card__image::after ,
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(2, 6, 23, 0) 45%, rgba(2, 6, 23, 0.52) 100%);
+    background: linear-gradient(180deg, rgba(26, 26, 26, 0) 45%, rgba(26, 26, 26, 0.52) 100%);
     opacity: 0.7;
     transition: opacity 0.3s ease;
 }
@@ -1224,7 +1257,7 @@ body.page-template-page-blog .article-card__read-more svg ,
 body.page-template-page-blog .article-card:hover .article-card__read-more ,
 .blog-list-page .article-card:hover .article-card__read-more  {
     color: #047857;
-    border-color: rgba(4, 120, 87, 0.5);
+    border-color: rgba(5, 150, 105, 0.5);
 }
 
 body.page-template-page-blog .article-card:hover .article-card__read-more svg ,
@@ -1344,10 +1377,16 @@ body.page-template-page-blog .pagination__item .page-numbers ,
     /* ページネーション */
     .pagination__item a,
     .pagination__item span {
-        min-width: 36px;
-        height: 36px;
+        min-width: 38px;
+        height: 38px;
         font-size: 13px;
-        border-radius: 8px;
+        border-radius: 10px;
+    }
+
+    .pagination__item a.prev,
+    .pagination__item a.next {
+        padding: 0 14px;
+        border-radius: 19px;
     }
 
     /* アーカイブコンテンツ */

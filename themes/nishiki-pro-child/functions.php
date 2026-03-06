@@ -304,3 +304,120 @@ add_action('init', function() {
         $run_once = true;
     }
 }, 999);
+
+/**
+ * ローカルアバター: プロフィール画面でメディアライブラリを有効化
+ */
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+    if ( in_array( $hook, [ 'profile.php', 'user-edit.php' ], true ) ) {
+        wp_enqueue_media();
+    }
+} );
+
+/**
+ * ローカルアバター: ユーザープロフィール画面に画像選択フィールドを追加
+ */
+function nishiki_avatar_profile_fields( $user ) {
+    $avatar_id = get_user_meta( $user->ID, 'nishiki_local_avatar_id', true );
+    $avatar_url = $avatar_id ? wp_get_attachment_image_url( (int) $avatar_id, 'thumbnail' ) : '';
+    ?>
+    <h3>プロフィール画像（ローカル）</h3>
+    <table class="form-table">
+        <tr>
+            <th><label for="nishiki_local_avatar">プロフィール画像</label></th>
+            <td>
+                <?php if ( $avatar_url ) : ?>
+                    <img id="nishiki_local_avatar_preview" src="<?php echo esc_url( $avatar_url ); ?>" style="width:80px;height:80px;border-radius:50%;object-fit:cover;display:block;margin-bottom:8px;">
+                <?php else : ?>
+                    <img id="nishiki_local_avatar_preview" src="" style="width:80px;height:80px;border-radius:50%;object-fit:cover;display:none;margin-bottom:8px;">
+                <?php endif; ?>
+                <input type="hidden" name="nishiki_local_avatar_id" id="nishiki_local_avatar_id" value="<?php echo esc_attr( $avatar_id ); ?>">
+                <button type="button" class="button" id="nishiki_upload_avatar_btn">画像を選択</button>
+                <?php if ( $avatar_id ) : ?>
+                    <button type="button" class="button" id="nishiki_remove_avatar_btn">削除</button>
+                <?php endif; ?>
+                <p class="description">メディアライブラリから画像を選択してください。設定するとGravatarの代わりに使用されます。</p>
+            </td>
+        </tr>
+    </table>
+    <script>
+    jQuery(function($) {
+        var frame;
+        $('#nishiki_upload_avatar_btn').on('click', function(e) {
+            e.preventDefault();
+            if (frame) { frame.open(); return; }
+            frame = wp.media({ title: 'プロフィール画像を選択', button: { text: '選択' }, multiple: false });
+            frame.on('select', function() {
+                var attachment = frame.state().get('selection').first().toJSON();
+                $('#nishiki_local_avatar_id').val(attachment.id);
+                var previewUrl = attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url;
+                $('#nishiki_local_avatar_preview').attr('src', previewUrl).show();
+            });
+            frame.open();
+        });
+        $('#nishiki_remove_avatar_btn').on('click', function(e) {
+            e.preventDefault();
+            $('#nishiki_local_avatar_id').val('');
+            $('#nishiki_local_avatar_preview').attr('src', '').hide();
+        });
+    });
+    </script>
+    <?php
+}
+add_action( 'show_user_profile', 'nishiki_avatar_profile_fields' );
+add_action( 'edit_user_profile', 'nishiki_avatar_profile_fields' );
+
+/**
+ * ローカルアバター: プロフィール保存時にuser metaを更新
+ */
+function nishiki_save_local_avatar( $user_id ) {
+    if ( ! current_user_can( 'edit_user', $user_id ) ) {
+        return;
+    }
+    if ( isset( $_POST['nishiki_local_avatar_id'] ) ) {
+        $attachment_id = absint( $_POST['nishiki_local_avatar_id'] );
+        if ( $attachment_id ) {
+            update_user_meta( $user_id, 'nishiki_local_avatar_id', $attachment_id );
+        } else {
+            delete_user_meta( $user_id, 'nishiki_local_avatar_id' );
+        }
+    }
+}
+add_action( 'personal_options_update', 'nishiki_save_local_avatar' );
+add_action( 'edit_user_profile_update', 'nishiki_save_local_avatar' );
+
+/**
+ * ローカルアバター: get_avatar() をローカル画像で上書き
+ */
+add_filter( 'pre_get_avatar_data', function( $args, $id_or_email ) {
+    $user_id = 0;
+    if ( is_numeric( $id_or_email ) ) {
+        $user_id = (int) $id_or_email;
+    } elseif ( $id_or_email instanceof WP_User ) {
+        $user_id = $id_or_email->ID;
+    } elseif ( is_string( $id_or_email ) ) {
+        $user = get_user_by( 'email', $id_or_email );
+        if ( $user ) {
+            $user_id = $user->ID;
+        }
+    }
+
+    if ( ! $user_id ) {
+        return $args;
+    }
+
+    $attachment_id = get_user_meta( $user_id, 'nishiki_local_avatar_id', true );
+    if ( ! $attachment_id ) {
+        return $args;
+    }
+
+    $size = isset( $args['size'] ) ? (int) $args['size'] : 96;
+    $image_url = wp_get_attachment_image_url( (int) $attachment_id, [ $size, $size ] );
+    if ( ! $image_url ) {
+        return $args;
+    }
+
+    $args['url']          = $image_url;
+    $args['found_avatar'] = true;
+    return $args;
+}, 10, 2 );
