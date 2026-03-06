@@ -37,10 +37,11 @@ get_header();
             <div class="about-hero__visual">
                 <div class="about-hero__card">
                     <div class="about-hero__avatar">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
+                        <?php
+                        $admin_users = get_users( [ 'role' => 'administrator', 'number' => 1 ] );
+                        $admin_id    = ! empty( $admin_users ) ? $admin_users[0]->ID : 1;
+                        echo get_avatar( $admin_id, 120 );
+                        ?>
                     </div>
                     <div class="about-hero__info">
                         <span class="about-hero__role">Web Application Engineer</span>
