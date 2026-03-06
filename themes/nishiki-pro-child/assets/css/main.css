@@ -6,10 +6,10 @@
     --bg-subtle: #fafafa;
     --border-light: #e5e5e5;
 
-    /* Green accent colors (matching page design) */
+    /* Green accent colors (unified 3-color system) */
     --accent: #10b981;
     --accent-dark: #059669;
-    --accent-light: #14b8a6;
+    --accent-light: #34d399;
     --accent-bg: rgba(16, 185, 129, 0.08);
 
     /* Header */
@@ -643,7 +643,7 @@ body.scrolled #masthead {
 
 /* 左カラム: 説明文（緑背景） */
 .hero__side {
-    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #14b8a6 100%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #34d399 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1128,7 +1128,7 @@ body.scrolled #masthead {
     bottom: 0;
     left: 0;
     height: 3px;
-    background: linear-gradient(90deg, #10b981 0%, #059669 50%, #14b8a6 100%);
+    background: linear-gradient(90deg, #10b981 0%, #059669 50%, #34d399 100%);
     width: 0%;
     transition: width 0.1s ease;
     border-radius: 0 3px 0 0;
@@ -1268,7 +1268,7 @@ body.scrolled #masthead {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #10b981, #14b8a6);
+    background: linear-gradient(90deg, #10b981, #34d399);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s ease;
@@ -1396,7 +1396,7 @@ body.scrolled #masthead {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(20, 184, 166, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
@@ -1418,7 +1418,7 @@ body.scrolled #masthead {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
     border-radius: 16px;
     color: #ffffff;
     margin-bottom: 24px;
@@ -1505,7 +1505,7 @@ body.scrolled #masthead {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #10b981, #14b8a6);
+    background: linear-gradient(90deg, #10b981, #34d399);
     border-radius: 999px;
 }
 
@@ -1584,7 +1584,7 @@ body.scrolled #masthead {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #10b981, #14b8a6);
+    background: linear-gradient(90deg, #10b981, #34d399);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s ease;
@@ -1757,7 +1757,7 @@ body.scrolled #masthead {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #10b981, #14b8a6);
+    background: linear-gradient(90deg, #10b981, #34d399);
     border-radius: 999px;
 }
 
@@ -1794,7 +1794,7 @@ body.scrolled #masthead {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #10b981, #14b8a6);
+    background: linear-gradient(90deg, #10b981, #34d399);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s ease;
@@ -1813,7 +1813,7 @@ body.scrolled #masthead {
 .archive-cta__icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -1825,7 +1825,7 @@ body.scrolled #masthead {
 
 .archive-cta__card:hover .archive-cta__icon {
     transform: scale(1.1) rotate(5deg);
-    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
     color: #ffffff;
 }
 
@@ -1853,7 +1853,7 @@ body.scrolled #masthead {
     align-items: center;
     gap: 8px;
     padding: 14px 32px;
-    background: linear-gradient(135deg, #10b981, #14b8a6);
+    background: linear-gradient(135deg, #10b981, #34d399);
     color: #ffffff;
     border-radius: 999px;
     text-decoration: none;
@@ -1897,7 +1897,7 @@ body.scrolled #masthead {
 
 /* Hero Section */
 .about-hero {
-    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #14b8a6 100%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #34d399 100%);
     padding: 100px 0 60px;
     text-align: center;
     color: #ffffff;
