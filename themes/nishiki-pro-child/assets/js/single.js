@@ -244,14 +244,20 @@
                 }
 
                 // TOCボディ内でアクティブ項目を可視スクロール
+                // scrollIntoView はウィンドウ含む全祖先をスクロールするため
+                // tocBody.scrollTo() で TOC 内部のみスクロールする
                 const linkEl = activeItem.li.querySelector('.toc-list__link');
                 if (linkEl && tocBody) {
                     const bodyRect  = tocBody.getBoundingClientRect();
                     const linkRect  = linkEl.getBoundingClientRect();
                     const isAbove   = linkRect.top < bodyRect.top;
                     const isBelow   = linkRect.bottom > bodyRect.bottom;
-                    if (isAbove || isBelow) {
-                        linkEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    if (isAbove) {
+                        const scrollAmount = bodyRect.top - linkRect.top;
+                        tocBody.scrollTo({ top: tocBody.scrollTop - scrollAmount, behavior: 'smooth' });
+                    } else if (isBelow) {
+                        const scrollAmount = linkRect.bottom - bodyRect.bottom;
+                        tocBody.scrollTo({ top: tocBody.scrollTop + scrollAmount, behavior: 'smooth' });
                     }
                 }
             }
