@@ -20,7 +20,7 @@
 /* ターミナル風ヒーロー */
 .dev-hero {
     background: var(--dev-bg);
-    padding: 60px 24px 48px;
+    padding: 60px 24px 56px;
 }
 
 .dev-hero__terminal {
@@ -66,7 +66,7 @@
 }
 
 .dev-hero__terminal-body {
-    padding: 32px;
+    padding: 32px 36px;
 }
 
 .dev-hero__breadcrumb {
@@ -92,15 +92,15 @@
     font-size: 28px;
     font-weight: 700;
     color: #f0f6fc;
-    line-height: 1.4;
-    margin: 0 0 20px;
+    line-height: 1.45;
+    margin: 0 0 24px;
 }
 
 .dev-hero__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .dev-hero__meta-item {
@@ -134,8 +134,8 @@
 .dev-hero__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
+    gap: 10px;
+    margin-top: 12px;
 }
 
 .dev-hero__tag {
@@ -234,15 +234,20 @@
 .single-wrapper--dev .post-navigation {
     background: var(--dev-bg);
     border-top: 1px solid var(--dev-border);
+    padding-top: 56px;
+    padding-bottom: 72px;
 }
 
 .single-wrapper--dev .post-navigation__item {
     border: 1px solid var(--dev-border);
     background: var(--dev-bg-light);
+    padding: 24px;
+    border-radius: 12px;
 }
 
 .single-wrapper--dev .post-navigation__item:hover {
     border-color: var(--dev-accent);
+    background: var(--dev-bg-card);
 }
 
 .single-wrapper--dev .post-navigation__direction {
@@ -258,11 +263,11 @@
 /* レスポンシブ */
 @media (max-width: 768px) {
     .dev-hero {
-        padding: 40px 16px 32px;
+        padding: 40px 16px 40px;
     }
 
     .dev-hero__terminal-body {
-        padding: 20px;
+        padding: 24px 20px;
     }
 
     .dev-hero__title {
@@ -271,5 +276,14 @@
 
     .dev-hero__meta {
         gap: 12px;
+    }
+
+    .single-wrapper--dev .post-navigation {
+        padding-top: 40px;
+        padding-bottom: 56px;
+    }
+
+    .single-wrapper--dev .post-navigation__item {
+        padding: 20px;
     }
 }
