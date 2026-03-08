@@ -46,6 +46,15 @@ add_filter('body_class', function($classes) {
         $classes[] = 'page-template';
         $classes[] = 'blog-list-route';
     }
+
+    // カテゴリ別テンプレートのbodyクラス追加
+    if (is_single()) {
+        $cat_slug = nishiki_get_current_post_category_style();
+        if ($cat_slug) {
+            $classes[] = 'single-category-' . $cat_slug;
+        }
+    }
+
     return array_unique($classes);
 });
 
@@ -87,6 +96,21 @@ add_action('wp_enqueue_scripts', function () {
             ['nishiki-pro-child'],
             $child->get('Version')
         );
+
+        // カテゴリ別CSS読み込み
+        $cat_slug = nishiki_get_current_post_category_style();
+        if ($cat_slug) {
+            $css_map = nishiki_get_category_css_map();
+            $css_file = get_stylesheet_directory() . '/assets/css/' . $css_map[$cat_slug];
+            if (file_exists($css_file)) {
+                wp_enqueue_style(
+                    'nishiki-pro-child-single-' . $cat_slug,
+                    get_stylesheet_directory_uri() . '/assets/css/' . $css_map[$cat_slug],
+                    ['nishiki-pro-child-single'],
+                    filemtime($css_file)
+                );
+            }
+        }
     }
 
     // About page CSS & JS
@@ -271,6 +295,100 @@ function create_blog_page_automatically() {
         flush_rewrite_rules(false);
         update_option($rewrite_key, '1', false);
     }
+}
+
+/**
+ * カテゴリ別テンプレート設定
+ * カテゴリスラッグとテンプレートファイルのマッピング
+ */
+function nishiki_get_category_template_map() {
+    return array(
+        'development'    => 'single-category-development.php',    // 開発 → 技術ブログ風
+        'infrastructure' => 'single-category-infrastructure.php', // インフラ → ドキュメント風
+        'knowledge'      => 'single-category-knowledge.php',      // ナレッジ → ノート風
+    );
+}
+
+/**
+ * カテゴリに基づいて記事テンプレートを切り替え
+ */
+add_filter('single_template', function($template) {
+    if (!is_single()) {
+        return $template;
+    }
+
+    $categories = get_the_category();
+    if (empty($categories)) {
+        return $template;
+    }
+
+    $map = nishiki_get_category_template_map();
+
+    foreach ($categories as $cat) {
+        // 記事のカテゴリスラッグとマッピングを照合（親カテゴリも含む）
+        $check_cats = array($cat);
+        if ($cat->parent) {
+            $parent = get_category($cat->parent);
+            if ($parent && !is_wp_error($parent)) {
+                $check_cats[] = $parent;
+            }
+        }
+
+        foreach ($check_cats as $check_cat) {
+            if (isset($map[$check_cat->slug])) {
+                $category_template = get_stylesheet_directory() . '/' . $map[$check_cat->slug];
+                if (file_exists($category_template)) {
+                    return $category_template;
+                }
+            }
+        }
+    }
+
+    return $template;
+});
+
+/**
+ * カテゴリ別テンプレートのCSSとフォントマッピング
+ */
+function nishiki_get_category_css_map() {
+    return array(
+        'development'    => 'single-development.css',
+        'infrastructure' => 'single-infrastructure.css',
+        'knowledge'      => 'single-knowledge.css',
+    );
+}
+
+/**
+ * 現在の投稿のカテゴリスラッグを取得（テンプレートマップに一致するもの）
+ */
+function nishiki_get_current_post_category_style() {
+    if (!is_single()) {
+        return null;
+    }
+
+    $categories = get_the_category();
+    if (empty($categories)) {
+        return null;
+    }
+
+    $map = nishiki_get_category_css_map();
+
+    foreach ($categories as $cat) {
+        $check_slugs = array($cat->slug);
+        if ($cat->parent) {
+            $parent = get_category($cat->parent);
+            if ($parent && !is_wp_error($parent)) {
+                $check_slugs[] = $parent->slug;
+            }
+        }
+        foreach ($check_slugs as $slug) {
+            if (isset($map[$slug])) {
+                return $slug;
+            }
+        }
+    }
+
+    return null;
 }
 
 // 記事ページ末尾の黒帯フィードセクションを削除

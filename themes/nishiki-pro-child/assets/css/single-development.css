@@ -1,0 +1,275 @@
+/* ===========================================
+   開発カテゴリ - 技術ブログ風デザイン
+   ターミナル/コードエディタの雰囲気
+   =========================================== */
+
+:root {
+    --dev-bg: #0d1117;
+    --dev-bg-light: #161b22;
+    --dev-bg-card: #1c2128;
+    --dev-border: #30363d;
+    --dev-text: #c9d1d9;
+    --dev-text-muted: #8b949e;
+    --dev-accent: #58a6ff;
+    --dev-green: #3fb950;
+    --dev-yellow: #d29922;
+    --dev-red: #f85149;
+    --dev-purple: #bc8cff;
+}
+
+/* ターミナル風ヒーロー */
+.dev-hero {
+    background: var(--dev-bg);
+    padding: 60px 24px 48px;
+}
+
+.dev-hero__terminal {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--dev-bg-light);
+    border: 1px solid var(--dev-border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+
+.dev-hero__terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--dev-bg-card);
+    border-bottom: 1px solid var(--dev-border);
+}
+
+.dev-hero__terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dev-hero__terminal-dot--red { background: var(--dev-red); }
+.dev-hero__terminal-dot--yellow { background: var(--dev-yellow); }
+.dev-hero__terminal-dot--green { background: var(--dev-green); }
+
+.dev-hero__terminal-tab {
+    margin-left: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--dev-text-muted);
+    background: var(--dev-bg-light);
+    padding: 4px 12px;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid var(--dev-border);
+    border-bottom: 1px solid var(--dev-bg-light);
+    margin-bottom: -1px;
+}
+
+.dev-hero__terminal-body {
+    padding: 32px;
+}
+
+.dev-hero__breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dev-hero__prompt {
+    color: var(--dev-green);
+    font-weight: 700;
+}
+
+.dev-hero__path {
+    color: var(--dev-accent);
+}
+
+.dev-hero__title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #f0f6fc;
+    line-height: 1.4;
+    margin: 0 0 20px;
+}
+
+.dev-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.dev-hero__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--dev-text-muted);
+}
+
+.dev-hero__meta-item svg {
+    opacity: 0.7;
+}
+
+.dev-hero__cat-link {
+    color: var(--dev-accent);
+    text-decoration: none;
+    padding: 2px 8px;
+    background: rgba(88, 166, 255, 0.1);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 4px;
+    font-size: 11px;
+    transition: background 0.2s;
+}
+
+.dev-hero__cat-link:hover {
+    background: rgba(88, 166, 255, 0.2);
+}
+
+.dev-hero__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.dev-hero__tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--dev-purple);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.dev-hero__tag:hover {
+    color: #d2a8ff;
+}
+
+/* 記事本文カスタマイズ */
+.single-wrapper--dev {
+    background: #ffffff;
+}
+
+.single-wrapper--dev .article-content h2 {
+    border-left: 4px solid var(--dev-accent);
+    padding-left: 16px;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.single-wrapper--dev .article-content h3 {
+    color: #1a1a1a;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.single-wrapper--dev .article-content code {
+    font-family: 'JetBrains Mono', monospace;
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 0.875em;
+}
+
+.single-wrapper--dev .article-content pre {
+    background: var(--dev-bg) !important;
+    border: 1px solid var(--dev-border);
+    border-radius: 8px;
+    position: relative;
+}
+
+.single-wrapper--dev .article-content pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* サイドバー強調 */
+.single-wrapper--dev .toc-widget {
+    background: var(--dev-bg-light);
+    border: 1px solid var(--dev-border);
+}
+
+.single-wrapper--dev .toc-widget__header {
+    background: var(--dev-bg-card);
+    border-bottom: 1px solid var(--dev-border);
+}
+
+.single-wrapper--dev .toc-widget__title {
+    color: var(--dev-text-muted);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.single-wrapper--dev .toc-widget__body {
+    background: var(--dev-bg-light);
+}
+
+.single-wrapper--dev .toc-list a {
+    color: var(--dev-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+}
+
+.single-wrapper--dev .toc-list a:hover,
+.single-wrapper--dev .toc-list a.is-active {
+    color: var(--dev-accent);
+}
+
+.single-wrapper--dev .article-sidebar__chip--category {
+    background: rgba(88, 166, 255, 0.1);
+    color: var(--dev-accent);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+}
+
+.single-wrapper--dev .article-sidebar__chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+}
+
+/* ナビゲーション */
+.single-wrapper--dev .post-navigation {
+    background: var(--dev-bg);
+    border-top: 1px solid var(--dev-border);
+}
+
+.single-wrapper--dev .post-navigation__item {
+    border: 1px solid var(--dev-border);
+    background: var(--dev-bg-light);
+}
+
+.single-wrapper--dev .post-navigation__item:hover {
+    border-color: var(--dev-accent);
+}
+
+.single-wrapper--dev .post-navigation__direction {
+    color: var(--dev-text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+}
+
+.single-wrapper--dev .post-navigation__title {
+    color: var(--dev-text);
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .dev-hero {
+        padding: 40px 16px 32px;
+    }
+
+    .dev-hero__terminal-body {
+        padding: 20px;
+    }
+
+    .dev-hero__title {
+        font-size: 22px;
+    }
+
+    .dev-hero__meta {
+        gap: 12px;
+    }
+}
