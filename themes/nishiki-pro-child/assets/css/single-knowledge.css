@@ -12,9 +12,9 @@
     --note-text: #3d3228;
     --note-text-secondary: #6b5e4f;
     --note-text-muted: #a09080;
-    --note-accent: #e07c3e;
-    --note-accent-dark: #c96a2e;
-    --note-accent-light: #fef0e0;
+    --note-accent: #10b981;
+    --note-accent-dark: #059669;
+    --note-accent-light: #ecfdf5;
     --note-yellow: #f5c842;
     --note-yellow-light: #fef9e7;
     --note-pink: #e8a0bf;
@@ -47,17 +47,18 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 16px;
-    padding: 24px 12px;
+    gap: 18px;
+    padding: 24px 10px;
     background: #d4c4a8;
     min-width: 36px;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .note-hero__ring {
-    width: 20px;
-    height: 20px;
-    border: 3px solid #b0a08a;
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid #b0a08a;
     border-radius: 50%;
     background: transparent;
 }
@@ -68,29 +69,29 @@
     background-image:
         repeating-linear-gradient(
             transparent,
-            transparent 31px,
-            var(--note-line) 31px,
-            var(--note-line) 32px
+            transparent 29px,
+            var(--note-line) 29px,
+            var(--note-line) 30px
         );
-    background-position: 0 8px;
+    background-position: 0 6px;
     position: relative;
 }
 
 .note-hero__page::before {
     content: '';
     position: absolute;
-    left: 48px;
+    left: 32px;
     top: 0;
     bottom: 0;
     width: 1px;
     background: #e8b4b4;
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
 .note-hero__date-stamp {
     position: absolute;
-    top: 16px;
-    right: 24px;
+    top: 12px;
+    right: 20px;
 }
 
 .note-hero__date-stamp time {
@@ -102,7 +103,7 @@
 }
 
 .note-hero__date-day {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--note-accent);
 }
@@ -135,7 +136,7 @@
     background: var(--note-accent-light);
     border-radius: 12px;
     font-weight: 600;
-    border: 1px solid rgba(224, 124, 62, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.2);
     transition: all 0.2s;
 }
 
@@ -217,11 +218,11 @@
     background-image:
         repeating-linear-gradient(
             transparent,
-            transparent 31px,
-            var(--note-line) 31px,
-            var(--note-line) 32px
+            transparent 29px,
+            var(--note-line) 29px,
+            var(--note-line) 30px
         );
-    background-position: 0 16px;
+    background-position: 0 6px;
 }
 
 .single-wrapper--note .article-content h2 {
@@ -344,25 +345,31 @@
 
 .toc-widget--note .toc-list a {
     color: var(--note-text-secondary);
-    font-size: 13px;
-    padding: 7px 0;
+    font-size: 13.5px;
+    padding: 8px 0;
+    line-height: 1.6;
     transition: color 0.2s;
+    border-left: 2px solid transparent;
+    padding-left: 12px;
 }
 
 .toc-widget--note .toc-list a:hover {
-    color: var(--note-accent);
+    color: var(--accent);
+    border-left-color: rgba(16, 185, 129, 0.3);
 }
 
 .toc-widget--note .toc-list a.is-active {
-    color: var(--note-accent);
+    color: var(--accent);
     font-weight: 600;
+    border-left-color: var(--accent);
+    background: rgba(16, 185, 129, 0.06);
 }
 
 /* チップ */
 .single-wrapper--note .article-sidebar__chip--category {
     background: var(--note-accent-light);
     color: var(--note-accent-dark);
-    border: 1px solid rgba(224, 124, 62, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.2);
     border-radius: 12px;
 }
 
@@ -387,7 +394,7 @@
 }
 
 .post-navigation--note .post-navigation__item:hover {
-    border-color: var(--note-accent);
+    border-color: var(--accent);
     background: var(--note-accent-light);
 }
 

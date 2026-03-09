@@ -1829,9 +1829,9 @@
 
 .toc-widget__title {
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
-    color: #999999;
+    color: #b0b0b0;
     letter-spacing: 0;
     text-transform: none;
     white-space: nowrap;
@@ -1925,26 +1925,26 @@
 
 /* H2 アイテム */
 .toc-list__item--h2 > .toc-list__link {
-    padding: 5px 12px 5px 0;
-    font-size: 12.5px;
+    padding: 7px 12px 7px 0;
+    font-size: 13.5px;
     font-weight: 500;
-    color: #cccccc;
+    color: #e0e0e0;
 }
 
 /* H3 アイテム */
 .toc-list__item--h3 > .toc-list__link {
-    padding: 4px 12px 4px 44px;
-    font-size: 11.5px;
+    padding: 6px 12px 6px 44px;
+    font-size: 12.5px;
     font-weight: 400;
-    color: #999999;
+    color: #b0b0b0;
 }
 
 /* H4 アイテム */
 .toc-list__item--h4 > .toc-list__link {
-    padding: 3px 12px 3px 56px;
-    font-size: 11px;
+    padding: 5px 12px 5px 56px;
+    font-size: 12px;
     font-weight: 400;
-    color: #888888;
+    color: #a0a0a0;
 }
 
 /* リンク共通 */
@@ -1953,7 +1953,7 @@
     align-items: flex-start;
     gap: 0;
     text-decoration: none;
-    line-height: 1.55;
+    line-height: 1.6;
     border-left: 2px solid transparent;
     transition: background 0.15s ease,
                 color 0.15s ease,
@@ -1971,9 +1971,9 @@
     flex-shrink: 0;
     width: 32px;
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 400;
-    color: #666666;
+    color: #777777;
     display: flex;
     align-items: flex-start;
     justify-content: flex-end;
@@ -1990,24 +1990,24 @@
 .toc-list__item--h3 > .toc-list__link::before {
     content: '├─';
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-    font-size: 10px;
-    color: #555555;
+    font-size: 11px;
+    color: #666666;
     padding-left: 12px;
     padding-right: 6px;
     flex-shrink: 0;
-    line-height: 1.55;
+    line-height: 1.6;
     transition: color 0.15s ease;
 }
 
 .toc-list__item--h4 > .toc-list__link::before {
     content: '│  └─';
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-    font-size: 10px;
-    color: #555555;
+    font-size: 11px;
+    color: #666666;
     padding-left: 12px;
     padding-right: 6px;
     flex-shrink: 0;
-    line-height: 1.55;
+    line-height: 1.6;
     transition: color 0.15s ease;
 }
 
