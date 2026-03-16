@@ -273,6 +273,30 @@
         }, { passive: true });
 
         updateActiveHeading();
+
+        // --------------------------------------------------
+        // 7. 本文内TOC（親テーマ等）のリンクを修復
+        // --------------------------------------------------
+        const contentLinks = articleContent.querySelectorAll('a[href^="#"]');
+        contentLinks.forEach(link => {
+            const targetId = link.getAttribute('href').substring(1);
+            if (!targetId || document.getElementById(targetId)) return;
+
+            const linkText = link.textContent.trim();
+            for (const { heading } of tocItems) {
+                const headingText = heading.textContent.replace(/\s*#\s*$/, '').trim();
+                if (headingText === linkText) {
+                    link.setAttribute('href', '#' + heading.id);
+                    link.addEventListener('click', e => {
+                        e.preventDefault();
+                        const top = heading.getBoundingClientRect().top + window.scrollY - 80;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                        history.replaceState(null, '', '#' + heading.id);
+                    });
+                    break;
+                }
+            }
+        });
     }
 
     // ===========================================

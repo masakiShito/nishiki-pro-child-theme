@@ -218,7 +218,7 @@
     color: #f0f6fc;
 }
 
-.single-wrapper--dev .toc-list a.is-active {
+.single-wrapper--dev .toc-list__item.is-active > .toc-list__link {
     color: var(--accent);
 }
 
