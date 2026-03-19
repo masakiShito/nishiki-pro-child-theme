@@ -84,15 +84,8 @@ get_header();
         <!-- 記事本文エリア -->
         <div class="article-main">
             <div class="article-body">
-                <div class="article-content">
-                    <?php the_content(); ?>
-                </div>
-            </div>
-
-            <!-- サイドバー -->
-            <aside class="article-sidebar">
                 <!-- 目次（コードエディタ風） -->
-                <div class="toc-widget" id="tocWidget">
+                <div class="toc-widget toc-widget--inline" id="tocWidget">
                     <div class="toc-widget__header">
                         <div class="toc-widget__title-wrap">
                             <div class="toc-widget__dots" aria-hidden="true">
@@ -120,6 +113,13 @@ get_header();
                     </nav>
                 </div>
 
+                <div class="article-content">
+                    <?php the_content(); ?>
+                </div>
+            </div>
+
+            <!-- サイドバー -->
+            <aside class="article-sidebar">
                 <?php if (!empty($post_categories)) : ?>
                     <section class="article-sidebar__section">
                         <h2 class="article-sidebar__title">カテゴリー</h2>

@@ -140,6 +140,24 @@ get_header();
         <div class="article-main article-main--infra">
             <!-- メインコンテンツ -->
             <div class="article-body article-body--infra">
+                <!-- 目次（コンソールナビゲーション風） -->
+                <div class="toc-widget toc-widget--infra toc-widget--inline" id="tocWidget">
+                    <div class="toc-widget__header toc-widget__header--infra">
+                        <div class="toc-widget__title-wrap">
+                            <span class="toc-widget__title-marker">///</span>
+                            <span class="toc-widget__title">INDEX</span>
+                        </div>
+                        <button class="toc-widget__toggle" id="tocToggle" aria-expanded="true" aria-label="目次を折りたたむ">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <nav class="toc-widget__body" id="tocBody" aria-label="目次">
+                        <ol class="toc-list" id="tocList"></ol>
+                    </nav>
+                </div>
+
                 <div class="article-content">
                     <?php the_content(); ?>
                 </div>
@@ -176,24 +194,6 @@ get_header();
                 <div class="infra-sidebar__nav-header">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                     <span>NAVIGATION PANEL</span>
-                </div>
-
-                <!-- 目次（コンソールナビゲーション風） -->
-                <div class="toc-widget toc-widget--infra" id="tocWidget">
-                    <div class="toc-widget__header toc-widget__header--infra">
-                        <div class="toc-widget__title-wrap">
-                            <span class="toc-widget__title-marker">///</span>
-                            <span class="toc-widget__title">INDEX</span>
-                        </div>
-                        <button class="toc-widget__toggle" id="tocToggle" aria-expanded="true" aria-label="目次を折りたたむ">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                                <polyline points="18 15 12 9 6 15"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <nav class="toc-widget__body" id="tocBody" aria-label="目次">
-                        <ol class="toc-list" id="tocList"></ol>
-                    </nav>
                 </div>
 
                 <!-- 関連ドキュメント -->

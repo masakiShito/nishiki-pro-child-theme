@@ -2086,18 +2086,15 @@
     display: none;
 }
 
-/* モバイル対応 */
-@media (max-width: 1024px) {
-    .toc-widget {
-        max-height: none;
-    }
+/* インライン目次（記事本文の先頭に配置） */
+.toc-widget--inline {
+    max-height: none;
+    margin-bottom: 28px;
+    border-radius: 12px;
 }
 
-/* モバイル：JSによりarticle-mainの直下に移動した際の目次スタイル調整 */
-@media (max-width: 1200px) {
-    .article-main > .toc-widget {
-        margin-bottom: 0;
-    }
+.toc-widget--inline .toc-widget__body {
+    max-height: 480px;
 }
 
 @media (max-width: 768px) {
@@ -2263,8 +2260,4 @@
         height: 40px;
     }
 
-    /* 目次ウィジェット */
-    .toc-widget {
-        padding: 14px 16px;
-    }
 }
