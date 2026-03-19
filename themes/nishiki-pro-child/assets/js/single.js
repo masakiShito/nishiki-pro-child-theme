@@ -647,7 +647,7 @@
         const snsFloat = document.getElementById('snsFloat');
         if (!snsFloat) return;
 
-        const articleHero = document.querySelector('.article-hero');
+        const articleHero = document.querySelector('.article-hero') || document.querySelector('.dev-hero') || document.querySelector('.infra-hero') || document.querySelector('.kn-hero');
         if (!articleHero) {
             snsFloat.classList.add('is-visible');
             return;
