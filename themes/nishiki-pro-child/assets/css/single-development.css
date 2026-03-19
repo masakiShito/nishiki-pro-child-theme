@@ -152,40 +152,244 @@
 
 /* 記事本文カスタマイズ */
 .single-wrapper--dev {
+    background: #f8fafb;
+}
+
+.single-wrapper--dev .article-body {
     background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.single-wrapper--dev .article-content {
+    font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .single-wrapper--dev .article-content h2 {
-    border-left: 4px solid var(--accent);
-    padding-left: 16px;
     font-family: 'Noto Sans JP', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-top: 56px;
+    margin-bottom: 24px;
+    padding: 14px 20px;
+    background: var(--dev-bg);
+    border-left: 4px solid var(--dev-accent);
+    border-radius: 0 8px 8px 0;
+    position: relative;
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: none;
+    text-shadow: none;
+}
+
+.single-wrapper--dev .article-content h2::before {
+    content: '##';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--dev-accent);
+    margin-right: 10px;
+    opacity: 0.7;
+}
+
+.single-wrapper--dev .article-content h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--dev-accent), transparent);
 }
 
 .single-wrapper--dev .article-content h3 {
-    color: #1a1a1a;
     font-family: 'Noto Sans JP', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-top: 44px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+    position: relative;
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: none;
+    text-shadow: none;
+}
+
+.single-wrapper--dev .article-content h3::before {
+    content: '###';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--dev-accent);
+    margin-right: 8px;
+    opacity: 0.6;
+}
+
+.single-wrapper--dev .article-content h4 {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #334155;
+    margin-top: 32px;
+    margin-bottom: 12px;
+    padding-left: 14px;
+    border-left: 3px solid var(--dev-green);
+    line-height: 1.5;
+}
+
+.single-wrapper--dev .article-content p {
+    color: #334155;
+    line-height: 1.9;
+    font-size: 15.5px;
+}
+
+.single-wrapper--dev .article-content a {
+    color: var(--dev-accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+    transition: all 0.2s;
+    background-image: none;
+}
+
+.single-wrapper--dev .article-content a:hover {
+    color: #059669;
+    border-bottom-color: #059669;
+    background-image: none;
 }
 
 .single-wrapper--dev .article-content code {
     font-family: 'JetBrains Mono', monospace;
-    background: #f6f8fa;
-    border: 1px solid #d0d7de;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 2px 6px;
-    font-size: 0.875em;
+    padding: 2px 7px;
+    font-size: 0.85em;
+    color: #0f766e;
 }
 
 .single-wrapper--dev .article-content pre {
     background: var(--dev-bg) !important;
     border: 1px solid var(--dev-border);
-    border-radius: 8px;
+    border-radius: 10px;
     position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    margin: 28px 0 !important;
+}
+
+.single-wrapper--dev .article-content pre::before {
+    content: '';
+    display: block;
+    height: 36px;
+    background: var(--dev-bg-card);
+    border-bottom: 1px solid var(--dev-border);
+    border-radius: 10px 10px 0 0;
+    margin: -16px -16px 16px;
+    background-image: radial-gradient(circle at 20px 50%, var(--dev-red) 5px, transparent 5px),
+                       radial-gradient(circle at 40px 50%, var(--dev-yellow) 5px, transparent 5px),
+                       radial-gradient(circle at 60px 50%, var(--dev-green) 5px, transparent 5px);
+    background-repeat: no-repeat;
 }
 
 .single-wrapper--dev .article-content pre code {
     background: transparent;
     border: none;
     padding: 0;
+    color: var(--dev-text);
+}
+
+.single-wrapper--dev .article-content blockquote {
+    border-left: 4px solid var(--dev-accent);
+    background: #f0fdf4;
+    padding: 20px 24px;
+    margin: 28px 0;
+    border-radius: 0 10px 10px 0;
+    color: #334155;
+    position: relative;
+}
+
+.single-wrapper--dev .article-content blockquote::before {
+    content: 'NOTE';
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--dev-accent);
+    background: #ffffff;
+    padding: 2px 8px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+}
+
+.single-wrapper--dev .article-content blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+.single-wrapper--dev .article-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0;
+    font-size: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.single-wrapper--dev .article-content table th {
+    background: var(--dev-bg);
+    color: var(--dev-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--dev-accent);
+}
+
+.single-wrapper--dev .article-content table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+}
+
+.single-wrapper--dev .article-content table tr:hover td {
+    background: #f8fafb;
+}
+
+.single-wrapper--dev .article-content ul,
+.single-wrapper--dev .article-content ol {
+    padding-left: 24px;
+}
+
+.single-wrapper--dev .article-content li {
+    line-height: 1.9;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+.single-wrapper--dev .article-content li::marker {
+    color: var(--dev-accent);
+}
+
+.single-wrapper--dev .article-content img {
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.single-wrapper--dev .article-content hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+    margin: 48px 0;
 }
 
 /* サイドバー強調 */

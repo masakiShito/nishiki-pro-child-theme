@@ -320,6 +320,9 @@
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--infra-border) transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .article-body--infra {
@@ -355,6 +358,9 @@
     border-radius: 8px;
     box-shadow: none;
     overflow: hidden;
+    max-height: none; /* 親のサイドバーがスクロール管理するためここでは制限しない */
+    flex-shrink: 1;
+    min-height: 0;
 }
 
 .toc-widget__header--infra {
@@ -934,6 +940,18 @@
 
 .post-navigation--infra .post-navigation__item:hover .post-navigation__arrow svg {
     stroke: var(--infra-cyan);
+}
+
+/* ===== SNSボタンの位置調整（左サイドバーとの重なり防止） ===== */
+.single-wrapper--infra .sns-float {
+    left: 300px; /* 左サイドバー280px + 余白20px */
+}
+
+@media (max-width: 1340px) {
+    /* サイドバー + コンテンツ + SNSボタンの余裕がない場合は非表示 */
+    .single-wrapper--infra .sns-float {
+        display: none;
+    }
 }
 
 /* ===== レスポンシブ ===== */
