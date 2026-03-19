@@ -199,7 +199,7 @@
     border-left-color: var(--infra-border-strong);
 }
 
-.toc-widget--infra .toc-list a.is-active {
+.toc-widget--infra .toc-list__item.is-active > .toc-list__link {
     color: var(--accent);
     border-left-color: var(--accent);
     font-weight: 500;
