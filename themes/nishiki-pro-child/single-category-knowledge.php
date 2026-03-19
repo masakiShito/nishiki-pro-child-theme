@@ -1,7 +1,7 @@
 <?php
 /**
- * ナレッジカテゴリ用記事テンプレート - ノート風
- * 手書きノートのような温かみのあるデザイン
+ * ナレッジカテゴリ用記事テンプレート - デジタルライブラリ/マガジン風
+ * 図書館のカード目録や洗練された雑誌記事のようなエレガントなデザイン
  */
 
 if (!defined('ABSPATH')) {
@@ -11,64 +11,81 @@ if (!defined('ABSPATH')) {
 get_header();
 ?>
 
-<div class="single-wrapper single-wrapper--note">
+<div class="single-wrapper single-wrapper--knowledge">
     <?php while (have_posts()) : the_post(); ?>
 
-    <article <?php post_class('single-article single-article--note'); ?>>
+    <article <?php post_class('single-article single-article--knowledge'); ?>>
         <?php
         $post_tags = get_the_tags();
         $reading_time = ceil(mb_strlen(strip_tags(get_the_content())) / 600);
         $post_categories = get_the_category();
         ?>
 
-        <!-- ノート風ヘッダー -->
-        <section class="note-hero">
-            <div class="note-hero__container">
-                <div class="note-hero__notebook">
-                    <div class="note-hero__binding" aria-hidden="true">
-                        <span class="note-hero__ring"></span>
-                        <span class="note-hero__ring"></span>
-                        <span class="note-hero__ring"></span>
-                        <span class="note-hero__ring"></span>
-                        <span class="note-hero__ring"></span>
+        <!-- マガジン風ヒーロー -->
+        <section class="knowledge-hero">
+            <div class="knowledge-hero__container">
+                <!-- 装飾ライン -->
+                <div class="knowledge-hero__accent-line" aria-hidden="true"></div>
+
+                <!-- カテゴリラベル -->
+                <div class="knowledge-hero__topbar">
+                    <?php if (!empty($post_categories)) : ?>
+                    <div class="knowledge-hero__category-badge">
+                        <span class="knowledge-hero__category-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        </span>
+                        <?php foreach ($post_categories as $cat) : ?>
+                            <a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>" class="knowledge-hero__cat-link"><?php echo esc_html($cat->name); ?></a>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="note-hero__page">
-                        <div class="note-hero__date-stamp">
-                            <time datetime="<?php echo get_the_date('c'); ?>">
-                                <span class="note-hero__date-day"><?php echo get_the_date('j'); ?></span>
-                                <span class="note-hero__date-month"><?php echo get_the_date('M'); ?></span>
-                                <span class="note-hero__date-year"><?php echo get_the_date('Y'); ?></span>
-                            </time>
-                        </div>
-                        <?php if (!empty($post_categories)) : ?>
-                        <div class="note-hero__category-tab">
-                            <?php foreach ($post_categories as $cat) : ?>
-                                <a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>" class="note-hero__cat">
-                                    <?php echo esc_html($cat->name); ?>
-                                </a>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php endif; ?>
-                        <h1 class="note-hero__title"><?php the_title(); ?></h1>
-                        <div class="note-hero__meta">
-                            <span class="note-hero__meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                約<?php echo $reading_time; ?>分
-                            </span>
-                            <span class="note-hero__meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                <?php the_author(); ?>
-                            </span>
-                        </div>
-                        <?php if ($post_tags) : ?>
-                        <div class="note-hero__tags">
-                            <?php foreach ($post_tags as $tag) : ?>
-                                <a href="<?php echo esc_url(get_tag_link($tag->term_id)); ?>" class="note-hero__tag">#<?php echo esc_html($tag->name); ?></a>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php endif; ?>
+                    <?php endif; ?>
+                    <div class="knowledge-hero__reading-time">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span><?php echo $reading_time; ?>分で読了</span>
                     </div>
                 </div>
+
+                <!-- タイトルエリア -->
+                <div class="knowledge-hero__title-block">
+                    <h1 class="knowledge-hero__title"><?php the_title(); ?></h1>
+                    <div class="knowledge-hero__subtitle-line" aria-hidden="true"></div>
+                </div>
+
+                <!-- 著者・日付カード -->
+                <div class="knowledge-hero__info-card">
+                    <div class="knowledge-hero__author">
+                        <div class="knowledge-hero__author-avatar">
+                            <?php echo get_avatar(get_the_author_meta('ID'), 56); ?>
+                        </div>
+                        <div class="knowledge-hero__author-detail">
+                            <span class="knowledge-hero__author-label">Written by</span>
+                            <span class="knowledge-hero__author-name"><?php the_author(); ?></span>
+                        </div>
+                    </div>
+                    <div class="knowledge-hero__dates">
+                        <div class="knowledge-hero__date-item">
+                            <span class="knowledge-hero__date-label">Published</span>
+                            <time class="knowledge-hero__date-value" datetime="<?php echo get_the_date('c'); ?>">
+                                <?php echo get_the_date('Y年n月j日'); ?>
+                            </time>
+                        </div>
+                        <div class="knowledge-hero__date-item">
+                            <span class="knowledge-hero__date-label">Updated</span>
+                            <time class="knowledge-hero__date-value" datetime="<?php echo get_the_modified_date('c'); ?>">
+                                <?php echo get_the_modified_date('Y年n月j日'); ?>
+                            </time>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- タグ -->
+                <?php if ($post_tags) : ?>
+                <div class="knowledge-hero__tags">
+                    <?php foreach ($post_tags as $tag) : ?>
+                        <a href="<?php echo esc_url(get_tag_link($tag->term_id)); ?>" class="knowledge-hero__tag"><?php echo esc_html($tag->name); ?></a>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -85,24 +102,21 @@ get_header();
         ?>
 
         <!-- 記事本文エリア -->
-        <div class="article-main article-main--note">
-            <div class="article-body article-body--note">
+        <div class="article-main article-main--knowledge">
+            <div class="article-body article-body--knowledge">
                 <div class="article-content">
                     <?php the_content(); ?>
                 </div>
             </div>
 
             <!-- サイドバー -->
-            <aside class="article-sidebar article-sidebar--note">
-                <!-- 目次（付箋風） -->
-                <div class="toc-widget toc-widget--note" id="tocWidget">
-                    <div class="toc-widget__header toc-widget__header--note">
+            <aside class="article-sidebar article-sidebar--knowledge">
+                <!-- 目次（インデックスカード風） -->
+                <div class="toc-widget toc-widget--knowledge" id="tocWidget">
+                    <div class="toc-widget__header toc-widget__header--knowledge">
                         <div class="toc-widget__title-wrap">
-                            <svg class="toc-widget__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <path d="M15.5 2H8.6c-.4 0-.8.2-1.1.5-.3.3-.5.7-.5 1.1v16.8c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h12.8c.4 0 .8-.2 1.1-.5.3-.3.5-.7.5-1.1V7.5L15.5 2z"/>
-                                <polyline points="14 2 14 8 20 8"/>
-                            </svg>
-                            <span class="toc-widget__title">もくじ</span>
+                            <span class="toc-widget__title-number">INDEX</span>
+                            <span class="toc-widget__title">目次</span>
                         </div>
                         <button class="toc-widget__toggle" id="tocToggle" aria-expanded="true" aria-label="目次を折りたたむ">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -115,12 +129,16 @@ get_header();
                     </nav>
                 </div>
 
+                <!-- ブックマーク風カテゴリ -->
                 <?php if (!empty($post_categories)) : ?>
-                    <section class="article-sidebar__section">
-                        <h2 class="article-sidebar__title">カテゴリー</h2>
-                        <div class="article-sidebar__chips">
+                    <section class="knowledge-sidebar__section">
+                        <h2 class="knowledge-sidebar__section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                            カテゴリー
+                        </h2>
+                        <div class="knowledge-sidebar__chips">
                             <?php foreach ($post_categories as $cat) : ?>
-                                <a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>" class="article-sidebar__chip article-sidebar__chip--category">
+                                <a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>" class="knowledge-sidebar__chip knowledge-sidebar__chip--category">
                                     <?php echo esc_html($cat->name); ?>
                                 </a>
                             <?php endforeach; ?>
@@ -128,40 +146,38 @@ get_header();
                     </section>
                 <?php endif; ?>
 
-                <section class="article-sidebar__section">
-                    <h2 class="article-sidebar__title">タグ</h2>
-                    <div class="article-sidebar__chips">
+                <!-- タグ -->
+                <section class="knowledge-sidebar__section">
+                    <h2 class="knowledge-sidebar__section-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                        タグ
+                    </h2>
+                    <div class="knowledge-sidebar__chips">
                         <?php if ($post_tags) : ?>
                             <?php foreach ($post_tags as $tag) : ?>
-                                <a href="<?php echo esc_url(get_tag_link($tag->term_id)); ?>" class="article-sidebar__chip">
-                                    #<?php echo esc_html($tag->name); ?>
+                                <a href="<?php echo esc_url(get_tag_link($tag->term_id)); ?>" class="knowledge-sidebar__chip">
+                                    <?php echo esc_html($tag->name); ?>
                                 </a>
                             <?php endforeach; ?>
                         <?php else : ?>
-                            <span class="article-sidebar__empty">タグなし</span>
+                            <span class="knowledge-sidebar__empty">タグなし</span>
                         <?php endif; ?>
                     </div>
                 </section>
 
-                <section class="article-sidebar__section article-author">
-                    <div class="article-author__avatar">
-                        <?php echo get_avatar(get_the_author_meta('ID'), 80); ?>
-                    </div>
-                    <div class="article-author__info">
-                        <span class="article-author__label">この記事を書いた人</span>
-                        <span class="article-author__name"><?php the_author(); ?></span>
-                    </div>
-                </section>
-
+                <!-- 関連ナレッジ -->
                 <?php if ($related_posts && $related_posts->have_posts()) : ?>
-                    <section class="article-sidebar__section">
-                        <h2 class="article-sidebar__title">関連ノート</h2>
-                        <ul class="article-sidebar__related-list">
+                    <section class="knowledge-sidebar__section">
+                        <h2 class="knowledge-sidebar__section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                            関連ナレッジ
+                        </h2>
+                        <ul class="knowledge-sidebar__related-list">
                             <?php while ($related_posts->have_posts()) : $related_posts->the_post(); ?>
-                                <li class="article-sidebar__related-item">
-                                    <a href="<?php the_permalink(); ?>" class="article-sidebar__related-link">
-                                        <span class="article-sidebar__related-title"><?php the_title(); ?></span>
-                                        <time class="article-sidebar__related-date" datetime="<?php echo get_the_date('c'); ?>">
+                                <li class="knowledge-sidebar__related-item">
+                                    <a href="<?php the_permalink(); ?>" class="knowledge-sidebar__related-link">
+                                        <span class="knowledge-sidebar__related-title"><?php the_title(); ?></span>
+                                        <time class="knowledge-sidebar__related-date" datetime="<?php echo get_the_date('c'); ?>">
                                             <?php echo get_the_date('Y.m.d'); ?>
                                         </time>
                                     </a>
@@ -181,7 +197,7 @@ get_header();
     $next_post = get_next_post();
     if ($prev_post || $next_post) :
     ?>
-    <nav class="post-navigation post-navigation--note">
+    <nav class="post-navigation post-navigation--knowledge">
         <div class="post-navigation__container">
             <?php if ($prev_post) : ?>
                 <a href="<?php echo get_permalink($prev_post); ?>" class="post-navigation__item post-navigation__item--prev">
@@ -189,7 +205,7 @@ get_header();
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     </span>
                     <span class="post-navigation__info">
-                        <span class="post-navigation__direction">前のノート</span>
+                        <span class="post-navigation__direction">前のナレッジ</span>
                         <span class="post-navigation__title"><?php echo esc_html($prev_post->post_title); ?></span>
                     </span>
                 </a>
@@ -199,12 +215,12 @@ get_header();
 
             <?php if ($next_post) : ?>
                 <a href="<?php echo get_permalink($next_post); ?>" class="post-navigation__item post-navigation__item--next">
+                    <span class="post-navigation__info">
+                        <span class="post-navigation__direction">次のナレッジ</span>
+                        <span class="post-navigation__title"><?php echo esc_html($next_post->post_title); ?></span>
+                    </span>
                     <span class="post-navigation__arrow">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </span>
-                    <span class="post-navigation__info">
-                        <span class="post-navigation__direction">次のノート</span>
-                        <span class="post-navigation__title"><?php echo esc_html($next_post->post_title); ?></span>
                     </span>
                 </a>
             <?php else : ?>
