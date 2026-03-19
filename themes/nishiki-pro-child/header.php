@@ -5,7 +5,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<?php wp_head(); ?>
 </head>
 
@@ -33,25 +32,28 @@
 				<!-- メインナビゲーション（親カテゴリ + 子カテゴリドロップダウン） -->
 				<nav class="header-nav" aria-label="メインナビゲーション">
 					<?php
-					// 親カテゴリのみ取得
+					// 親カテゴリのみ取得（子カテゴリもキャッシュして再利用）
 					$parent_categories = get_categories( array(
 						'orderby'    => 'count',
 						'order'      => 'DESC',
 						'hide_empty' => true,
-						'parent'     => 0, // 親カテゴリのみ
+						'parent'     => 0,
 					) );
+					$children_by_parent = array();
+					foreach ( $parent_categories as $p ) {
+						$children_by_parent[ $p->term_id ] = get_categories( array(
+							'orderby'    => 'name',
+							'order'      => 'ASC',
+							'hide_empty' => true,
+							'parent'     => $p->term_id,
+						) );
+					}
 
 					if ( ! empty( $parent_categories ) ) :
 					?>
 						<ul class="nav-list">
 							<?php foreach ( $parent_categories as $parent ) :
-								// 子カテゴリを取得
-								$child_categories = get_categories( array(
-									'orderby'    => 'name',
-									'order'      => 'ASC',
-									'hide_empty' => true,
-									'parent'     => $parent->term_id,
-								) );
+								$child_categories = $children_by_parent[ $parent->term_id ];
 								$has_children = ! empty( $child_categories );
 							?>
 								<li class="nav-item <?php echo $has_children ? 'has-dropdown' : ''; ?>">
@@ -129,12 +131,7 @@
 					<?php if ( ! empty( $parent_categories ) ) : ?>
 						<ul class="mobile-nav-list">
 							<?php foreach ( $parent_categories as $index => $parent ) :
-								$child_categories = get_categories( array(
-									'orderby' => 'name',
-									'order' => 'ASC',
-									'hide_empty' => true,
-									'parent' => $parent->term_id,
-								) );
+								$child_categories = $children_by_parent[ $parent->term_id ];
 								$has_children = ! empty( $child_categories );
 							?>
 								<li class="mobile-nav-item <?php echo $has_children ? 'has-children' : ''; ?>" style="--i: <?php echo $index; ?>">

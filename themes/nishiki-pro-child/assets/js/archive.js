@@ -75,9 +75,9 @@
                     }
                 });
 
-                // Update URL without reload (optional)
-                if (category !== 'all') {
-                    history.replaceState(null, '', `?category=${category}`);
+                // Update URL without reload (sanitized)
+                if (category !== 'all' && /^[a-zA-Z0-9_-]+$/.test(category)) {
+                    history.replaceState(null, '', `?category=${encodeURIComponent(category)}`);
                 } else {
                     history.replaceState(null, '', window.location.pathname);
                 }
@@ -94,15 +94,19 @@
 
         if (!viewBtns.length || !articleGrid) return;
 
-        // Load saved preference
-        const savedView = localStorage.getItem('archive-view') || 'grid';
+        // Load saved preference (validated against whitelist)
+        const validViews = ['grid', 'list'];
+        const rawView = localStorage.getItem('archive-view');
+        const savedView = validViews.includes(rawView) ? rawView : 'grid';
         setView(savedView);
 
         viewBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const view = btn.dataset.view;
-                setView(view);
-                localStorage.setItem('archive-view', view);
+                if (validViews.includes(view)) {
+                    setView(view);
+                    localStorage.setItem('archive-view', view);
+                }
             });
         });
 
