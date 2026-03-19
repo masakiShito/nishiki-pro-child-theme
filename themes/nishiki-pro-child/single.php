@@ -60,16 +60,8 @@ get_header();
         <div class="article-main">
             <!-- メインコンテンツ -->
             <div class="article-body">
-                <div class="article-content">
-                    <?php the_content(); ?>
-                </div>
-
-            </div>
-
-            <!-- 右カラム -->
-            <aside class="article-sidebar">
                 <!-- 目次 -->
-                <div class="toc-widget" id="tocWidget">
+                <div class="toc-widget toc-widget--inline" id="tocWidget">
                     <div class="toc-widget__header">
                         <div class="toc-widget__title-wrap">
                             <div class="toc-widget__dots" aria-hidden="true">
@@ -97,6 +89,14 @@ get_header();
                     </nav>
                 </div>
 
+                <div class="article-content">
+                    <?php the_content(); ?>
+                </div>
+
+            </div>
+
+            <!-- 右カラム -->
+            <aside class="article-sidebar">
                 <?php if (!empty($post_categories)) : ?>
                     <section class="article-sidebar__section">
                         <h2 class="article-sidebar__title">カテゴリー</h2>

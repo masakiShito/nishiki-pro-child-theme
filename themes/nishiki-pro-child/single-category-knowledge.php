@@ -105,15 +105,8 @@ get_header();
         <!-- 記事本文エリア -->
         <div class="article-main article-main--knowledge">
             <div class="article-body article-body--knowledge">
-                <div class="article-content">
-                    <?php the_content(); ?>
-                </div>
-            </div>
-
-            <!-- サイドバー -->
-            <aside class="article-sidebar article-sidebar--knowledge">
                 <!-- 目次（インデックスカード風） -->
-                <div class="toc-widget toc-widget--knowledge" id="tocWidget">
+                <div class="toc-widget toc-widget--knowledge toc-widget--inline" id="tocWidget">
                     <div class="toc-widget__header toc-widget__header--knowledge">
                         <div class="toc-widget__title-wrap">
                             <span class="toc-widget__title-number">INDEX</span>
@@ -130,6 +123,13 @@ get_header();
                     </nav>
                 </div>
 
+                <div class="article-content">
+                    <?php the_content(); ?>
+                </div>
+            </div>
+
+            <!-- サイドバー -->
+            <aside class="article-sidebar article-sidebar--knowledge">
                 <!-- ブックマーク風カテゴリ -->
                 <?php if (!empty($post_categories)) : ?>
                     <section class="knowledge-sidebar__section">
