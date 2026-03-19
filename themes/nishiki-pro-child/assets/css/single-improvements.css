@@ -50,7 +50,7 @@
 
 .article-hero {
     position: relative;
-    margin: 0 auto 40px;
+    margin: 0 auto 56px;
     padding: 0 24px;
     max-width: var(--article-full);
     z-index: 1;
@@ -267,7 +267,7 @@
 .article-main {
     max-width: var(--article-full);
     margin: 0 auto;
-    padding: 0 24px 24px;
+    padding: 0 24px 48px;
     display: grid;
     grid-template-columns: minmax(0, 760px) 320px;
     justify-content: center;
@@ -302,14 +302,14 @@
     top: 100px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
 }
 
 .article-sidebar__section {
     background: #ffffff;
     border: 1px solid #e5e5e5;
     border-radius: 12px;
-    padding: 20px;
+    padding: 22px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.25s ease;
 }
@@ -331,7 +331,7 @@
 .article-sidebar__chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
 }
 
 .article-sidebar__chip {
@@ -380,7 +380,7 @@
 
 .article-sidebar__related-link {
     display: block;
-    padding: 12px 0;
+    padding: 14px 0;
     color: inherit;
     text-decoration: none;
 }
@@ -1073,9 +1073,9 @@
    =========================================== */
 
 .post-navigation {
-    max-width: var(--article-width);
+    max-width: var(--article-wide);
     margin: 0 auto;
-    padding: 64px 24px 80px;
+    padding: 64px 24px 96px;
 }
 
 .post-navigation__container {
@@ -1766,7 +1766,7 @@
     border: 1px solid #333333;
     border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 24px;
+    margin-bottom: 0;
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.04) inset,
         0 12px 36px rgba(0, 0, 0, 0.45);
@@ -1829,9 +1829,9 @@
 
 .toc-widget__title {
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
-    color: #999999;
+    color: #b0b0b0;
     letter-spacing: 0;
     text-transform: none;
     white-space: nowrap;
@@ -1916,7 +1916,7 @@
 .toc-list {
     list-style: none;
     margin: 0;
-    padding: 4px 0 8px;
+    padding: 8px 0 12px;
 }
 
 .toc-list__item {
@@ -1925,26 +1925,26 @@
 
 /* H2 アイテム */
 .toc-list__item--h2 > .toc-list__link {
-    padding: 5px 12px 5px 0;
-    font-size: 12.5px;
+    padding: 7px 12px 7px 0;
+    font-size: 13.5px;
     font-weight: 500;
-    color: #cccccc;
+    color: #e0e0e0;
 }
 
 /* H3 アイテム */
 .toc-list__item--h3 > .toc-list__link {
-    padding: 4px 12px 4px 44px;
-    font-size: 11.5px;
+    padding: 6px 12px 6px 44px;
+    font-size: 12.5px;
     font-weight: 400;
-    color: #999999;
+    color: #b0b0b0;
 }
 
 /* H4 アイテム */
 .toc-list__item--h4 > .toc-list__link {
-    padding: 3px 12px 3px 56px;
-    font-size: 11px;
+    padding: 5px 12px 5px 56px;
+    font-size: 12px;
     font-weight: 400;
-    color: #888888;
+    color: #a0a0a0;
 }
 
 /* リンク共通 */
@@ -1953,7 +1953,7 @@
     align-items: flex-start;
     gap: 0;
     text-decoration: none;
-    line-height: 1.55;
+    line-height: 1.6;
     border-left: 2px solid transparent;
     transition: background 0.15s ease,
                 color 0.15s ease,
@@ -1971,9 +1971,9 @@
     flex-shrink: 0;
     width: 32px;
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 400;
-    color: #666666;
+    color: #777777;
     display: flex;
     align-items: flex-start;
     justify-content: flex-end;
@@ -1990,24 +1990,24 @@
 .toc-list__item--h3 > .toc-list__link::before {
     content: '├─';
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-    font-size: 10px;
-    color: #555555;
+    font-size: 11px;
+    color: #666666;
     padding-left: 12px;
     padding-right: 6px;
     flex-shrink: 0;
-    line-height: 1.55;
+    line-height: 1.6;
     transition: color 0.15s ease;
 }
 
 .toc-list__item--h4 > .toc-list__link::before {
     content: '│  └─';
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-    font-size: 10px;
-    color: #555555;
+    font-size: 11px;
+    color: #666666;
     padding-left: 12px;
     padding-right: 6px;
     flex-shrink: 0;
-    line-height: 1.55;
+    line-height: 1.6;
     transition: color 0.15s ease;
 }
 
