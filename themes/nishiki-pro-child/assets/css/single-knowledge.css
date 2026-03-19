@@ -565,6 +565,8 @@
 .toc-widget--knowledge .toc-widget__body {
     background: var(--kn-bg-content);
     padding: 14px 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .toc-widget--knowledge .toc-list {
@@ -572,6 +574,81 @@
     padding: 0;
     margin: 0;
     counter-reset: toc-counter;
+}
+
+.toc-widget--knowledge .toc-widget__comment {
+    color: var(--kn-amber);
+    font-size: 11px;
+    padding: 10px 16px 6px;
+}
+
+.toc-widget--knowledge .toc-list__link {
+    border-left-color: transparent;
+}
+
+.toc-widget--knowledge .toc-list__num {
+    color: var(--kn-text-muted);
+    border-right-color: var(--kn-border);
+    background: transparent;
+    font-size: 11px;
+    width: 32px;
+}
+
+.toc-widget--knowledge .toc-list__item--h2 > .toc-list__link {
+    color: var(--kn-text);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px 8px 0;
+}
+
+.toc-widget--knowledge .toc-list__item--h3 > .toc-list__link {
+    color: var(--kn-text-secondary);
+    font-size: 12.5px;
+    padding-left: 44px;
+}
+
+.toc-widget--knowledge .toc-list__item--h3 > .toc-list__link::before,
+.toc-widget--knowledge .toc-list__item--h4 > .toc-list__link::before {
+    color: var(--kn-border);
+}
+
+.toc-widget--knowledge .toc-list__item--h4 > .toc-list__link {
+    color: var(--kn-text-muted);
+    font-size: 12px;
+    padding-left: 56px;
+}
+
+.toc-widget--knowledge .toc-list__item.is-active > .toc-list__link {
+    border-left-color: var(--kn-amber);
+    background: var(--kn-amber-subtle);
+    color: var(--kn-amber-dark);
+}
+
+.toc-widget--knowledge .toc-list__item--h2.is-active > .toc-list__link .toc-list__num {
+    color: var(--kn-amber);
+    border-right-color: rgba(212, 160, 32, 0.3);
+    background: transparent;
+}
+
+.toc-widget--knowledge .toc-list__item--h3.is-active > .toc-list__link,
+.toc-widget--knowledge .toc-list__item--h4.is-active > .toc-list__link {
+    color: var(--kn-amber-dark);
+}
+
+.toc-widget--knowledge .toc-list__item--h3.is-active > .toc-list__link::before,
+.toc-widget--knowledge .toc-list__item--h4.is-active > .toc-list__link::before {
+    color: var(--kn-amber);
+}
+
+.toc-widget--knowledge .toc-widget__footer {
+    background: var(--kn-bg-warm);
+    border-top-color: var(--kn-border);
+    color: var(--kn-text-muted);
+}
+
+.toc-widget--knowledge .toc-widget__footer-dot {
+    background: var(--kn-amber);
+    box-shadow: 0 0 4px rgba(212, 160, 32, 0.5);
 }
 
 .toc-widget--knowledge .toc-list a {

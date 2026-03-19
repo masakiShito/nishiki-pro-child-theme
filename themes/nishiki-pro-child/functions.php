@@ -4,8 +4,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * $_SERVER['REQUEST_URI'] をサニタイズして取得
+ */
+function nishiki_get_sanitized_request_path() {
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : '';
+    return trim((string) parse_url($request_uri, PHP_URL_PATH), '/');
+}
+
 function nishiki_is_blog_request_path() {
-    $request_path = trim((string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    $request_path = nishiki_get_sanitized_request_path();
     return (bool) preg_match('#^blog(?:/page/([0-9]+))?$#', $request_path);
 }
 
@@ -24,7 +32,7 @@ add_filter('query_vars', function($vars) {
 });
 
 add_filter('template_include', function($template) {
-    $request_path = trim((string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    $request_path = nishiki_get_sanitized_request_path();
     $is_blog_path = preg_match('#^blog(?:/page/([0-9]+))?$#', $request_path, $matches);
 
     if ($is_blog_path && !empty($matches[1])) {
@@ -69,9 +77,9 @@ add_action('wp_enqueue_scripts', function () {
 
     wp_enqueue_style(
         'nishiki-pro-child-fonts',
-        'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700&display=swap',
+        'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;600;700&display=swap',
         [],
-        null
+        false
     );
 
     $child = wp_get_theme();
@@ -88,7 +96,7 @@ add_action('wp_enqueue_scripts', function () {
             'nishiki-pro-child-jetbrains-mono',
             'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
             [],
-            null
+            false
         );
         wp_enqueue_style(
             'nishiki-pro-child-single',
@@ -101,16 +109,27 @@ add_action('wp_enqueue_scripts', function () {
         $cat_slug = nishiki_get_current_post_category_style();
         if ($cat_slug) {
             $css_map = nishiki_get_category_css_map();
-            $css_file = get_stylesheet_directory() . '/assets/css/' . $css_map[$cat_slug];
-            if (file_exists($css_file)) {
-                wp_enqueue_style(
-                    'nishiki-pro-child-single-' . $cat_slug,
-                    get_stylesheet_directory_uri() . '/assets/css/' . $css_map[$cat_slug],
-                    ['nishiki-pro-child-single'],
-                    filemtime($css_file)
-                );
+            if (isset($css_map[$cat_slug])) {
+                $css_file = get_stylesheet_directory() . '/assets/css/' . $css_map[$cat_slug];
+                if (file_exists($css_file)) {
+                    wp_enqueue_style(
+                        'nishiki-pro-child-single-' . $cat_slug,
+                        get_stylesheet_directory_uri() . '/assets/css/' . $css_map[$cat_slug],
+                        ['nishiki-pro-child-single'],
+                        filemtime($css_file)
+                    );
+                }
             }
         }
+
+        // Single Article JS (記事ページ用)
+        wp_enqueue_script(
+            'nishiki-pro-child-single',
+            get_stylesheet_directory_uri() . '/assets/js/single.js',
+            [],
+            $child->get('Version'),
+            true
+        );
     }
 
     // About page CSS & JS
@@ -132,7 +151,8 @@ add_action('wp_enqueue_scripts', function () {
     }
 
     // Archive page improvements CSS & JS
-    if (is_home() || is_archive() || is_search() || is_page('blog') || is_page_template('page-blog.php') || get_query_var('nishiki_blog') || nishiki_is_blog_request_path()) {
+    $is_archive_page = is_home() || is_archive() || is_search() || is_page('blog') || is_page_template('page-blog.php') || get_query_var('nishiki_blog') || nishiki_is_blog_request_path();
+    if ($is_archive_page) {
         $archive_css = get_stylesheet_directory() . '/assets/css/archive-improvements.css';
         $archive_js = get_stylesheet_directory() . '/assets/js/archive.js';
         wp_enqueue_style(
@@ -151,7 +171,7 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 
-    // Header Enhancement JS
+    // Header Enhancement JS (全ページ共通)
     wp_enqueue_script(
         'nishiki-pro-child-header',
         get_stylesheet_directory_uri() . '/assets/js/header.js',
@@ -160,65 +180,51 @@ add_action('wp_enqueue_scripts', function () {
         true
     );
 
-    // Hero section JavaScript
-    wp_enqueue_script(
-        'nishiki-pro-child-hero',
-        get_stylesheet_directory_uri() . '/assets/js/hero.js',
-        [],
-        $child->get('Version'),
-        true
-    );
-
-    // Categories section JavaScript
-    wp_enqueue_script(
-        'nishiki-pro-child-categories',
-        get_stylesheet_directory_uri() . '/assets/js/categories.js',
-        [],
-        $child->get('Version'),
-        true
-    );
-
-    // Features section JavaScript
-    wp_enqueue_script(
-        'nishiki-pro-child-features',
-        get_stylesheet_directory_uri() . '/assets/js/features.js',
-        [],
-        $child->get('Version'),
-        true
-    );
-
-    // Latest Posts Slider JS
-    wp_enqueue_script(
-        'nishiki-pro-child-latest-posts',
-        get_stylesheet_directory_uri() . '/assets/js/latest-posts.js',
-        [],
-        $child->get('Version'),
-        true
-    );
-
-    // Archive CTA JS
-    wp_enqueue_script(
-        'nishiki-pro-child-archive-cta',
-        get_stylesheet_directory_uri() . '/assets/js/archive-cta.js',
-        [],
-        $child->get('Version'),
-        true
-    );
-
-    // Footer CTA JS (About導線)
-    wp_enqueue_script(
-        'nishiki-pro-child-footer-cta',
-        get_stylesheet_directory_uri() . '/assets/js/footer-cta.js',
-        [],
-        $child->get('Version'),
-        true
-    );
-
-    // Single Article JS (記事ページ用)
-    if (is_single()) {
+    // フロントページ専用JS
+    if (is_front_page()) {
         wp_enqueue_script(
-            'nishiki-pro-child-single',
-            get_stylesheet_directory_uri() . '/assets/js/single.js',
+            'nishiki-pro-child-hero',
+            get_stylesheet_directory_uri() . '/assets/js/hero.js',
+            [],
+            $child->get('Version'),
+            true
+        );
+
+        wp_enqueue_script(
+            'nishiki-pro-child-categories',
+            get_stylesheet_directory_uri() . '/assets/js/categories.js',
+            [],
+            $child->get('Version'),
+            true
+        );
+
+        wp_enqueue_script(
+            'nishiki-pro-child-features',
+            get_stylesheet_directory_uri() . '/assets/js/features.js',
+            [],
+            $child->get('Version'),
+            true
+        );
+
+        wp_enqueue_script(
+            'nishiki-pro-child-latest-posts',
+            get_stylesheet_directory_uri() . '/assets/js/latest-posts.js',
+            [],
+            $child->get('Version'),
+            true
+        );
+
+        wp_enqueue_script(
+            'nishiki-pro-child-archive-cta',
+            get_stylesheet_directory_uri() . '/assets/js/archive-cta.js',
+            [],
+            $child->get('Version'),
+            true
+        );
+
+        wp_enqueue_script(
+            'nishiki-pro-child-footer-cta',
+            get_stylesheet_directory_uri() . '/assets/js/footer-cta.js',
             [],
             $child->get('Version'),
             true
@@ -227,14 +233,12 @@ add_action('wp_enqueue_scripts', function () {
 });
 
 /**
- * About固定ページを自動生成
+ * About固定ページを自動生成（テーマ有効化時のみ）
  */
 function create_about_page_automatically() {
-    // 既にAboutページが存在するかチェック
     $about_page = get_page_by_path('about');
-    
+
     if (!$about_page) {
-        // Aboutページを作成
         $page_data = array(
             'post_title'    => 'About',
             'post_content'  => '',
@@ -242,30 +246,22 @@ function create_about_page_automatically() {
             'post_type'     => 'page',
             'post_name'     => 'about'
         );
-        
+
         $page_id = wp_insert_post($page_data);
-        
-        // テンプレートを設定
-        if ($page_id) {
+
+        if ($page_id && !is_wp_error($page_id)) {
             update_post_meta($page_id, '_wp_page_template', 'page-about.php');
-            
-            // パーマリンクを更新
-            flush_rewrite_rules();
         }
     }
 }
 
 /**
- * Blog固定ページを自動生成
+ * Blog固定ページを自動生成（テーマ有効化時のみ）
  */
 function create_blog_page_automatically() {
-    $needs_flush = false;
-
-    // 既にBlogページが存在するかチェック
     $blog_page = get_page_by_path('blog');
 
     if (!$blog_page) {
-        // Blogページを作成
         $page_data = array(
             'post_title'    => 'Blog',
             'post_content'  => '',
@@ -276,10 +272,8 @@ function create_blog_page_automatically() {
 
         $page_id = wp_insert_post($page_data);
 
-        // テンプレートを設定
-        if ($page_id) {
+        if ($page_id && !is_wp_error($page_id)) {
             update_post_meta($page_id, '_wp_page_template', 'page-blog.php');
-            $needs_flush = true;
         }
     } else {
         // 既存blogページにもテンプレートを適用
@@ -287,13 +281,6 @@ function create_blog_page_automatically() {
         if ($current_template !== 'page-blog.php') {
             update_post_meta($blog_page->ID, '_wp_page_template', 'page-blog.php');
         }
-    }
-
-    // 一度だけリライトルールを更新（既存ページでも404回避）
-    $rewrite_key = 'nishiki_child_blog_rewrite_flushed_v1';
-    if ($needs_flush || !get_option($rewrite_key)) {
-        flush_rewrite_rules(false);
-        update_option($rewrite_key, '1', false);
     }
 }
 
@@ -303,9 +290,9 @@ function create_blog_page_automatically() {
  */
 function nishiki_get_category_template_map() {
     return array(
-        'development'    => 'single-category-development.php',    // 開発 → 技術ブログ風
-        'infrastructure' => 'single-category-infrastructure.php', // インフラ → ドキュメント風
-        'knowledge'      => 'single-category-knowledge.php',      // ナレッジ → ノート風
+        'development'    => 'single-category-development.php',
+        'infrastructure' => 'single-category-infrastructure.php',
+        'knowledge'      => 'single-category-knowledge.php',
     );
 }
 
@@ -325,7 +312,6 @@ add_filter('single_template', function($template) {
     $map = nishiki_get_category_template_map();
 
     foreach ($categories as $cat) {
-        // 記事のカテゴリスラッグとマッピングを照合（親カテゴリも含む）
         $check_cats = array($cat);
         if ($cat->parent) {
             $parent = get_category($cat->parent);
@@ -399,29 +385,12 @@ add_action('template_redirect', function() {
     }
 }, 5);
 
-// テーマ有効化時に実行
+// テーマ有効化時にページ自動生成＋リライトルール更新
 add_action('after_switch_theme', function() {
     create_about_page_automatically();
     create_blog_page_automatically();
+    flush_rewrite_rules(false);
 });
-
-// 初回読み込み時にも実行
-add_action('init', function() {
-    static $run_once = false;
-    if (!$run_once) {
-        create_about_page_automatically();
-        create_blog_page_automatically();
-
-        // ルーティング更新（/blog フォールバック用）
-        $route_key = 'nishiki_child_blog_route_flushed_v2';
-        if (!get_option($route_key)) {
-            flush_rewrite_rules(false);
-            update_option($route_key, '1', false);
-        }
-
-        $run_once = true;
-    }
-}, 999);
 
 /**
  * ローカルアバター: プロフィール画面でメディアライブラリを有効化
@@ -450,6 +419,7 @@ function nishiki_avatar_profile_fields( $user ) {
                     <img id="nishiki_local_avatar_preview" src="" style="width:80px;height:80px;border-radius:50%;object-fit:cover;display:none;margin-bottom:8px;">
                 <?php endif; ?>
                 <input type="hidden" name="nishiki_local_avatar_id" id="nishiki_local_avatar_id" value="<?php echo esc_attr( $avatar_id ); ?>">
+                <?php wp_nonce_field( 'nishiki_avatar_save', 'nishiki_avatar_nonce' ); ?>
                 <button type="button" class="button" id="nishiki_upload_avatar_btn">画像を選択</button>
                 <?php if ( $avatar_id ) : ?>
                     <button type="button" class="button" id="nishiki_remove_avatar_btn">削除</button>
@@ -490,6 +460,9 @@ add_action( 'edit_user_profile', 'nishiki_avatar_profile_fields' );
  */
 function nishiki_save_local_avatar( $user_id ) {
     if ( ! current_user_can( 'edit_user', $user_id ) ) {
+        return;
+    }
+    if ( ! isset( $_POST['nishiki_avatar_nonce'] ) || ! wp_verify_nonce( $_POST['nishiki_avatar_nonce'], 'nishiki_avatar_save' ) ) {
         return;
     }
     if ( isset( $_POST['nishiki_local_avatar_id'] ) ) {

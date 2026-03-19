@@ -7,13 +7,13 @@ if (!defined('ABSPATH')) {
 get_header();
 ?>
 
-<main class="onesta-main">
+<div class="onesta-main">
     <?php get_template_part('components/hero'); ?>
     <?php get_template_part('components/categories'); ?>
     <?php get_template_part('components/footer-cta'); ?>
     <?php get_template_part('components/features'); ?>
     <?php get_template_part('components/highlight'); ?>
-</main>
+</div><!-- .onesta-main -->
 
 <?php
 get_footer();
