@@ -138,7 +138,39 @@ get_header();
 
         <!-- 記事本文エリア -->
         <div class="article-main article-main--infra">
-            <!-- サイドバー（左配置） -->
+            <!-- メインコンテンツ -->
+            <div class="article-body article-body--infra">
+                <div class="article-content">
+                    <?php the_content(); ?>
+                </div>
+
+                <!-- 記事フッター情報 -->
+                <footer class="infra-article-footer">
+                    <div class="infra-article-footer__divider">
+                        <span class="infra-article-footer__divider-text">END OF DOCUMENT</span>
+                    </div>
+                    <div class="infra-article-footer__content">
+                        <div class="infra-article-footer__author">
+                            <?php echo get_avatar(get_the_author_meta('ID'), 48); ?>
+                            <div class="infra-article-footer__author-info">
+                                <span class="infra-article-footer__author-label">DOCUMENT AUTHOR</span>
+                                <span class="infra-article-footer__author-name"><?php the_author(); ?></span>
+                            </div>
+                        </div>
+                        <?php if (!empty($post_categories)) : ?>
+                        <div class="infra-article-footer__categories">
+                            <?php foreach ($post_categories as $cat) : ?>
+                                <a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>" class="infra-article-footer__cat">
+                                    <?php echo esc_html($cat->name); ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </footer>
+            </div>
+
+            <!-- サイドバー（右配置） -->
             <aside class="article-sidebar article-sidebar--infra">
                 <!-- システムナビゲーション -->
                 <div class="infra-sidebar__nav-header">
@@ -214,38 +246,6 @@ get_header();
                     </div>
                 </div>
             </aside>
-
-            <!-- メインコンテンツ -->
-            <div class="article-body article-body--infra">
-                <div class="article-content">
-                    <?php the_content(); ?>
-                </div>
-
-                <!-- 記事フッター情報 -->
-                <footer class="infra-article-footer">
-                    <div class="infra-article-footer__divider">
-                        <span class="infra-article-footer__divider-text">END OF DOCUMENT</span>
-                    </div>
-                    <div class="infra-article-footer__content">
-                        <div class="infra-article-footer__author">
-                            <?php echo get_avatar(get_the_author_meta('ID'), 48); ?>
-                            <div class="infra-article-footer__author-info">
-                                <span class="infra-article-footer__author-label">DOCUMENT AUTHOR</span>
-                                <span class="infra-article-footer__author-name"><?php the_author(); ?></span>
-                            </div>
-                        </div>
-                        <?php if (!empty($post_categories)) : ?>
-                        <div class="infra-article-footer__categories">
-                            <?php foreach ($post_categories as $cat) : ?>
-                                <a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>" class="infra-article-footer__cat">
-                                    <?php echo esc_html($cat->name); ?>
-                                </a>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </footer>
-            </div>
         </div>
     </article>
 
