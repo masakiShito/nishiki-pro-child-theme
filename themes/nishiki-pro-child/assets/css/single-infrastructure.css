@@ -300,12 +300,16 @@
 
 /* ===== レイアウト: メインコンテンツ + 右サイドバー ===== */
 .article-main--infra {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 0;
     max-width: 1200px;
     margin: 0 auto;
     min-height: 60vh;
+}
+
+/* TOCなしの場合のみ2カラム */
+.article-main--infra:not(.article-main--with-toc) {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 0;
 }
 
 .article-sidebar--infra {
@@ -874,7 +878,8 @@
 }
 
 @media (max-width: 960px) {
-    .article-main--infra {
+    .article-main--infra,
+    .article-main--infra:not(.article-main--with-toc) {
         grid-template-columns: 1fr;
     }
 
