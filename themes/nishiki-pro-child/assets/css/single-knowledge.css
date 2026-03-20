@@ -251,12 +251,9 @@
 
 /* ===== レイアウト ===== */
 .article-main--knowledge {
-    max-width: 1160px;
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 48px 24px;
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 48px;
+    padding: 0 24px 48px;
 }
 
 .article-body--knowledge {
@@ -266,6 +263,7 @@
     box-shadow:
         0 1px 3px rgba(44, 36, 23, 0.04),
         0 8px 32px rgba(44, 36, 23, 0.06);
+    max-width: 820px;
     padding: 0;
     overflow: hidden;
     position: relative;
@@ -282,7 +280,7 @@
 }
 
 .article-body--knowledge .article-content {
-    padding: 48px 52px 56px;
+    padding: clamp(26px, 3.2vw, 44px);
 }
 
 /* ===== 記事本文カスタマイズ ===== */
@@ -706,8 +704,6 @@
 /* ===== レスポンシブ ===== */
 @media (max-width: 960px) {
     .article-main--knowledge {
-        grid-template-columns: 1fr;
-        gap: 32px;
         padding: 32px 20px;
     }
 
@@ -744,7 +740,7 @@
     }
 
     .article-body--knowledge .article-content {
-        padding: 32px 24px 40px;
+        padding: clamp(16px, 3vw, 28px);
     }
 
     .post-navigation--knowledge {
@@ -768,7 +764,7 @@
     }
 
     .article-body--knowledge .article-content {
-        padding: 24px 18px 32px;
+        padding: clamp(14px, 2.5vw, 20px);
     }
 
     .knowledge-hero__tags {
