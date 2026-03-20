@@ -103,26 +103,21 @@ get_header();
         ?>
 
         <!-- 記事本文エリア -->
-        <div class="article-main article-main--knowledge">
-            <div class="article-body article-body--knowledge">
-                <!-- 目次（インデックスカード風） -->
-                <div class="toc-widget toc-widget--knowledge toc-widget--inline" id="tocWidget">
-                    <div class="toc-widget__header toc-widget__header--knowledge">
-                        <div class="toc-widget__title-wrap">
-                            <span class="toc-widget__title-number">INDEX</span>
-                            <span class="toc-widget__title">目次</span>
-                        </div>
-                        <button class="toc-widget__toggle" id="tocToggle" aria-expanded="true" aria-label="目次を折りたたむ">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                                <polyline points="18 15 12 9 6 15"/>
-                            </svg>
-                        </button>
+        <div class="article-main article-main--knowledge article-main--with-toc">
+            <!-- 左：目次サイドバー -->
+            <aside class="toc-sidebar" id="tocSidebar">
+                <div class="toc-sidebar__inner" id="tocWidget">
+                    <div class="toc-sidebar__header">
+                        <span class="toc-sidebar__label">CONTENTS</span>
+                        <span class="toc-sidebar__progress" id="tocProgress">0%</span>
                     </div>
-                    <nav class="toc-widget__body" id="tocBody" aria-label="目次">
-                        <ol class="toc-list" id="tocList"></ol>
+                    <nav class="toc-sidebar__body" id="tocBody" aria-label="目次">
+                        <ol class="toc-timeline" id="tocList"></ol>
                     </nav>
                 </div>
+            </aside>
 
+            <div class="article-body article-body--knowledge">
                 <div class="article-content">
                     <?php the_content(); ?>
                 </div>
