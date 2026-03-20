@@ -392,40 +392,6 @@
     margin: 48px 0;
 }
 
-/* サイドバー強調 */
-.single-wrapper--dev .toc-widget {
-    background: var(--dev-bg-light);
-    border: 1px solid var(--dev-border);
-}
-
-.single-wrapper--dev .toc-widget__header {
-    background: var(--dev-bg-card);
-    border-bottom: 1px solid var(--dev-border);
-}
-
-.single-wrapper--dev .toc-widget__title {
-    color: var(--dev-text-muted);
-    font-family: 'JetBrains Mono', monospace;
-}
-
-.single-wrapper--dev .toc-widget__body {
-    background: var(--dev-bg-light);
-}
-
-.single-wrapper--dev .toc-list a {
-    color: var(--dev-text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-}
-
-.single-wrapper--dev .toc-list a:hover {
-    color: #f0f6fc;
-}
-
-.single-wrapper--dev .toc-list__item.is-active > .toc-list__link {
-    color: var(--accent);
-}
-
 .single-wrapper--dev .article-sidebar__chip--category {
     background: rgba(16, 185, 129, 0.1);
     color: var(--dev-accent);
