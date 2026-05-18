@@ -1,0 +1,517 @@
+.specforge-page {
+    color: #0f1f19;
+    background:
+        radial-gradient(circle at top left, rgba(31, 90, 67, 0.12), transparent 30%),
+        linear-gradient(180deg, #f5f9f7 0%, #edf4f0 100%);
+}
+
+.specforge-wrap,
+.specforge-hero__container {
+    width: min(1200px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.specforge-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 132px 0 88px;
+    background: linear-gradient(135deg, #0d211a 0%, #153c2d 46%, #1f5a43 100%);
+    color: #f6fbf8;
+}
+
+.specforge-hero__backdrop,
+.specforge-hero__grid,
+.specforge-hero__glow {
+    position: absolute;
+    inset: 0;
+}
+
+.specforge-hero__grid {
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
+    opacity: 0.28;
+}
+
+.specforge-hero__glow--1 {
+    background: radial-gradient(circle at 15% 20%, rgba(79, 138, 114, 0.28), transparent 30%);
+}
+
+.specforge-hero__glow--2 {
+    background: radial-gradient(circle at 82% 18%, rgba(121, 176, 151, 0.2), transparent 28%);
+}
+
+.specforge-hero__container {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+    gap: 40px;
+    align-items: start;
+}
+
+.specforge-hero__eyebrow,
+.specforge-section__label,
+.specforge-card__eyebrow,
+.specforge-flow__label,
+.specforge-cta__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.specforge-hero__eyebrow::before,
+.specforge-section__label::before,
+.specforge-cta__eyebrow::before {
+    content: "";
+    width: 18px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+}
+
+.specforge-hero__title {
+    margin: 18px 0 12px;
+    font-size: clamp(44px, 10vw, 108px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: #ffffff;
+}
+
+.specforge-hero__lead {
+    margin: 0 0 20px;
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.6;
+    color: #e7f4ee;
+}
+
+.specforge-hero__description {
+    max-width: 700px;
+    margin: 0;
+    font-size: 16px;
+    line-height: 2;
+    color: rgba(246, 251, 248, 0.82);
+}
+
+.specforge-hero__actions,
+.specforge-cta__actions,
+.specforge-spotlight__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.specforge-hero__button,
+.specforge-cta__button,
+.specforge-spotlight__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 0 24px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.specforge-hero__button,
+.specforge-cta__button,
+.specforge-spotlight__button {
+    color: #ffffff;
+    background: linear-gradient(135deg, #245d47 0%, #153c2d 100%);
+    box-shadow: 0 18px 40px rgba(10, 28, 22, 0.18);
+}
+
+.specforge-hero__button:hover,
+.specforge-cta__button:hover,
+.specforge-spotlight__button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 48px rgba(10, 28, 22, 0.22);
+}
+
+.specforge-hero__button--secondary,
+.specforge-cta__button--secondary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    color: #f6fbf8;
+    box-shadow: none;
+}
+
+.specforge-hero__panel {
+    padding: 28px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+}
+
+.specforge-hero__panel-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(246, 251, 248, 0.72);
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.specforge-hero__panel-status {
+    color: #93d1b7;
+}
+
+.specforge-hero__steps {
+    display: grid;
+    gap: 12px;
+}
+
+.specforge-hero__step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(8, 20, 16, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.specforge-hero__step-index {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: #93d1b7;
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.specforge-hero__step h2,
+.specforge-hero__step p,
+.specforge-pillar h3,
+.specforge-pillar p,
+.specforge-card__title,
+.specforge-card__description,
+.specforge-flow__item h3,
+.specforge-flow__item p,
+.specforge-fit__item h3,
+.specforge-fit__item p {
+    margin: 0;
+}
+
+.specforge-hero__step h2 {
+    margin-bottom: 6px;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.specforge-hero__step p {
+    color: rgba(246, 251, 248, 0.74);
+    line-height: 1.7;
+}
+
+.specforge-section {
+    padding: 88px 0;
+}
+
+.specforge-section--summary {
+    padding-top: 72px;
+}
+
+.specforge-section__header {
+    max-width: 760px;
+    margin-bottom: 32px;
+}
+
+.specforge-section__label {
+    color: #245d47;
+}
+
+.specforge-section__title {
+    margin: 14px 0 12px;
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.2;
+    color: #10281f;
+}
+
+.specforge-section__lead {
+    margin: 0;
+    color: #4a5f56;
+    line-height: 2;
+}
+
+.specforge-pillars,
+.specforge-grid,
+.specforge-fit {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.specforge-pillar,
+.specforge-card,
+.specforge-fit__item,
+.specforge-flow__item {
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(31, 90, 67, 0.12);
+    box-shadow: 0 18px 42px rgba(17, 39, 30, 0.08);
+}
+
+.specforge-pillar::before,
+.specforge-card::before,
+.specforge-fit__item::before,
+.specforge-flow__item::before,
+.specforge-cta__panel::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #1f5a43 0%, #4f8a72 100%);
+}
+
+.specforge-pillar__code {
+    display: inline-flex;
+    margin-bottom: 14px;
+    color: #245d47;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.specforge-pillar h3,
+.specforge-card__title,
+.specforge-flow__item h3,
+.specforge-fit__item h3 {
+    font-size: 22px;
+    line-height: 1.4;
+    color: #10281f;
+}
+
+.specforge-pillar p,
+.specforge-card__description,
+.specforge-flow__item p,
+.specforge-fit__item p {
+    margin-top: 10px;
+    color: #556a61;
+    line-height: 1.9;
+}
+
+.specforge-card__eyebrow,
+.specforge-flow__label {
+    color: #245d47;
+}
+
+.specforge-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.specforge-section--workflow {
+    background:
+        linear-gradient(180deg, rgba(16, 40, 31, 0.02) 0%, rgba(16, 40, 31, 0.05) 100%);
+}
+
+.specforge-flow {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.specforge-cta {
+    padding: 16px 0 96px;
+}
+
+.specforge-cta__panel {
+    position: relative;
+    overflow: hidden;
+    padding: 40px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #10281f 0%, #153c2d 52%, #245d47 100%);
+    color: #f6fbf8;
+    box-shadow: 0 28px 56px rgba(12, 27, 22, 0.18);
+}
+
+.specforge-cta__title {
+    margin: 14px 0 12px;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.2;
+    color: #ffffff;
+}
+
+.specforge-cta__text {
+    max-width: 720px;
+    margin: 0;
+    color: rgba(246, 251, 248, 0.78);
+    line-height: 2;
+}
+
+.specforge-spotlight {
+    padding: 36px 0 24px;
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f4f8f6 100%);
+}
+
+.specforge-spotlight__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    gap: 28px;
+    align-items: center;
+    padding: 34px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #f8fbf9 0%, #e8f1ec 100%);
+    border: 1px solid rgba(31, 90, 67, 0.12);
+    box-shadow: 0 22px 48px rgba(15, 37, 29, 0.08);
+}
+
+.specforge-spotlight__eyebrow {
+    display: inline-flex;
+    margin-bottom: 12px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+    color: #245d47;
+}
+
+.specforge-spotlight__title {
+    margin: 0 0 12px;
+    font-size: clamp(32px, 6vw, 58px);
+    line-height: 0.98;
+    color: #10281f;
+}
+
+.specforge-spotlight__lead {
+    margin: 0 0 12px;
+    font-size: clamp(18px, 2vw, 24px);
+    line-height: 1.7;
+    color: #153c2d;
+}
+
+.specforge-spotlight__description {
+    margin: 0;
+    color: #556a61;
+    line-height: 1.95;
+}
+
+.specforge-spotlight__visual {
+    display: grid;
+    gap: 14px;
+}
+
+.specforge-spotlight__terminal {
+    overflow: hidden;
+    border-radius: 22px;
+    background: linear-gradient(180deg, #0d1f19 0%, #122922 100%);
+    box-shadow: 0 24px 44px rgba(10, 28, 22, 0.18);
+}
+
+.specforge-spotlight__terminal-bar {
+    display: flex;
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.specforge-spotlight__terminal-bar span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.24);
+}
+
+.specforge-spotlight__terminal-body {
+    padding: 18px 18px 20px;
+    font-size: 13px;
+    line-height: 1.9;
+    color: #dff0e8;
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.specforge-spotlight__prompt {
+    color: #86c5aa;
+}
+
+.specforge-spotlight__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.specforge-spotlight__chips span {
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(31, 90, 67, 0.08);
+    color: #245d47;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+@media (max-width: 1024px) {
+    .specforge-hero__container,
+    .specforge-spotlight__panel,
+    .specforge-flow {
+        grid-template-columns: 1fr;
+    }
+
+    .specforge-pillars,
+    .specforge-fit,
+    .specforge-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .specforge-wrap,
+    .specforge-hero__container {
+        width: min(100% - 32px, 1200px);
+    }
+
+    .specforge-hero {
+        padding: 108px 0 64px;
+    }
+
+    .specforge-section,
+    .specforge-cta {
+        padding: 72px 0;
+    }
+
+    .specforge-spotlight {
+        padding: 24px 0 16px;
+    }
+
+    .specforge-hero__panel,
+    .specforge-pillar,
+    .specforge-card,
+    .specforge-fit__item,
+    .specforge-flow__item,
+    .specforge-cta__panel,
+    .specforge-spotlight__panel {
+        padding: 24px;
+        border-radius: 22px;
+    }
+
+    .specforge-pillars,
+    .specforge-fit,
+    .specforge-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specforge-hero__step {
+        grid-template-columns: 46px 1fr;
+        padding: 14px 16px;
+    }
+}
