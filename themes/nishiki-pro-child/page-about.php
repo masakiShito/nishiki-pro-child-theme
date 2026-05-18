@@ -10,11 +10,11 @@ if (!defined('ABSPATH')) {
 
 get_header();
 
-$admin_users = get_users([
-    'role'   => 'administrator',
-    'number' => 1,
-]);
-$admin_id = !empty($admin_users) ? $admin_users[0]->ID : 1;
+$page_author_id = (int) get_post_field('post_author', get_the_ID());
+$profile_user_id = $page_author_id > 0 ? $page_author_id : get_current_user_id();
+$career_start_year = 2019;
+$current_year = (int) current_time('Y');
+$experience_years = max(1, $current_year - $career_start_year);
 ?>
 
 <div class="about-page">
@@ -42,11 +42,11 @@ $admin_id = !empty($admin_users) ? $admin_users[0]->ID : 1;
             <div class="about-hero__visual">
                 <div class="about-hero__card">
                     <div class="about-hero__avatar">
-                        <?php echo get_avatar($admin_id, 120); ?>
+                        <?php echo get_avatar($profile_user_id, 120); ?>
                     </div>
                     <div class="about-hero__info">
                         <span class="about-hero__role">System Engineer / Full-stack Web Engineer</span>
-                        <span class="about-hero__exp">2019 - Present</span>
+                        <span class="about-hero__exp"><?php echo esc_html($career_start_year); ?> - Now</span>
                     </div>
                 </div>
             </div>
@@ -101,7 +101,7 @@ $admin_id = !empty($admin_users) ? $admin_users[0]->ID : 1;
                 </div>
 
                 <div class="bento-card bento-card--experience">
-                    <div class="bento-card__number">6+</div>
+                    <div class="bento-card__number"><?php echo esc_html($experience_years); ?>+</div>
                     <span class="bento-card__label">Years</span>
                     <p class="bento-card__text">2019年頃から継続して開発に従事</p>
                 </div>
@@ -126,11 +126,11 @@ $admin_id = !empty($admin_users) ? $admin_users[0]->ID : 1;
                             <span class="mini-timeline__role">テスト / 保守 / 調査</span>
                         </div>
                         <div class="mini-timeline__item">
-                            <span class="mini-timeline__year">2021-2023</span>
-                            <span class="mini-timeline__role">設計 / 実装 / リプレイス</span>
+                            <span class="mini-timeline__year">2021-2022</span>
+                            <span class="mini-timeline__role">設計 / 実装 / リリース</span>
                         </div>
                         <div class="mini-timeline__item mini-timeline__item--current">
-                            <span class="mini-timeline__year">2024-Now</span>
+                            <span class="mini-timeline__year">2023-Now</span>
                             <span class="mini-timeline__role">PL / API / フルスタック</span>
                         </div>
                     </div>
