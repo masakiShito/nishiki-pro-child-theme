@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (entry.target.classList.contains('about-phases')) {
                     animatePhaseBars();
                 }
+
+                sectionObserver.unobserve(entry.target);
             }
         });
     }, {
@@ -48,32 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ===========================================
-    // Bento Card Hover Effects
-    // ===========================================
-
-    const bentoCards = document.querySelectorAll('.bento-card');
-
-    bentoCards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
-
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = '';
-        });
-    });
-
-    // ===========================================
     // Skill Tags Stagger Animation
     // ===========================================
 
@@ -93,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         tag.style.transform = 'translateY(0)';
                     }, index * 50);
                 });
+
+                skillObserver.unobserve(entry.target);
             }
         });
     }, {
@@ -123,6 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         number.style.transform = 'scale(1)';
                     }, 200);
                 }
+
+                strengthObserver.unobserve(entry.target);
             }
         });
     }, {
@@ -156,25 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ===========================================
-    // Mouse Movement Effect on Hero Card
-    // ===========================================
-
-    const heroCard = document.querySelector('.about-hero__card');
-
-    if (heroCard) {
-        document.addEventListener('mousemove', (e) => {
-            const rect = heroCard.getBoundingClientRect();
-            const cardCenterX = rect.left + rect.width / 2;
-            const cardCenterY = rect.top + rect.height / 2;
-
-            const angleX = (e.clientY - cardCenterY) / 30;
-            const angleY = (cardCenterX - e.clientX) / 30;
-
-            heroCard.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg)`;
-        });
-    }
-
-    // ===========================================
     // Highlight Items Stagger
     // ===========================================
 
@@ -195,6 +156,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             item.style.transform = 'translateX(0)';
                         }, index * 150);
                     });
+
+                    highlightObserver.unobserve(entry.target);
                 }
             });
         }, {
@@ -254,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         }, index * 150);
                     });
                 }
+
+                timelineObserver.unobserve(entry.target);
             }
         });
     }, {
