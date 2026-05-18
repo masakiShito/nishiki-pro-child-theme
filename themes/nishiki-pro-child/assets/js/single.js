@@ -90,6 +90,7 @@
         const tocList    = document.getElementById('tocList');
         const tocBody    = document.getElementById('tocBody');
         const tocProgress = document.getElementById('tocProgress');
+        const articleBody = document.querySelector('.article-body');
 
         if (!tocWidget || !tocList) return;
 
@@ -168,6 +169,8 @@
             tocItems.push({ heading, li });
         });
 
+        createMobileToc(headings, articleBody);
+
         // --------------------------------------------------
         // 3. スクロール追従ハイライト＆プログレス
         // --------------------------------------------------
@@ -195,6 +198,14 @@
                 if (currentIndex >= 0 && i < currentIndex) {
                     item.li.classList.add('is-passed');
                 }
+                const link = item.li.querySelector('.toc-timeline__link');
+                if (link) {
+                    if (i === currentIndex) {
+                        link.setAttribute('aria-current', 'true');
+                    } else {
+                        link.removeAttribute('aria-current');
+                    }
+                }
             });
 
             activeItem = current;
@@ -207,9 +218,8 @@
 
                 // プログレス表示を更新
                 if (tocProgress) {
-                    const displayPercent = Math.round(progressPercent);
-                    tocProgress.textContent = displayPercent + '%';
-                    if (displayPercent >= 100) {
+                    tocProgress.textContent = `${currentIndex + 1} / ${tocItems.length}`;
+                    if (currentIndex + 1 >= tocItems.length) {
                         tocProgress.classList.add('is-complete');
                     } else {
                         tocProgress.classList.remove('is-complete');
@@ -266,6 +276,58 @@
                 }
             }
         });
+
+        function createMobileToc(targetHeadings, targetBody) {
+            if (!targetBody || !targetHeadings.length) return;
+
+            const existing = targetBody.querySelector('.article-mobile-toc');
+            if (existing) existing.remove();
+
+            const mobileToc = document.createElement('details');
+            mobileToc.className = 'article-mobile-toc';
+
+            const summary = document.createElement('summary');
+            summary.className = 'article-mobile-toc__summary';
+            summary.innerHTML = `
+                <span class="article-mobile-toc__eyebrow">目次</span>
+                <span class="article-mobile-toc__title">見出し一覧</span>
+            `;
+            mobileToc.appendChild(summary);
+
+            const nav = document.createElement('nav');
+            nav.className = 'article-mobile-toc__body';
+            nav.setAttribute('aria-label', '目次');
+
+            const list = document.createElement('ol');
+            list.className = 'article-mobile-toc__list';
+
+            targetHeadings.forEach(heading => {
+                const level = parseInt(heading.tagName.replace('H', ''), 10);
+                const item = document.createElement('li');
+                item.className = `article-mobile-toc__item article-mobile-toc__item--h${level}`;
+
+                const link = document.createElement('a');
+                link.className = 'article-mobile-toc__link';
+                link.href = `#${heading.id}`;
+                link.textContent = heading.textContent.replace(/\s*#\s*$/, '').trim();
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const target = document.getElementById(heading.id);
+                    if (!target) return;
+                    const top = target.getBoundingClientRect().top + window.scrollY - 80;
+                    mobileToc.removeAttribute('open');
+                    window.scrollTo({ top, behavior: 'smooth' });
+                    history.replaceState(null, '', `#${heading.id}`);
+                });
+
+                item.appendChild(link);
+                list.appendChild(item);
+            });
+
+            nav.appendChild(list);
+            mobileToc.appendChild(nav);
+            targetBody.insertBefore(mobileToc, targetBody.firstChild);
+        }
     }
 
     // ===========================================

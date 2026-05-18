@@ -16,11 +16,16 @@ $total_posts = $wp_query->found_posts;
 $archive_title = '';
 $archive_label = 'Archive';
 $archive_description = '';
+$archive_style_slug = null;
+$archive_theme = nishiki_get_category_theme();
 
 if (is_category()) {
     $archive_label = 'Category';
+    $archive_category = get_queried_object();
     $archive_title = single_cat_title('', false);
-    $archive_description = category_description();
+    $archive_style_slug = nishiki_get_term_category_style($archive_category);
+    $archive_theme = nishiki_get_category_theme($archive_style_slug);
+    $archive_description = category_description() ?: $archive_theme['lead'];
 } elseif (is_tag()) {
     $archive_label = 'Tag';
     $archive_title = single_tag_title('', false);
@@ -42,7 +47,7 @@ if (is_category()) {
 }
 ?>
 
-<div class="archive-page">
+<div class="archive-page<?php echo $archive_style_slug ? ' archive-page--' . esc_attr($archive_style_slug) : ''; ?>" style="--archive-accent: <?php echo esc_attr($archive_theme['accent']); ?>; --archive-accent-dark: <?php echo esc_attr($archive_theme['accent_dark']); ?>; --archive-accent-light: <?php echo esc_attr($archive_theme['accent_light']); ?>; --archive-hero-gradient: <?php echo esc_attr($archive_theme['palette']); ?>; --archive-surface: <?php echo esc_attr($archive_theme['surface']); ?>; --archive-glow: <?php echo esc_attr($archive_theme['glow']); ?>;">
     <!-- ヒーローセクション -->
     <section class="archive-hero">
         <div class="archive-hero__shapes">
@@ -52,7 +57,7 @@ if (is_category()) {
         </div>
         <div class="archive-hero__container">
             <div class="archive-hero__content">
-                <span class="archive-hero__label"><?php echo esc_html($archive_label); ?></span>
+                <span class="archive-hero__label"><?php echo esc_html($archive_style_slug ? $archive_theme['label'] : $archive_label); ?></span>
                 <h1 class="archive-hero__title"><?php echo esc_html($archive_title); ?></h1>
                 <?php if ($archive_description) : ?>
                     <p class="archive-hero__description"><?php echo wp_kses_post($archive_description); ?></p>
@@ -107,8 +112,19 @@ if (is_category()) {
                 <div class="article-grid">
                     <?php while (have_posts()) : the_post();
                         $article_categories = get_the_category();
+                        $card_category = !empty($article_categories) ? $article_categories[0] : null;
+                        $card_style_slug = $card_category ? nishiki_get_term_category_style($card_category) : null;
+                        $card_theme = nishiki_get_category_theme($card_style_slug);
+                        $card_style = sprintf(
+                            '--card-accent:%1$s;--card-accent-dark:%2$s;--card-accent-light:%3$s;--card-surface:%4$s;--card-glow:%5$s;',
+                            esc_attr($card_theme['accent']),
+                            esc_attr($card_theme['accent_dark']),
+                            esc_attr($card_theme['accent_light']),
+                            esc_attr($card_theme['surface']),
+                            esc_attr($card_theme['glow'])
+                        );
                     ?>
-                        <article <?php post_class('article-card'); ?> data-category="<?php echo !empty($article_categories) ? esc_attr($article_categories[0]->slug) : ''; ?>">
+                        <article <?php post_class('article-card' . ($card_style_slug ? ' article-card--' . $card_style_slug : '')); ?> data-category="<?php echo !empty($article_categories) ? esc_attr($article_categories[0]->slug) : ''; ?>" style="<?php echo $card_style; ?>">
                             <a href="<?php the_permalink(); ?>" class="article-card__link">
                                 <div class="article-card__content">
                                     <div class="article-card__meta">

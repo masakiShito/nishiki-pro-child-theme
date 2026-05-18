@@ -19,14 +19,14 @@
     --kn-text-muted: #9c8e7a;
     --kn-text-hero: #f5efe6;
     --kn-text-hero-muted: #b8a98e;
-    --kn-amber: #d4a020;
-    --kn-amber-light: #f5e6b8;
-    --kn-amber-subtle: rgba(212, 160, 32, 0.1);
-    --kn-amber-dark: #b8860b;
-    --kn-green: #10b981;
-    --kn-green-light: #ecfdf5;
-    --kn-rust: #c4704b;
-    --kn-rust-light: #fdf2ec;
+    --kn-amber: #2e6651;
+    --kn-amber-light: #d3cfb1;
+    --kn-amber-subtle: rgba(46, 102, 81, 0.12);
+    --kn-amber-dark: #4f5438;
+    --kn-green: #1f5a43;
+    --kn-green-light: #f4f2e8;
+    --kn-rust: #5e947d;
+    --kn-rust-light: #f3efe2;
     --kn-navy: #3b5998;
 }
 
@@ -43,7 +43,7 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(212, 160, 32, 0.08), transparent),
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(46, 102, 81, 0.08), transparent),
         radial-gradient(ellipse 50% 40% at 80% 20%, rgba(196, 112, 75, 0.06), transparent);
     pointer-events: none;
 }
@@ -98,8 +98,8 @@
     color: var(--kn-amber);
     text-decoration: none;
     padding: 4px 14px;
-    background: rgba(212, 160, 32, 0.1);
-    border: 1px solid rgba(212, 160, 32, 0.25);
+    background: rgba(46, 102, 81, 0.1);
+    border: 1px solid rgba(46, 102, 81, 0.25);
     border-radius: 20px;
     transition: all 0.2s;
     letter-spacing: 0.03em;
@@ -131,12 +131,12 @@
 
 .knowledge-hero__title {
     font-family: 'Noto Sans JP', serif;
-    font-size: 34px;
+    font-size: 36px;
     font-weight: 800;
     color: var(--kn-text-hero);
-    line-height: 1.5;
+    line-height: 1.35;
     margin: 0 0 24px;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.01em;
 }
 
 .knowledge-hero__subtitle-line {
@@ -241,7 +241,7 @@
 .knowledge-hero__tag:hover {
     color: var(--kn-amber);
     border-color: var(--kn-amber);
-    background: rgba(212, 160, 32, 0.1);
+    background: rgba(46, 102, 81, 0.1);
 }
 
 /* ===== ページ全体の背景 ===== */
@@ -286,60 +286,57 @@
 /* ===== 記事本文カスタマイズ ===== */
 .single-wrapper--knowledge .article-content h2 {
     font-family: 'Noto Sans JP', serif;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 800;
     color: var(--kn-text);
     margin-top: 56px;
     margin-bottom: 24px;
-    padding: 20px 24px;
-    background: var(--kn-bg-warm);
-    border-radius: 12px;
+    padding: 0 0 12px;
+    background: transparent;
+    border-bottom: 1px solid var(--kn-border);
+    border-radius: 0;
     position: relative;
     line-height: 1.5;
+    letter-spacing: -0.02em;
 }
 
 .single-wrapper--knowledge .article-content h2::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 12px;
-    bottom: 12px;
-    width: 5px;
-    background: linear-gradient(180deg, var(--kn-amber), var(--kn-rust));
-    border-radius: 0 3px 3px 0;
+    bottom: -1px;
+    width: 56px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--kn-amber), var(--kn-rust));
+    border-radius: 999px;
 }
 
 .single-wrapper--knowledge .article-content h3 {
     font-family: 'Noto Sans JP', serif;
-    font-size: 19px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--kn-text);
     margin-top: 40px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--kn-border);
-    position: relative;
+    margin-bottom: 14px;
+    padding-bottom: 0;
+    border-bottom: 0;
+    position: static;
+    letter-spacing: -0.01em;
 }
 
 .single-wrapper--knowledge .article-content h3::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 40px;
-    height: 2px;
-    background: var(--kn-amber);
+    content: none;
 }
 
 .single-wrapper--knowledge .article-content h4 {
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 16px;
     font-weight: 700;
-    color: var(--kn-text-secondary);
+    color: var(--kn-rust);
     margin-top: 32px;
     margin-bottom: 12px;
-    padding-left: 14px;
-    border-left: 3px solid var(--kn-amber-light);
+    padding-left: 0;
+    border-left: 0;
 }
 
 .single-wrapper--knowledge .article-content p {
@@ -396,9 +393,9 @@
     margin: -16px -16px 16px;
     padding: 0 16px;
     background-image:
-        radial-gradient(circle at 20px 50%, #c4704b 4px, transparent 4px),
-        radial-gradient(circle at 38px 50%, #d4a020 4px, transparent 4px),
-        radial-gradient(circle at 56px 50%, #10b981 4px, transparent 4px);
+        radial-gradient(circle at 20px 50%, #5e947d 4px, transparent 4px),
+        radial-gradient(circle at 38px 50%, #2e6651 4px, transparent 4px),
+        radial-gradient(circle at 56px 50%, #1f5a43 4px, transparent 4px);
     background-repeat: no-repeat;
 }
 
@@ -572,7 +569,7 @@
 .knowledge-sidebar__chip--category {
     color: var(--kn-amber-dark);
     background: var(--kn-amber-subtle);
-    border-color: rgba(212, 160, 32, 0.25);
+    border-color: rgba(46, 102, 81, 0.25);
     font-weight: 600;
 }
 
@@ -675,7 +672,7 @@
 
 .post-navigation--knowledge .post-navigation__item:hover {
     border-color: var(--kn-amber);
-    background: rgba(212, 160, 32, 0.08);
+    background: rgba(46, 102, 81, 0.08);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 

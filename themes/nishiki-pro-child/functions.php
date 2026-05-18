@@ -63,6 +63,16 @@ add_filter('body_class', function($classes) {
         }
     }
 
+    if (is_category()) {
+        $category = get_queried_object();
+        if ($category instanceof WP_Term) {
+            $cat_slug = nishiki_get_term_category_style($category);
+            if ($cat_slug) {
+                $classes[] = 'archive-category-' . $cat_slug;
+            }
+        }
+    }
+
     return array_unique($classes);
 });
 
@@ -345,6 +355,101 @@ function nishiki_get_category_css_map() {
 }
 
 /**
+ * カテゴリーデザイン定義
+ */
+function nishiki_get_category_theme_map() {
+    return array(
+        'development' => array(
+            'label' => 'Build',
+            'lead' => '実装・設計・改善の流れを、コードと判断の文脈ごと整理します。',
+            'description' => '設計判断、実装パターン、改善の進め方を開発者目線でまとめたカテゴリです。',
+            'icon' => '</>',
+            'palette' => 'linear-gradient(135deg, #10281f 0%, #1f5a43 52%, #4f8a72 100%)',
+            'surface' => 'linear-gradient(180deg, #edf5f1 0%, #d7e7df 100%)',
+            'accent' => '#1f5a43',
+            'accent_dark' => '#153c2d',
+            'accent_light' => '#4f8a72',
+            'glow' => 'rgba(31, 90, 67, 0.22)',
+        ),
+        'infrastructure' => array(
+            'label' => 'Operate',
+            'lead' => '構成、運用、監視まで含めて、安定稼働する仕組みを扱います。',
+            'description' => 'サーバー、クラウド、監視、運用設計までを構造的に扱うカテゴリです。',
+            'icon' => '[]',
+            'palette' => 'linear-gradient(135deg, #0f261e 0%, #1a4d3a 46%, #40755f 100%)',
+            'surface' => 'linear-gradient(180deg, #eaf3ef 0%, #d2e4dc 100%)',
+            'accent' => '#245d47',
+            'accent_dark' => '#153c2d',
+            'accent_light' => '#4f8a72',
+            'glow' => 'rgba(36, 93, 71, 0.24)',
+        ),
+        'knowledge' => array(
+            'label' => 'Insight',
+            'lead' => '知識を断片で終わらせず、背景と使いどころまで含めて残します。',
+            'description' => '学び、調査、考え方を読み物として蓄積するナレッジカテゴリです。',
+            'icon' => '::',
+            'palette' => 'linear-gradient(135deg, #173228 0%, #2e6651 52%, #5e947d 100%)',
+            'surface' => 'linear-gradient(180deg, #eef6f2 0%, #dceae3 100%)',
+            'accent' => '#2e6651',
+            'accent_dark' => '#1b4334',
+            'accent_light' => '#5e947d',
+            'glow' => 'rgba(46, 102, 81, 0.24)',
+        ),
+    );
+}
+
+/**
+ * タームからカテゴリーデザイン用スラッグを解決
+ */
+function nishiki_get_term_category_style($term) {
+    if (!$term instanceof WP_Term) {
+        return null;
+    }
+
+    $map = nishiki_get_category_css_map();
+    $check_slugs = array($term->slug);
+
+    if ('category' === $term->taxonomy && $term->parent) {
+        $parent = get_category($term->parent);
+        if ($parent && !is_wp_error($parent)) {
+            $check_slugs[] = $parent->slug;
+        }
+    }
+
+    foreach ($check_slugs as $slug) {
+        if (isset($map[$slug])) {
+            return $slug;
+        }
+    }
+
+    return null;
+}
+
+/**
+ * デザイン定義を取得。未定義カテゴリは緩やかなデフォルトにフォールバック
+ */
+function nishiki_get_category_theme($slug = null) {
+    $themes = nishiki_get_category_theme_map();
+
+    if ($slug && isset($themes[$slug])) {
+        return $themes[$slug];
+    }
+
+    return array(
+        'label' => 'Browse',
+        'lead' => 'テーマごとに記事を整理しています。',
+        'description' => 'このカテゴリの記事をまとめてチェックできます。',
+        'icon' => '//',
+        'palette' => 'linear-gradient(135deg, #10281f 0%, #1f5a43 52%, #4f8a72 100%)',
+        'surface' => 'linear-gradient(180deg, #edf5f1 0%, #d7e7df 100%)',
+        'accent' => '#1f5a43',
+        'accent_dark' => '#153c2d',
+        'accent_light' => '#4f8a72',
+        'glow' => 'rgba(31, 90, 67, 0.2)',
+    );
+}
+
+/**
  * 現在の投稿のカテゴリスラッグを取得（テンプレートマップに一致するもの）
  */
 function nishiki_get_current_post_category_style() {
@@ -357,20 +462,10 @@ function nishiki_get_current_post_category_style() {
         return null;
     }
 
-    $map = nishiki_get_category_css_map();
-
     foreach ($categories as $cat) {
-        $check_slugs = array($cat->slug);
-        if ($cat->parent) {
-            $parent = get_category($cat->parent);
-            if ($parent && !is_wp_error($parent)) {
-                $check_slugs[] = $parent->slug;
-            }
-        }
-        foreach ($check_slugs as $slug) {
-            if (isset($map[$slug])) {
-                return $slug;
-            }
+        $slug = nishiki_get_term_category_style($cat);
+        if ($slug) {
+            return $slug;
         }
     }
 

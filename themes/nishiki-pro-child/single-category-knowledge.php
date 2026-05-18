@@ -108,8 +108,8 @@ get_header();
             <aside class="toc-sidebar" id="tocSidebar">
                 <div class="toc-sidebar__inner" id="tocWidget">
                     <div class="toc-sidebar__header">
-                        <span class="toc-sidebar__label">CONTENTS</span>
-                        <span class="toc-sidebar__progress" id="tocProgress">0%</span>
+                        <span class="toc-sidebar__label">目次</span>
+                        <span class="toc-sidebar__progress" id="tocProgress">0 / 0</span>
                     </div>
                     <nav class="toc-sidebar__body" id="tocBody" aria-label="目次">
                         <ol class="toc-timeline" id="tocList"></ol>
