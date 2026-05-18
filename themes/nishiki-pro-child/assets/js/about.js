@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===========================================
 
     const sections = document.querySelectorAll(
-        '.about-profile, .about-career, .about-phases, .about-skills, .about-strengths, .about-management'
+        '.about-profile, .about-career, .about-history, .about-phases, .about-skills, .about-strengths, .about-management'
     );
 
     const sectionObserver = new IntersectionObserver((entries) => {
