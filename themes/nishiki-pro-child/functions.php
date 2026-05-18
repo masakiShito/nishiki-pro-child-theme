@@ -160,6 +160,16 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 
+    if (is_page_template('page-specforge.php') || is_front_page()) {
+        $specforge_css = get_stylesheet_directory() . '/assets/css/page-specforge.css';
+        wp_enqueue_style(
+            'nishiki-pro-child-specforge',
+            get_stylesheet_directory_uri() . '/assets/css/page-specforge.css',
+            ['nishiki-pro-child'],
+            file_exists($specforge_css) ? filemtime($specforge_css) : $child->get('Version')
+        );
+    }
+
     // Archive page improvements CSS & JS
     $is_archive_page = is_home() || is_archive() || is_search() || is_page('blog') || is_page_template('page-blog.php') || get_query_var('nishiki_blog') || nishiki_is_blog_request_path();
     if ($is_archive_page) {
@@ -293,6 +303,40 @@ function create_blog_page_automatically() {
         }
     }
 }
+
+/**
+ * specforge固定ページを自動生成（テーマ有効化時のみ）
+ */
+function create_specforge_page_automatically() {
+    $specforge_page = get_page_by_path('specforge');
+
+    if (!$specforge_page) {
+        $page_data = array(
+            'post_title'    => 'specforge',
+            'post_content'  => '',
+            'post_status'   => 'publish',
+            'post_type'     => 'page',
+            'post_name'     => 'specforge'
+        );
+
+        $page_id = wp_insert_post($page_data);
+
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'page-specforge.php');
+        }
+    } else {
+        $current_template = get_post_meta($specforge_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'page-specforge.php') {
+            update_post_meta($specforge_page->ID, '_wp_page_template', 'page-specforge.php');
+        }
+    }
+}
+
+add_action('init', function() {
+    if (!get_page_by_path('specforge')) {
+        create_specforge_page_automatically();
+    }
+}, 20);
 
 /**
  * カテゴリ別テンプレート設定
@@ -484,6 +528,7 @@ add_action('template_redirect', function() {
 add_action('after_switch_theme', function() {
     create_about_page_automatically();
     create_blog_page_automatically();
+    create_specforge_page_automatically();
     flush_rewrite_rules(false);
 });
 
