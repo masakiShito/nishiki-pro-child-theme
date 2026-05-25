@@ -119,7 +119,17 @@
 			<div class="mobile-menu-overlay"></div>
 			<div class="mobile-menu-panel">
 				<div class="mobile-menu-header">
-					<span class="mobile-menu-title">Menu</span>
+					<div class="mobile-menu-brand">
+						<span class="mobile-menu-title">Navigation</span>
+						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="mobile-menu-home">
+							<?php if ( has_custom_logo() && ! empty( $logo ) ) : ?>
+								<img src="<?php echo esc_url( $logo[0] ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" class="mobile-menu-logo">
+							<?php else : ?>
+								<span class="mobile-menu-site-name"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
+							<?php endif; ?>
+							<span class="mobile-menu-home-text">カテゴリから記事を探す</span>
+						</a>
+					</div>
 					<button type="button" class="mobile-menu-close" aria-label="メニューを閉じる">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M18 6L6 18M6 6l12 12"/>
@@ -163,6 +173,16 @@
 						</ul>
 					<?php endif; ?>
 				</nav>
+
+				<div class="mobile-menu-footer">
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="mobile-about-link">
+						トップへ戻る
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M7 17L17 7"/>
+							<path d="M7 7h10v10"/>
+						</svg>
+					</a>
+				</div>
 			</div>
 		</div>
 

@@ -93,11 +93,12 @@ add_action('wp_enqueue_scripts', function () {
     );
 
     $child = wp_get_theme();
+    $main_css = get_stylesheet_directory() . '/assets/css/main.css';
     wp_enqueue_style(
         'nishiki-pro-child',
         get_stylesheet_directory_uri() . '/assets/css/main.css',
         ['nishiki-pro-parent'],
-        $child->get('Version')
+        file_exists($main_css) ? filemtime($main_css) : $child->get('Version')
     );
 
     // Single post improvements CSS + JetBrains Mono font (コードエディタ風目次用)
